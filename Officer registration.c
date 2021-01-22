@@ -7,7 +7,7 @@ char name[23];
 int i,j,outofguesses=0,count=0;
 
 
-puts("Enter User name");
+puts("Enter User Name:");
 gets(name);
 puts("Enter password to be saved\n You only have 3 trials !");
 gets(password1);
