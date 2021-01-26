@@ -12,6 +12,10 @@ gets(name);
 puts("Enter password to be saved\n You only have 3 trials !");
 gets(password1);
 
+FILE *k;
+k= fopen("user","w++");
+fprintf(k,"%s %s" , name, password1);
+
 while(j!=44&&outofguesses==0)
 {
 	if(count<3){
