@@ -1,0 +1,13 @@
+.btn:not(:disabled):not(.disabled) {
+}
+
+.sidebar-dark .nav-item .nav-link:active {
+  background-color: white;
+  color: blue;
+}
+
+.sidebar-dark .nav-item .nav-link:hover {
+  background-color: white;
+  color: blue;
+}
+
