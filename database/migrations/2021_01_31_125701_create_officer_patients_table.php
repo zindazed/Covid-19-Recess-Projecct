@@ -17,6 +17,9 @@ class CreateOfficerPatientsTable extends Migration
             $table->unsignedBigInteger("officer_ID");
             $table->unsignedBigInteger("patient_ID");
             $table->primary(["officer_ID","patient_ID"]);
+
+            $table->foreign("officer_ID")->references("officer_ID")->on("officers")->onDelete("cascade");
+            $table->foreign("patient_ID")->references("patient_ID")->on("patients")->onDelete("cascade");
             $table->timestamps();
         });
     }

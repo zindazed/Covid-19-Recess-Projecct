@@ -18,7 +18,9 @@ class CreateDonorsTable extends Migration
             $table->string("donor_name");
             $table->string("donation_month");
             $table->integer("amount_donated");
-            $table->unsignedBigInteger("administrator_ID");
+            $table->unsignedBigInteger("administrator_ID")->index();
+
+            $table->foreign("administrator_ID")->references("administrator_ID")->on("administrators")->onDelete("restrict");
             $table->timestamps();
         });
     }

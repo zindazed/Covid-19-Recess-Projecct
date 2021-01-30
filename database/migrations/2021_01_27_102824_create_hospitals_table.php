@@ -18,9 +18,12 @@ class CreateHospitalsTable extends Migration
             $table->string("hospital_name");
             $table->string("category");
             $table->string("class");
-            $table->string("hospital_head");
+            $table->unsignedBigInteger("hospital_head")->index();
             $table->string("district");
             $table->timestamps();
+
+            $table->foreign("hospital_head")->references("officer_ID")->on("officers")->onDelete("restrict")->onUpdate("cascade");
+
         });
     }
 
