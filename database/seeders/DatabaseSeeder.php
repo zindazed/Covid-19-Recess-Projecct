@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +15,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $faker = Faker::create();
+        foreach (range(1,10) as $index){
+            DB::table('patients')->insert([
+                'patient_name' => $faker ->firstName,
+                'Date_of_identification' => $faker ->date("d-m-Y"),
+                'category' => $faker ->name,
+                'Gender' => $faker -> titleMale,
+                'Case_type' => $faker ->title,
+            ]);
+        }
+
     }
 }

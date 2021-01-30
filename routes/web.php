@@ -20,3 +20,8 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/patients', 'App\Http\Controllers\PatientsController@display')->name("patients");
+Route::get('/orgchart', function (){
+    return view('orgchart');
+});
