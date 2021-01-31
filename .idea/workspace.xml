@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="460ea1a4-3671-42fb-abde-adf648d43134" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/views/orgchart.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/patients.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_01_30_094424_create_patients_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_01_30_094424_create_patients_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-    </list>
+    <list default="true" id="460ea1a4-3671-42fb-abde-adf648d43134" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -178,7 +171,7 @@
       <workItem from="1611735395132" duration="14794000" />
       <workItem from="1611815477442" duration="1580000" />
       <workItem from="1612034965306" duration="2399000" />
-      <workItem from="1612037712285" duration="5292000" />
+      <workItem from="1612037712285" duration="5357000" />
     </task>
     <servers />
   </component>
