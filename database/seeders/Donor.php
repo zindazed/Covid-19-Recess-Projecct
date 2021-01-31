@@ -18,8 +18,8 @@ class Donor extends Seeder
 
         $faker = Faker::create();
 
-        $admins = \App\Models\Administrator::all()->pluck('administrator_ID')->toArray();
-        foreach (range(1,10) as $index){
+        $admins = \App\Models\User::all()->pluck('id')->toArray();
+        foreach (range(1,20) as $index){
             DB::table('donors')->insert([
                 'donor_name' => $faker -> name,
                 'donation_month' => $faker ->month,
@@ -27,5 +27,6 @@ class Donor extends Seeder
                 'administrator_ID' => $faker -> randomElement($admins),
             ]);
         }
+
     }
 }

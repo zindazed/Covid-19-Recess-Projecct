@@ -20,7 +20,7 @@ class CreateDonorsTable extends Migration
             $table->integer("amount_donated");
             $table->unsignedBigInteger("administrator_ID")->index();
 
-            $table->foreign("administrator_ID")->references("administrator_ID")->on("administrators")->onDelete("restrict");
+            $table->foreign("administrator_ID")->references("id")->on("users")->onDelete("restrict");
             $table->timestamps();
         });
     }

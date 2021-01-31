@@ -18,11 +18,20 @@ class CreateHospitalsTable extends Migration
             $table->string("hospital_name");
             $table->string("category");
             $table->string("class");
-            $table->unsignedBigInteger("hospital_head")->index();
             $table->string("district");
+
+            $table->unsignedBigInteger("head_ID")->index();
+            $table->string("head_name");
+            $table->boolean("waiting");
+            $table->integer("monthly_payment");
+            $table->integer("award_payment");
+            $table->string("password");
+            $table->string("officer_position");
+            $table->unsignedBigInteger("administrator_ID")->index();
             $table->timestamps();
 
-            $table->foreign("hospital_head")->references("officer_ID")->on("officers")->onDelete("restrict")->onUpdate("cascade");
+            $table->foreign("administrator_ID")->references("id")->on("users")->onDelete("restrict");
+
 
         });
     }

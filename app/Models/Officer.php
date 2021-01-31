@@ -8,19 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Officer extends Model
 {
     use HasFactory;
-    public function officers()
-    {
-        return $this->hasMany(Officer::class);
-    }
 
-    public function head()
-    {
-        return $this->belongsTo(Officer::class);
-    }
 
     public function administrator()
     {
-        return $this->belongsTo(Administrator::class);
+        return $this->belongsTo(User::class);
     }
 
     public function hospital()
@@ -28,10 +20,6 @@ class Officer extends Model
         return $this->belongsTo(Hospital::class);
     }
 
-    public function hospitals()
-    {
-        return $this->hasOne(Hospital::class);
-    }
 
     public function patients()
     {

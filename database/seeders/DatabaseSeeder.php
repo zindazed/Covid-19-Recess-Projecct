@@ -16,15 +16,74 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        foreach (range(1,10) as $index){
-            DB::table('patients')->insert([
-                'patient_name' => $faker ->firstName,
-                'Date_of_identification' => $faker ->date("d-m-Y"),
-                'category' => $faker ->name,
-                'Gender' => $faker -> titleMale,
-                'Case_type' => $faker ->title,
+
+        foreach (range(1,2) as $index){
+            DB::table('users')->insert([
+                'name' => $faker -> name,
+                'email' => $faker ->email,
+                'email_verified_at' => $faker -> date(),
+                'password' => $faker -> password,
+                'is_admin' => $faker -> boolean,
+                'monthly_payment' => $faker -> numberBetween(50, 100),
             ]);
         }
 
+
+        $admins = \App\Models\User::all()->pluck('id')->toArray();
+        foreach (range(1,20) as $index){
+            DB::table('donors')->insert([
+                'donor_name' => $faker -> name,
+                'donation_month' => $faker ->month,
+                'amount_donated' => $faker -> numberBetween(50, 100),
+                'administrator_ID' => $faker -> randomElement($admins),
+            ]);
+        }
+
+        $category = array("Symptomatic", "Asymptomatic");
+        $gendar = array("M", "F");
+        $case_type = array("postive", "false positive");
+        foreach (range(1,20) as $index){
+            DB::table('patients')->insert([
+                'patient_name' => $faker ->firstName,
+                'date_of_identification' => $faker -> date(),
+                'category' => $faker -> randomElement($category),
+                'gender' => $faker ->  randomElement($gendar),
+                'case_type' => $faker -> randomElement($case_type),
+            ]);
+        }
+
+        $officers = \App\Models\Officer::all()->pluck('officer_Id')->toArray();
+        $admin = \App\Models\User::all()->pluck('id')->toArray();
+        $category = array("Private", "Public");
+        $class = array("National Referral", "Regional Referral", "General");
+        $postion = array("Health Officer", "Senior health Officer", "Consultant");
+
+        foreach (range(1, 20) as $index) {
+            DB::table('hospitals')->insert([
+                'hospital_name' => $faker->name,
+                'category' => $faker->randomElement($category),
+                'class' => $faker->randomElement($class),
+                'district' => $faker->state,
+
+                'head_ID' => $faker->unique()->numberBetween(1,155),
+                'head_name' => $faker->firstName,
+                'waiting' => $faker->boolean,
+                'monthly_payment' => $faker->numberBetween(50,100),
+                'award_payment' => $faker->numberBetween(50,100),
+                'password' => $faker->password,
+                'officer_position' => $faker->randomElement($postion),
+                'administrator_ID' => $faker->randomElement($admin),
+            ]);
+
+            $officers = \App\Models\Officer::all()->pluck('officer_ID')->toArray();
+            $patients = \App\Models\Patient::all()->pluck('patient_ID')->toArray();
+            foreach (range(1,20) as $index){
+                DB::table('officer_patients')->insert([
+                    'officer_ID' => $faker ->randomElement($officers),
+                    'patient_ID' => $faker -> randomElement($patients),
+                ]);
+            }
+
+        }
     }
 }

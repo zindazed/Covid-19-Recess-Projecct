@@ -23,11 +23,9 @@ class CreateOfficersTable extends Migration
             $table->string("officer_position");
             $table->unsignedBigInteger("head_ID")->index();
             $table->unsignedBigInteger("administrator_ID")->index();
-            $table->unsignedBigInteger("hospital_ID")->index();
 
-            $table->foreign("head_ID")->references("officer_ID")->on("officers")->onDelete("restrict");
-            $table->foreign("administrator_ID")->references("administrator_ID")->on("administrators")->onDelete("restrict");
-            $table->foreign("hospital_ID")->references("hospital_ID")->on("hospitals")->onDelete("cascade");
+            $table->foreign("head_ID")->references("head_ID")->on("hospitals")->onDelete("restrict");
+            $table->foreign("administrator_ID")->references("id")->on("users")->onDelete("restrict");
             $table->timestamps();
         });
     }

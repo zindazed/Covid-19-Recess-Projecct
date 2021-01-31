@@ -10,6 +10,6 @@ class Donor extends Model
     use HasFactory;
     public function administrator()
     {
-        return $this->belongsTo(Administrator::class);
+        return $this->belongsTo(User::class);
     }
 }

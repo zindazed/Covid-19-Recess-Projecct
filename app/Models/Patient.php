@@ -12,4 +12,9 @@ class Patient extends Model
     {
         return $this->hasMany(Officer_patient::class);
     }
+
+    public function heads()
+    {
+        return $this->hasMany(Head_patient::class);
+    }
 }

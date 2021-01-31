@@ -14,8 +14,14 @@ class Hospital extends Model
         return $this->hasMany(Officer::class);
     }
 
-    public function head()
+
+    public function patients()
     {
-        return $this->belongsTo(Officer::class);
+        return $this->hasMany(Officer_patient::class);
+    }
+
+    public function administrator()
+    {
+        return $this->belongsTo(User::class);
     }
 }

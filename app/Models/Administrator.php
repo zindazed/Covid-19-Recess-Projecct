@@ -13,6 +13,11 @@ class Administrator extends Model
         return $this->hasMany(Officer::class);
     }
 
+    public function heads()
+    {
+        return $this->hasMany(Officer::class);
+    }
+
     public function donorMoney()
     {
         return $this->hasMany(Donor::class);
