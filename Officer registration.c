@@ -21,7 +21,7 @@ k= fopen("user","w++");
 fprintf(k,"%s %s" , name, password1);
 
 //Trial error count
-while(j!=44&&outofguesses==0)
+while(j!=1&&outofguesses==0)
 {
 	if(count<3){
 
@@ -34,7 +34,7 @@ i=strcmp(password1,password2);
 if(i==0)
 {
 	printf("You have logged in successfully\n");
-	j=44;
+	j=1;
 	count=5;
 	break;
 }
