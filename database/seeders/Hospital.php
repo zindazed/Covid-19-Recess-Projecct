@@ -18,7 +18,6 @@ class Hospital extends Seeder
     {
         $faker = Faker::create();
 
-        $officers = \App\Models\Officer::all()->pluck('officer_Id')->toArray();
         $admin = \App\Models\User::all()->pluck('id')->toArray();
         $category = array("Private", "Public");
         $class = array("National Referral", "Regional Referral", "General");
