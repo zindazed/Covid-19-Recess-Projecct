@@ -43,8 +43,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-<<<<<<< HEAD
-
         foreach (range(1,20) as $index){
             DB::table('donors')->insert([
                 'donor_name' => $faker -> name,
@@ -54,9 +52,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-
-=======
->>>>>>> webapp
         $category = array("Symptomatic", "Asymptomatic");
         $gendar = array("M", "F");
         $case_type = array("postive", "false positive");
@@ -71,10 +66,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> webapp
         $admins = \App\Models\User::all()->pluck('id')->toArray();
         foreach (range(1,20) as $index){
             DB::table('donors')->insert([
@@ -107,7 +98,6 @@ class DatabaseSeeder extends Seeder
                 'administrator_ID' => $faker->randomElement($admins),
             ]);
 
-<<<<<<< HEAD
 
             foreach (range(1,200) as $index){
                 DB::table('officers')->insert([
@@ -154,10 +144,6 @@ class DatabaseSeeder extends Seeder
                 'administrator_ID' => $faker -> randomElement($admins),
             ]);
         }
-
-=======
-        }
-
         $heads = Hospital::all()->pluck('head_ID')->toArray();
         $patients = \App\Models\Patient::all()->pluck('patient_ID')->toArray();
         foreach (range(1,20) as $index){
@@ -180,7 +166,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
->>>>>>> webapp
         $officers = \App\Models\Officer::all()->pluck('officer_ID')->toArray();
         foreach (range(1,20) as $index){
             DB::table('officer_patients')->insert([
@@ -188,6 +173,6 @@ class DatabaseSeeder extends Seeder
                 'patient_ID' => $faker -> randomElement($patients),
             ]);
         }
-
     }
+
 }
