@@ -22,9 +22,9 @@ class Hospital extends Seeder
         $admin = \App\Models\User::all()->pluck('id')->toArray();
         $category = array("Private", "Public");
         $class = array("National Referral", "Regional Referral", "General");
-        $postion = array("Health Officer", "Senior health Officer", "Consultant");
+        $postion = array("Director", "superintendent", "General head");
 
-        foreach (range(1, 20) as $index) {
+        foreach (range(1, 155) as $index) {
             DB::table('hospitals')->insert([
                 'hospital_name' => $faker->name,
                 'category' => $faker->randomElement($category),

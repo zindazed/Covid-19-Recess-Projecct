@@ -24,7 +24,7 @@
                     <li class="nav-item"><a class="nav-link" href="distribution.html"><i class="fa fa-dollar"></i><span>Money distribution</span></a></li>
                     <li class="nav-item"><a class="nav-link active" href="{{ url('/') }}"><i class="fas fa-table"></i><span>patients&nbsp;</span></a></li>
                     <li class="nav-item"></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/orgchart') }}"><i class="fa fa-area-chart"></i><span>Organisation chart</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/orgchart') }}"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
                     <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>register</a>
                         <div class="dropdown-menu"><a class="dropdown-item" href="register.html"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="hospital.html"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
                     </li>
