@@ -1,8 +1,20 @@
+#include <stdio.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#define MAX 80
+#define PORT 8080
+#define SA struct sockaddr
 // Driver function
 int main()
 {
 	int sockfd, connfd, len;
 	struct sockaddr_in servaddr, cli;
+	int patient_message[5];
+	int read_size;
 	// socket create and verification
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd == -1) {
@@ -45,7 +57,26 @@ int main()
 		printf("server acccept the client...\n");
 
 	//call the functio that receives content from the server program
+	   // Receive a message from client
+    // while ((read_size = recv(connfd, &patient_message, (int)sizeof(patient_message), 0)) > 0) {
+
+    //     //check_func(patient_message);
+  		// //call function to print the array
+    // 	displayArr(patient_message);
+    //     write(connfd, &patient_message, (int)sizeof(patient_message));
+    // }
+
+    if ((read_size = recv(connfd, &patient_message, (int)sizeof(patient_message), 0)) > 0)
+    {
+    		for (int i = 0; i < 5; ++i)
+		 	{
+		 		printf("%s\n", patient_message[i] );
+		 	}
+    }
+
 
 	// After after executing, close the socket
 	close(sockfd);
+	return 0;
 }
+

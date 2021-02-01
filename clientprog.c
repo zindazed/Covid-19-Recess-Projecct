@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+//#include "patientStructure.h"
 #define MAX 80
 #define PORT 8080
 #define SA struct sockaddr
@@ -11,6 +12,17 @@ int main(int argc, char **argv)
 {
 	int sockfd, connfd;
 	struct sockaddr_in servaddr, cli;
+
+	char patient_info[5];
+
+	//struct
+	struct patient
+{
+    char patient_name[20];
+    char date[10];
+    char gender;
+    char category[15];
+};struct patient p;
 
 	//note, argv1 is the command
 
@@ -41,6 +53,33 @@ int main(int argc, char **argv)
         //cchecking if command is correct
         if(strncmp(argv[1], "Addpatient",10)==0){
 	        //send arguments to server
+	          // char patient_info[50];
+				//for(int i = 1; i<=argc; i++){
+			    	//printf("arg %d is %s, ",i, argv[i]);
+			    	//assign a value to the structure var
+			    	char *patientName = argv[2];
+			    	char *Date = argv[3];
+			    	char *Gender = argv[4];
+			    	char *Category = argv[5];
+			    	// inserting structure vslues into an array
+			    	//patient_info[5] = { patientName, Date, Gender, Category };
+			    	patient_info[0]= patientName;
+			    	patient_info[0]= Date;
+			    	patient_info[0]= Gender;
+			    	patient_info[0]= Category;
+			    	//send the array to the server
+			    	if(send(sockfd, &patient_info, (int)sizeof(patient_info), 0)<0){
+			    		puts("send failed");
+			    		return 1;
+			    	}else{
+			    		puts("message sent");
+					  // Receive a reply from the server
+			    	}
+				   // if (recv(sock, &server_reply, 10 * sizeof(int), 0) < 0) {
+				     //   puts("recv failed");
+				    //    return 0;
+				  //  }
+
 	        puts("Addpatient entered");
 	        //break;
 	        }else if(strncmp(argv[1], "Addpatientlist",14)==0){
@@ -63,15 +102,11 @@ int main(int argc, char **argv)
         //sending the command
 	//int *stringLen;
 	//char *string = argv[argc];
-	for(int i = 1; i<=argc; i++){
-    	//printf("arg %d is %s, ",i, argv[i]);
-    	strcat(str1, str2);
-    	stringLen[i-1] = strlen(argv[i]);
-    	send(sockfd, string, stringLen[i-1], 0);//sending data to the server program
-	}
+
 
 
 
 	// close the socket
 	close(sockfd);
+return 0;
 }
