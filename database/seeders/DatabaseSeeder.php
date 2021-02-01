@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+<<<<<<< HEAD
 
         foreach (range(1,20) as $index){
             DB::table('donors')->insert([
@@ -54,6 +55,8 @@ class DatabaseSeeder extends Seeder
         }
 
 
+=======
+>>>>>>> webapp
         $category = array("Symptomatic", "Asymptomatic");
         $gendar = array("M", "F");
         $case_type = array("postive", "false positive");
@@ -68,7 +71,10 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> webapp
         $admins = \App\Models\User::all()->pluck('id')->toArray();
         foreach (range(1,20) as $index){
             DB::table('donors')->insert([
@@ -101,6 +107,7 @@ class DatabaseSeeder extends Seeder
                 'administrator_ID' => $faker->randomElement($admins),
             ]);
 
+<<<<<<< HEAD
 
             foreach (range(1,200) as $index){
                 DB::table('officers')->insert([
@@ -148,6 +155,32 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+=======
+        }
+
+        $heads = Hospital::all()->pluck('head_ID')->toArray();
+        $patients = \App\Models\Patient::all()->pluck('patient_ID')->toArray();
+        foreach (range(1,20) as $index){
+            DB::table('head_patients')->insert([
+                'head_ID' => $faker ->randomElement($heads),
+                'patient_ID' => $faker -> randomElement($patients),
+            ]);
+        }
+
+        foreach (range(1,20) as $index){
+            DB::table('officers')->insert([
+                'officer_name' => $faker -> firstName,
+                'waiting' => $faker ->boolean,
+                'monthly_payment' => $faker -> numberBetween(50, 100),
+                'award_payment' => $faker -> numberBetween(50, 100),
+                'password' => $faker -> password,
+                'officer_position' => $faker -> randomElement($postion),
+                'head_ID' => $faker -> randomElement($heads),
+                'administrator_ID' => $faker -> randomElement($admins),
+            ]);
+        }
+
+>>>>>>> webapp
         $officers = \App\Models\Officer::all()->pluck('officer_ID')->toArray();
         foreach (range(1,20) as $index){
             DB::table('officer_patients')->insert([

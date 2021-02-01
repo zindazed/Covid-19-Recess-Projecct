@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="460ea1a4-3671-42fb-abde-adf648d43134" name="Default Changelist" comment="">
 <<<<<<< HEAD
+<<<<<<< HEAD
       <change afterPath="$PROJECT_DIR$/app/Http/Controllers/HierachyController.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/resources/views/hierachy.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -19,6 +20,11 @@
       <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/seeders/Hospital.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Hospital.php" afterDir="false" />
 >>>>>>> d76e8e72eb9d6662c22411f617a2fb0e6d12c8ff
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/Hospital.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Hospital.php" afterDir="false" />
+>>>>>>> webapp
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,12 +231,17 @@
     </state>
     <state x="94" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.680@0.0.1280.680" timestamp="1612106306195" />
 <<<<<<< HEAD
+<<<<<<< HEAD
     <state x="117" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1612121229292">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="117" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1280.680@0.0.1280.680" timestamp="1612121229292" />
     <state x="370" y="94" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1612124999945">
       <screen x="0" y="0" width="1280" height="680" />
+=======
+    <state x="469" y="55" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1612100733354">
+      <screen x="0" y="0" width="1280" height="760" />
+>>>>>>> webapp
     </state>
     <state x="370" y="94" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1280.680@0.0.1280.680" timestamp="1612124999945" />
 =======
@@ -239,7 +250,10 @@
     </state>
     <state x="370" y="94" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1280.680@0.0.1280.680" timestamp="1612122209845" />
     <state x="469" y="55" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1280.760@0.0.1280.760" timestamp="1612100733354" />
+<<<<<<< HEAD
 >>>>>>> d76e8e72eb9d6662c22411f617a2fb0e6d12c8ff
+=======
+>>>>>>> webapp
     <state x="420" y="120" key="FileChooserDialogImpl" timestamp="1612037169907">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
