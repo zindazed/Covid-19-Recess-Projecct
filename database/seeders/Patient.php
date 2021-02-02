@@ -19,10 +19,10 @@ class Patient extends Seeder
         $category = array("Symptomatic", "Asymptomatic");
         $gendar = array("M", "F");
         $case_type = array("postive", "false positive");
-        foreach (range(1,20) as $index){
+        foreach (range(1,300) as $index){
             DB::table('patients')->insert([
                 'patient_name' => $faker ->firstName,
-                'date_of_identification' => $faker -> date(),
+                'date_of_identification' => $faker -> date('d-m-Y'),
                 'category' => $faker -> randomElement($category),
                 'gender' => $faker ->  randomElement($gendar),
                 'case_type' => $faker -> randomElement($case_type),

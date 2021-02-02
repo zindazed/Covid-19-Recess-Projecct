@@ -13,8 +13,9 @@ class PatientsController extends Controller
         $months_patients=array(0,0,0,-1,-1,-1,0,0,0,0,0,0);
         $percentages = array();
         $patients_graph = Patient::all();
+
         foreach ($patients_graph as $p){
-            $date = $p->Date_of_identification;
+            $date = $p->date_of_identification;
             $month = (int)substr($date, 3, -5)-1;
             for ($i=0; $i<sizeof($months_patients); $i++){
                 if ($i == $month){
@@ -24,14 +25,14 @@ class PatientsController extends Controller
         }
 
         for ($x=0; $x<11; $x++){
-            $percentage = ($months_patients[$x+1]-$months_patients[$x])/$months_patients[$x];
+            $percentage = ($months_patients[$x+1]-$months_patients[$x]);
             $percentages[] = $percentage;
         }
 
         $patients = Patient::paginate(4);
         return view('patients', [
             'patients'=>$patients,
-            'data'=>$percentages,
+            'data'=>$months_patients,
             'all_patients'=>$patients_graph
         ]);
     }

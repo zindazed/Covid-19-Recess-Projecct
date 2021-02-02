@@ -23,4 +23,7 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 Route::get('/patients', 'App\Http\Controllers\PatientsController@display')->name("patients");
 Route::get('/hierachy', 'App\Http\Controllers\HierachyController@display')->name("hierachy");
+Route::get('/donations', 'App\Http\Controllers\DonorController@display')->name("donations");
+Route::get('/{id}', 'App\Http\Controllers\DonorController@show')->name("donor");
+//Route::get('/donations', 'App\Http\Controllers\DonorController@add')->name("donor");
 

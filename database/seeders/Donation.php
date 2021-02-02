@@ -6,7 +6,7 @@ use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class Donor extends Seeder
+class Donation extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,17 +15,18 @@ class Donor extends Seeder
      */
     public function run()
     {
-
         $faker = Faker::create();
 
         $admins = \App\Models\User::all()->pluck('id')->toArray();
+        $donors = \App\Models\Donor::all()->pluck('donor_ID')->toArray();
         $class = array("", "Regional Referral", "General");
-        foreach (range(1,5) as $index){
-            DB::table('donors')->insert([
-                'donor_name' => $faker -> name,
+        foreach (range(1,20) as $index){
+            DB::table('donations')->insert([
+                'donation_month' => $faker ->date('d-m-Y'),
+                'amount_donated' => $faker -> numberBetween(50, 100),
+                'donor_ID' => $faker -> randomElement($donors),
                 'administrator_ID' => $faker -> randomElement($admins),
             ]);
         }
-
     }
 }

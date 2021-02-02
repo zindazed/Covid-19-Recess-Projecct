@@ -21,7 +21,7 @@
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="distribution.html"><i class="fa fa-dollar"></i><span>Money distribution</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money distribution</span></a></li>
                     <li class="nav-item"><a class="nav-link active" href="{{ url('/') }}"><i class="fas fa-table"></i><span>patients&nbsp;</span></a></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url('/orgchart') }}"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
@@ -60,10 +60,10 @@
                                     <tbody>
                                         @foreach($patients as $patient)
                                         <tr>
-                                            <td>{{$patient->name}}</td>
-                                            <td>{{$patient->Date_of_identification}}</td>
-                                            <td>{{$patient->Gender}}</td>
-                                            <td>{{$patient->Case_type}}</td>
+                                            <td>{{$patient->patient_name}}</td>
+                                            <td>{{$patient->date_of_identification}}</td>
+                                            <td>{{$patient->gender}}</td>
+                                            <td>{{$patient->case_type}}</td>
                                             <td>{{$patient->category}}</td>
                                         </tr>
                                         @endforeach
@@ -83,7 +83,7 @@
                             <div class="row">
                                 <div class="col-md-6 align-self-center">
                                     <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing {{$patients->count()}} of
-                                        {{$all_patients->count()}}</p>
+                                        {{$all_patients->count()}} Patients</p>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     {!! $patients->links() !!}

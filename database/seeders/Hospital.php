@@ -23,7 +23,7 @@ class Hospital extends Seeder
         $class = array("National Referral", "Regional Referral", "General");
         $postion = array("Director", "superintendent", "General head");
 
-        foreach (range(1, 155) as $index) {
+        foreach (range(1, 50) as $index) {
             DB::table('hospitals')->insert([
                 'hospital_name' => $faker->name,
                 'category' => $faker->randomElement($category),
