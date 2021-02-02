@@ -24,7 +24,10 @@ class PatientsController extends Controller
         }
 
         for ($x=0; $x<11; $x++){
-            $percentage = ($months_patients[$x+1]-$months_patients[$x])/$months_patients[$x];
+            if ($months_patients[$x]==0)
+                $percentage = 0;
+            else
+                $percentage = ($months_patients[$x+1]-$months_patients[$x])/$months_patients[$x];
             $percentages[] = $percentage;
         }
 

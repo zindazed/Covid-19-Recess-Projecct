@@ -26,16 +26,16 @@
             <div class="container-fluid d-flex flex-column p-0">
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard<button class="btn btn-primary" type="button" style="font-size: 16px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;padding-top: 0px;background: var(--danger);">B1</button></span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="distribution.html"><i class="fa fa-dollar"></i><span>Money distribution<button class="btn btn-primary" type="button" style="font-size: 16px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;padding-top: 0px;background: var(--danger);">M1</button></span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="patients.html"><i class="fas fa-table"></i><span>patients&nbsp;<button class="btn btn-primary" type="button" style="font-size: 16px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;padding-top: 0px;background: var(--danger);">P1</button></span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href=" "><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="distribution"><i class="fa fa-dollar"></i><span>Money distribution</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="patients"><i class="fas fa-table"></i><span>patients</span></a></li>
                     <li class="nav-item"></li>
-                    <li class="nav-item"><a class="nav-link" href="orgchart.html"><i class="fa fa-area-chart"></i><span>Organisation chart<button class="btn btn-primary" type="button" style="font-size: 16px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;padding-top: 0px;background: var(--danger);">C1</button></span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="orgchart"><i class="fa fa-area-chart"></i><span>Organisation chart</span></a></li>
                     <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>register</a>
-                        <div class="dropdown-menu"><a class="dropdown-item" href="register.html"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="hospital.html"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
+                        <div class="dropdown-menu"><a class="dropdown-item" href="register"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
                     </li>
                 </ul>
-                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button><button class="btn btn-primary" type="button" style="font-size: 16px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;padding-top: 0px;background: var(--danger);">T0</button></div>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
         </nav>
         <div class="d-flex flex-column" id="content-wrapper">
@@ -70,7 +70,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body"><button class="btn btn-primary" type="button" style="font-size: 16px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;padding-top: 0px;background: var(--danger);margin-right: -312px;">D3</button>
+                                <div class="card-body">
                                     <div class="chart-area"><canvas data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Earnings&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;0&quot;,&quot;10000&quot;,&quot;5000&quot;,&quot;15000&quot;,&quot;10000&quot;,&quot;20000&quot;,&quot;15000&quot;,&quot;25000&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}]}}}"></canvas></div>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body"><button class="btn btn-primary" type="button" style="font-size: 16px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;padding-top: 0px;background: var(--danger);margin-right: -312px;">D5</button>
+                                <div class="card-body">
                                     <div class="chart-area"><canvas data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Ashraf&quot;,&quot;Bashir&quot;,&quot;Twalib &quot;,&quot;A-brians&quot;,&quot;Zinda&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Earnings&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;0&quot;,&quot;10000&quot;,&quot;5000&quot;,&quot;15000&quot;,&quot;10000&quot;,&quot;20000&quot;,&quot;15000&quot;,&quot;25000&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{&quot;text&quot;:&quot;AUGUST&quot;,&quot;display&quot;:true,&quot;fontSize&quot;:&quot;20&quot;},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}]}}}"></canvas></div>
                                 </div>
                             </div>

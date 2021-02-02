@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => $faker -> date(),
                 'password' => $faker -> password,
                 'is_admin' => $faker -> boolean,
-                'monthly_payment' => $faker -> numberBetween(50, 100),
             ]);
         }
 
@@ -54,7 +53,7 @@ class DatabaseSeeder extends Seeder
 
         $category = array("Private", "Public");
         $class = array("National Referral", "Regional Referral", "General");
-        $postion = array("Health Officer", "Senior health Officer", "Consultant");
+        $postion = array("Head", "Superintendent", "Director");
 
         foreach (range(1, 20) as $index) {
             DB::table('hospitals')->insert([
@@ -63,11 +62,8 @@ class DatabaseSeeder extends Seeder
                 'class' => $faker->randomElement($class),
                 'district' => $faker->state,
 
-                'head_ID' => $faker->unique()->numberBetween(1,155),
                 'head_name' => $faker->firstName,
-                'waiting' => $faker->boolean,
-                'monthly_payment' => $faker->numberBetween(50,100),
-                'award_payment' => $faker->numberBetween(50,100),
+                'Email' => $faker->email,
                 'password' => $faker->password,
                 'officer_position' => $faker->randomElement($postion),
                 'administrator_ID' => $faker->randomElement($admins),
@@ -77,19 +73,12 @@ class DatabaseSeeder extends Seeder
 
         $heads = Hospital::all()->pluck('head_ID')->toArray();
         $patients = \App\Models\Patient::all()->pluck('patient_ID')->toArray();
-        foreach (range(1,20) as $index){
-            DB::table('head_patients')->insert([
-                'head_ID' => $faker ->randomElement($heads),
-                'patient_ID' => $faker -> randomElement($patients),
-            ]);
-        }
 
+        $postion = array("Health Officer", "Senior health Officer", "Consultant");
         foreach (range(1,20) as $index){
             DB::table('officers')->insert([
                 'officer_name' => $faker -> firstName,
                 'waiting' => $faker ->boolean,
-                'monthly_payment' => $faker -> numberBetween(50, 100),
-                'award_payment' => $faker -> numberBetween(50, 100),
                 'password' => $faker -> password,
                 'officer_position' => $faker -> randomElement($postion),
                 'head_ID' => $faker -> randomElement($heads),

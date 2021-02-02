@@ -2,9 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="460ea1a4-3671-42fb-abde-adf648d43134" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/DistributionController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/HospitalController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/distribution.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/hospital.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PatientsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PatientsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Head_patient.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Hospital.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Hospital.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_01_27_102824_create_hospitals_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_01_27_102824_create_hospitals_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_01_27_114300_create_officers_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_01_27_114300_create_officers_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_01_31_125701_create_officer_patients_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_01_31_125701_create_officer_patients_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_01_31_171833_create_head_patients_table.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/seeders/Hospital.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Hospital.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/Officer.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Officer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/login.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/login.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/patients.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/patients.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,9 +170,9 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Zindazed\laravel\new laravel project\recess\resources\views" />
       <recent name="C:\Users\ashraf\Desktop\new recess\Covid-19-Recess-Project\resources\views" />
       <recent name="C:\Users\ashraf\Desktop\new recess\Covid-19-Recess-Project\app\Http\Controllers" />
-      <recent name="C:\Users\Zindazed\laravel\new laravel project\recess\resources\views" />
       <recent name="C:\Users\Zindazed\laravel\new laravel project\recess\public" />
       <recent name="C:\Users\Zindazed\laravel\new laravel project\recess\resources\views\auth" />
     </key>
@@ -182,6 +200,9 @@
       <workItem from="1612053343808" duration="3742000" />
       <workItem from="1612058384499" duration="5648000" />
       <workItem from="1612105363431" duration="17429000" />
+      <workItem from="1612173477833" duration="8334000" />
+      <workItem from="1612248761334" duration="17488000" />
+      <workItem from="1612291224827" duration="7584000" />
     </task>
     <servers />
   </component>
@@ -208,11 +229,15 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="94" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.680@0.0.1280.680" timestamp="1612106306195" />
-    <state x="469" y="55" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1612100733354">
+    <state x="469" y="55" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1612301771057">
       <screen x="0" y="0" width="1280" height="760" />
     </state>
     <state x="370" y="94" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1280.680@0.0.1280.680" timestamp="1612122209845" />
-    <state x="469" y="55" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1280.760@0.0.1280.760" timestamp="1612100733354" />
+    <state x="469" y="55" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1280.760@0.0.1280.760" timestamp="1612301771057" />
+    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1612253382578">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.760@0.0.1280.760" timestamp="1612253382578" />
     <state x="420" y="120" key="FileChooserDialogImpl" timestamp="1612037169907">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
