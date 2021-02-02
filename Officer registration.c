@@ -1,4 +1,6 @@
 #include<stdio.h>
+#include "include/mysql.h"
+#include <stdlib.h>
 main()
 {
 // storing variables	
