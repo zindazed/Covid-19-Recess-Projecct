@@ -25,5 +25,5 @@ Route::get('/patients', 'App\Http\Controllers\PatientsController@display')->name
 Route::get('/hierachy', 'App\Http\Controllers\HierachyController@display')->name("hierachy");
 Route::get('/donations', 'App\Http\Controllers\DonorController@display')->name("donations");
 Route::get('/{id}', 'App\Http\Controllers\DonorController@show')->name("donor");
-//Route::get('/donations', 'App\Http\Controllers\DonorController@add')->name("donor");
+Route::post('/donations', 'App\Http\Controllers\DonorController@add')->name("donor");
 

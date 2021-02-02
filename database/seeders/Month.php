@@ -17,7 +17,7 @@ class Month extends Seeder
     {
         $faker = Faker::create();
         $months = array("January", "February", "March",'April','May','June','June','August','September','October','November','December');
-        foreach (range(1,12) as $index){
+        foreach (range(1,1) as $index){
             foreach ($months as $m){
             DB::table('months')->insert([
                 'month_name' => $m,

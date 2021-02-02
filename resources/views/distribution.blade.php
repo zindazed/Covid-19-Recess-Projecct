@@ -44,7 +44,16 @@
                     <div class="col">
                         <div style="margin-bottom: 10px;"><a class="btn btn-primary" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button">enter donation</a>
                             <div class="collapse show" id="collapse-1">
-                                <form style="padding-left: 7px;padding-bottom: 5px;background: var(--white);"><label style="color: var(--blue);">Donor name:</label><input class="form-control" type="text" style="width: 200px;"><label style="color: var(--blue);">Ammount:</label><input class="form-control" type="text" style="width: 200px;"><button class="btn btn-primary" type="button" style="margin-top: 8px;font-size: 14px;background: var(--blue);padding-top: 0px;padding-bottom: 1px;">add</button></form>
+                                <form style="padding-left: 7px;padding-bottom: 5px;background: var(--white);" action="/donations" method="post">
+                                    @csrf
+                                    <label style="color: var(--blue);">Ammount:</label>
+                                    <input class="form-control" type="text" style="width: 200px;" name="ammount" required="true">
+                                    <label style="color: var(--blue);">donor name:</label>
+                                    <input class="form-control" type="text" style="width: 200px;" name="donor" required="true">
+                                    <label style="color: var(--blue);">Date e.g 12/02/2015:</label>
+                                    <input class="form-control" type="text" style="width: 200px;" name="date" required="true">
+                                    <button class="btn btn-primary" type="submit" style="margin-top: 8px;font-size: 14px;background: var(--blue);padding-top: 0px;padding-bottom: 1px;">add</button>
+                                </form>
                             </div>
                         </div>
                     </div>
