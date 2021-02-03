@@ -17,8 +17,6 @@ class CreateOfficersTable extends Migration
             $table->bigIncrements("officer_ID");
             $table->string("officer_name");
             $table->boolean("waiting");
-            $table->integer("monthly_payment");
-            $table->integer("award_payment");
             $table->string("password");
             $table->string("officer_position");
             $table->unsignedBigInteger("head_ID")->index();

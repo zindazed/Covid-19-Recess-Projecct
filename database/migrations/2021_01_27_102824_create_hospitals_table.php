@@ -14,17 +14,14 @@ class CreateHospitalsTable extends Migration
     public function up()
     {
         Schema::create('hospitals', function (Blueprint $table) {
-            $table->bigIncrements("hospital_ID");
             $table->string("hospital_name");
             $table->string("category");
             $table->string("class");
             $table->string("district");
 
-            $table->unsignedBigInteger("head_ID")->index();
+            $table->bigIncrements("head_ID");
             $table->string("head_name");
-            $table->boolean("waiting");
-            $table->integer("monthly_payment");
-            $table->integer("award_payment");
+            $table->string("Email")->unique();
             $table->string("password");
             $table->string("officer_position");
             $table->unsignedBigInteger("administrator_ID")->index();

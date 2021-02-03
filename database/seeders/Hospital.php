@@ -21,8 +21,7 @@ class Hospital extends Seeder
         $admin = \App\Models\User::all()->pluck('id')->toArray();
         $category = array("Private", "Public");
         $class = array("National Referral", "Regional Referral", "General");
-        $postion = array("Director", "superintendent", "General head");
-
+        $postion = array("Head", "Superintendent", "Director");
         foreach (range(1, 50) as $index) {
             DB::table('hospitals')->insert([
                 'hospital_name' => $faker->name,
@@ -30,11 +29,8 @@ class Hospital extends Seeder
                 'class' => $faker->randomElement($class),
                 'district' => $faker->state,
 
-                'head_ID' => $faker->unique()->numberBetween(1,155),
                 'head_name' => $faker->firstName,
-                'waiting' => $faker->boolean,
-                'monthly_payment' => $faker->numberBetween(50,100),
-                'award_payment' => $faker->numberBetween(50,100),
+                'Email' => $faker->email,
                 'password' => $faker->password,
                 'officer_position' => $faker->randomElement($postion),
                 'administrator_ID' => $faker->randomElement($admin),

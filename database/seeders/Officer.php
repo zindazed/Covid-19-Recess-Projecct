@@ -29,8 +29,6 @@ class Officer extends Seeder
             DB::table('officers')->insert([
                 'officer_name' => $faker -> firstName,
                 'waiting' => $faker ->boolean,
-                'monthly_payment' => $faker -> numberBetween(500000, 1000000),
-                'award_payment' => $faker -> numberBetween(100000, 500000),
                 'password' => $faker -> password,
                 'officer_position' => $faker -> randomElement($postion),
                 'head_ID' => $faker -> randomElement($hospitals),
