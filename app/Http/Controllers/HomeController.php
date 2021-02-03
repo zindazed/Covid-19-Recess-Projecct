@@ -55,21 +55,60 @@ class HomeController extends Controller
         ///////////////graph display for donations made in a given month//////////////////
         //getting all donors
 
-        $month_donations = array();//array to contain donations money for donor in a give month
+//        $month_donations = array();//array to contain donations money for donor in a give month
+//        $month_donors = array();//array to contains donors in a give month
+//        foreach ($donations as $d){
+//            $date = $d->donation_month;
+//            $month = (int)substr($date, 3, -5);
+//            if ($month == 6){
+//                $donors = DB::Table('donors')
+//                    ->select('donor_ID', 'donor_name')
+//                    ->where('donor_ID', '=', $d->donor_ID)
+//                    ->get();
+//                foreach ($donors as $do){
+//                    $month_donors[] = $do->donor_name;
+//                }
+//                $month_donations[] = $d->amount_donated;
+//            }
+//        }
+
+        $month_donations = array(0,0,0,0,0,0);//array to contain donations money for donor in a give month
         $month_donors = array();//array to contains donors in a give month
         foreach ($donations as $d){
             $date = $d->donation_month;
-            $month = (int)substr($date, 3, -5)-1;
-            if ($month == 5){
+            $month = (int)substr($date, 3, -5);
+            if ($month == 6){
                 $donors = DB::Table('donors')
                     ->select('donor_ID', 'donor_name')
                     ->where('donor_ID', '=', $d->donor_ID)
                     ->get();
                 foreach ($donors as $do){
                     $month_donors[] = $do->donor_name;
+                    $ammount = (int)$d->amount_donated;
+                    for ($i=0; $i<sizeof($month_donations); $i++){
+                        if ($i == $do->donor_ID){
+                            $month_donations[$i]+=$ammount;
+                        }
+                    }
                 }
-                $month_donations[] = $d->amount_donated;
+//                $month_donations[] = $d->amount_donated;
             }
+        }
+
+//        $reverted_donors = array_reverse($month_donors, true);
+
+        for ($i=0; $i<sizeof($month_donors); $i++){
+            if ($month_donors[$i] == $month_donors[$i+1] ){
+                unset($month_donors[$i+1]);
+            }
+        }
+
+
+        for ($i=0; $i<(sizeof($month_donations)+1); $i++){
+            if ($month_donations[$i] == 0){
+                unset($month_donations[$i]);
+            }
+
         }
 
         return view('home',[
@@ -78,7 +117,7 @@ class HomeController extends Controller
             'total' => $total_donations,
             'data' => $months_donations,
             'month_donations' => $month_donations,
-            'month_donor' => $month_donors,
+            'month_donor' => array_reverse($month_donors, true),
         ]);
     }
 }
