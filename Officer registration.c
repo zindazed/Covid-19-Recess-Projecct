@@ -18,9 +18,9 @@ puts("Enter password to be saved\n You only have 3 trials !");
 gets(password1);
 
 //Store registered details in a separate file
-FILE *k;
-k= fopen("user","w++");
-fprintf(k,"%s %s" , name, password1);
+FILE *m;
+m= fopen("user","w++");
+fprintf(m,"%s %s" , name, password1);
 
 //Trial error count
 while(j!=1&&outofguesses==0)
