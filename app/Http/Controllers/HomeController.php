@@ -14,10 +14,6 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Show the application dashboard.
@@ -52,27 +48,10 @@ class HomeController extends Controller
             }
         }
 
-        ///////////////graph display for donations made in a given month//////////////////
+        /////////////graph display for donations made in a given month//////////////////
         //getting all donors
 
-//        $month_donations = array();//array to contain donations money for donor in a give month
-//        $month_donors = array();//array to contains donors in a give month
-//        foreach ($donations as $d){
-//            $date = $d->donation_month;
-//            $month = (int)substr($date, 3, -5);
-//            if ($month == 6){
-//                $donors = DB::Table('donors')
-//                    ->select('donor_ID', 'donor_name')
-//                    ->where('donor_ID', '=', $d->donor_ID)
-//                    ->get();
-//                foreach ($donors as $do){
-//                    $month_donors[] = $do->donor_name;
-//                }
-//                $month_donations[] = $d->amount_donated;
-//            }
-//        }
-
-        $month_donations = array(0,0,0,0,0,0);//array to contain donations money for donor in a give month
+        $month_donations = array();//array to contain donations money for donor in a give month
         $month_donors = array();//array to contains donors in a give month
         foreach ($donations as $d){
             $date = $d->donation_month;
@@ -84,32 +63,49 @@ class HomeController extends Controller
                     ->get();
                 foreach ($donors as $do){
                     $month_donors[] = $do->donor_name;
-                    $ammount = (int)$d->amount_donated;
-                    for ($i=0; $i<sizeof($month_donations); $i++){
-                        if ($i == $do->donor_ID){
-                            $month_donations[$i]+=$ammount;
-                        }
-                    }
                 }
-//                $month_donations[] = $d->amount_donated;
+                $month_donations[] = $d->amount_donated;
             }
         }
 
-//        $reverted_donors = array_reverse($month_donors, true);
-
-        for ($i=0; $i<sizeof($month_donors); $i++){
-            if ($month_donors[$i] == $month_donors[$i+1] ){
-                unset($month_donors[$i+1]);
-            }
-        }
-
-
-        for ($i=0; $i<(sizeof($month_donations)+1); $i++){
-            if ($month_donations[$i] == 0){
-                unset($month_donations[$i]);
-            }
-
-        }
+//        $month_donations = array(0,0,0,0,0,0);//array to contain donations money for donor in a give month
+//        $month_donors = array();//array to contains donors in a give month
+//        foreach ($donations as $d){
+//            $date = $d->donation_month;
+//            $month = (int)substr($date, 3, -5);
+//            if ($month == 6){
+//                $donors = DB::Table('donors')
+//                    ->select('donor_ID', 'donor_name')
+//                    ->where('donor_ID', '=', $d->donor_ID)
+//                    ->get();
+//                foreach ($donors as $do){
+//                    $month_donors[] = $do->donor_name;
+//                    $ammount = (int)$d->amount_donated;
+//                    for ($i=0; $i<sizeof($month_donations); $i++){
+//                        if ($i == $do->donor_ID){
+//                            $month_donations[$i]+=$ammount;
+//                        }
+//                    }
+//                }
+////                $month_donations[] = $d->amount_donated;
+//            }
+//        }
+//
+////        $reverted_donors = array_reverse($month_donors, true);
+//
+//        for ($i=0; $i<sizeof($month_donors); $i++){
+//            if ($month_donors[$i] == $month_donors[$i+1] ){
+//                unset($month_donors[$i+1]);
+//            }
+//        }
+//
+//
+//        for ($i=0; $i<(sizeof($month_donations)+1); $i++){
+//            if ($month_donations[$i] == 0){
+//                unset($month_donations[$i]);
+//            }
+//
+//        }
 
         return view('home',[
             'patients' => Patient::all(),

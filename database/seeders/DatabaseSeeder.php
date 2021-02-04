@@ -17,24 +17,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $admins = \App\Models\User::all()->pluck('id')->toArray();
 
-        foreach (range(1,3) as $index){
+        foreach (range(1,2) as $index){
             DB::table('users')->insert([
                 'name' => $faker -> name,
                 'email' => $faker ->email,
                 'email_verified_at' => $faker -> date(),
                 'password' => $faker -> password,
                 'is_admin' => $faker -> boolean,
-            ]);
-        }
-
-        foreach (range(1,20) as $index){
-            DB::table('donors')->insert([
-                'donor_name' => $faker -> name,
-                'donation_month' => $faker ->month,
-                'amount_donated' => $faker -> numberBetween(50, 100),
-                'administrator_ID' => $faker -> randomElement($admins),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s')
             ]);
         }
 
@@ -42,23 +34,46 @@ class DatabaseSeeder extends Seeder
         $gendar = array("M", "F");
         $case_type = array("postive", "false positive");
 
-        foreach (range(1,100) as $index){
+        foreach (range(1,20) as $index){
             DB::table('patients')->insert([
                 'patient_name' => $faker ->firstName,
                 'date_of_identification' => $faker -> date(),
                 'category' => $faker -> randomElement($category),
                 'gender' => $faker ->  randomElement($gendar),
                 'case_type' => $faker -> randomElement($case_type),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s')
             ]);
         }
 
+        $admins = \App\Models\User::all()->pluck('id')->toArray();
+        foreach (range(1,5) as $index){
+            DB::table('donors')->insert([
+                'donor_name' => $faker -> name,
+                'administrator_ID' => $faker -> randomElement($admins),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s')
+            ]);
+        }
+
+        $donors = \App\Models\Donor::all()->pluck('donor_ID')->toArray();
+        foreach (range(1,20) as $index){
+            DB::table('donations')->insert([
+                'donation_month' => $faker ->date('d-m-Y'),
+                'amount_donated' => $faker -> numberBetween(500000, 1000000),
+                'donor_ID' => $faker -> randomElement($donors),
+                'administrator_ID' => $faker -> randomElement($admins),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s')
+            ]);
+        }
 
         $category = array("Private", "Public");
         $class = array("National Referral", "Regional Referral", "General");
         $postion = array("Head", "Superintendent", "Director");
 
 
-        foreach (range(1, 155) as $index) {
+        foreach (range(1, 5) as $index) {
             DB::table('hospitals')->insert([
                 'hospital_name' => $faker->name,
                 'category' => $faker->randomElement($category),
@@ -70,6 +85,8 @@ class DatabaseSeeder extends Seeder
                 'password' => $faker->password,
                 'officer_position' => $faker->randomElement($postion),
                 'administrator_ID' => $faker->randomElement($admins),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s'),
             ]);
 
         }
@@ -87,6 +104,8 @@ class DatabaseSeeder extends Seeder
                 'officer_position' => $faker -> randomElement($postion),
                 'head_ID' => $faker -> randomElement($heads),
                 'administrator_ID' => $faker -> randomElement($admins),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s'),
             ]);
         }
 
@@ -95,6 +114,8 @@ class DatabaseSeeder extends Seeder
             DB::table('officer_patients')->insert([
                 'officer_ID' => $faker ->randomElement($officers),
                 'patient_ID' => $faker -> randomElement($patients),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s'),
             ]);
         }
     }

@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\DB;
 
 class HospitalController extends Controller
 {
+    function view()
+    {
+        $message = 0;
+        return view("hospital", [
+            "message" => $message
+        ]);
+
+    }
+
     function addhospital(Request $req)
     {
         $hospital = new Hospital;

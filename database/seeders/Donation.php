@@ -19,7 +19,6 @@ class Donation extends Seeder
 
         $admins = \App\Models\User::all()->pluck('id')->toArray();
         $donors = \App\Models\Donor::all()->pluck('donor_ID')->toArray();
-        $class = array("", "Regional Referral", "General");
         foreach (range(1,50) as $index){
             DB::table('donations')->insert([
                 'donation_month' => $faker ->date('d-m-Y'),

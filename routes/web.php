@@ -22,21 +22,18 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/patients', 'App\Http\Controllers\PatientsController@display')->name("patients");
 
-Route::get('/hierachy', 'App\Http\Controllers\HierachyController@display')->name("hierachy");
+Route::get('/hierachy', [App\Http\Controllers\HierachyController::class, 'display'])->name("hierachy");
 Route::get('/donations', 'App\Http\Controllers\DonorController@display')->name("donations");
-Route::get('/{id}', 'App\Http\Controllers\DonorController@show')->name("donor");
+//Route::get('/{id}', 'App\Http\Controllers\DonorController@show')->name("donor");
 Route::post('/donations', 'App\Http\Controllers\DonorController@add')->name("donor");
 
 
 
-Route::get('/hospital',function () {
-    $message = 0;
-    return view("hospital", [
-        "message" => $message
-    ]);
-
-});
+Route::get('/hospital','App\Http\Controllers\HospitalController@view');
 Route::post('/addhospital','App\Http\Controllers\HospitalController@addhospital');
 
-Route::get('/donations','App\Http\Controllers\DonorController@payments');
+Route::get('/officer','App\Http\Controllers\OfficerController@view');
+Route::post('/addofficer','App\Http\Controllers\OfficerController@addofficer');
 
+
+Route::get('/salary','App\Http\Controllers\DonorController@payments');

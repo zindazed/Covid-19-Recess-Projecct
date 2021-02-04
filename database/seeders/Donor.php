@@ -19,7 +19,6 @@ class Donor extends Seeder
         $faker = Faker::create();
 
         $admins = \App\Models\User::all()->pluck('id')->toArray();
-        $class = array("", "Regional Referral", "General");
         foreach (range(1,5) as $index){
             DB::table('donors')->insert([
                 'donor_name' => $faker -> name,

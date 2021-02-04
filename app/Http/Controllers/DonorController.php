@@ -9,6 +9,19 @@ use Illuminate\Support\Facades\DB;
 
 class DonorController extends Controller
 {
+
+    function payments()
+    {
+        $amount = DB::table("donors")
+            ->select("amount_donated")
+            ->where("created_at", 'like', '2000%')
+            ->get();
+
+        echo $amount[0]->amount_donated;
+//        $time = Carbon::now()->format('m');
+//        echo $time;
+    }
+
     public function display()
     {
         $donors = DB::Table('donors')
