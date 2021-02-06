@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
                 'email' => $faker ->email,
                 'email_verified_at' => $faker -> date(),
                 'password' => $faker -> password,
-                'is_admin' => $faker -> boolean,
+                'position' => "Administrator",
                 'created_at' => $faker -> date('Y-m-d H:i:s'),
                 'updated_at' => $faker -> date('Y-m-d H:i:s')
             ]);
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         $gendar = array("M", "F");
         $case_type = array("postive", "false positive");
 
-        foreach (range(1,20) as $index){
+        foreach (range(1,10) as $index){
             DB::table('patients')->insert([
                 'patient_name' => $faker ->firstName,
                 'date_of_identification' => $faker -> date(),
@@ -57,10 +57,10 @@ class DatabaseSeeder extends Seeder
         }
 
         $donors = \App\Models\Donor::all()->pluck('donor_ID')->toArray();
-        foreach (range(1,20) as $index){
+        foreach (range(1,1) as $index){
             DB::table('donations')->insert([
                 'donation_month' => $faker ->date('d-m-Y'),
-                'amount_donated' => $faker -> numberBetween(500000, 1000000),
+                'amount_donated' => 10000,
                 'donor_ID' => $faker -> randomElement($donors),
                 'administrator_ID' => $faker -> randomElement($admins),
                 'created_at' => $faker -> date('Y-m-d H:i:s'),

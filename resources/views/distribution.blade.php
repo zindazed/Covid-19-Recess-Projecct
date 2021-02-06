@@ -70,15 +70,39 @@
                             <table class="table my-0" id="dataTable">
                                 <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Officer</th>
                                     <th>Ammount</th>
+                                    <th>Position</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         @foreach($officers as $of)
                                         <tr>
-                                            <td>{{$of->officer_name}}</td>
-                                            <td>{{$of->monthly_payment}}</td>
+                                            <td>{{$of->id}}</td>
+                                            <td>{{$of->name}}</td>
+                                            @switch($of->position)
+                                                @case("Health Officer")
+                                                    <td>{{$salary->Officer}}</td>
+                                                    @break
+                                                @case("Senior health Officer")
+                                                @case("Consultant")
+                                                    <td>{{$salary->Senior_Officer}}</td>
+                                                    @break
+                                                @case("Head")
+                                                    <td>{{$salary->Head}}</td>
+                                                    @break
+                                                @case("Superintendent")
+                                                    <td>{{$salary->Superintendent}}</td>
+                                                    @break
+                                                @case("Director")
+                                                    <td>{{$salary->Director}}</td>
+                                                    @break
+                                                @case("Administrator")
+                                                    <td>{{$salary->Administrator}}</td>
+                                                    @break
+                                            @endswitch
+                                            <td>{{$of->position}}</td>
                                         </tr>
                                         @endforeach
                                         </tbody>

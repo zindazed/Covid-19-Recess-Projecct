@@ -2,27 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="460ea1a4-3671-42fb-abde-adf648d43134" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/OfficerController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/officer.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DistributionController.php" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/Salary.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/UsedDonation.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_02_04_205416_create_used_donations_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_02_05_033539_create_salaries_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DonorController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/DonorController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HospitalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HospitalController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Officer.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Officer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OfficerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OfficerController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Donor.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Donor.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_02_01_171201_create_donations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_02_01_171201_create_donations_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/seeders/Donation.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Donation.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/seeders/Donor.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Donor.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/Head_patient.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/Hospital.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Hospital.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/Officer.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Officer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/Officer_patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Officer_patient.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Patient.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/register.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/register.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/distribution.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/distribution.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/donor.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/donor.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/hierachy.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/hierachy.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/hospital.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/hospital.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/patients.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/patients.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/officer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/officer.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -208,7 +209,10 @@
       <workItem from="1612418961897" duration="2870000" />
       <workItem from="1612422598776" duration="4109000" />
       <workItem from="1612441597712" duration="12125000" />
-      <workItem from="1612455333968" duration="2012000" />
+      <workItem from="1612455333968" duration="8057000" />
+      <workItem from="1612484189369" duration="1626000" />
+      <workItem from="1612530770331" duration="14815000" />
+      <workItem from="1612549959563" duration="21775000" />
     </task>
     <servers />
   </component>
@@ -254,9 +258,9 @@
     </state>
     <state x="296" y="152" key="run.anything.popup/0.0.1280.680@0.0.1280.680" timestamp="1612122268024" />
     <state x="296" y="170" key="run.anything.popup/0.0.1280.760@0.0.1280.760" timestamp="1611738215870" />
-    <state x="303" y="81" width="672" height="678" key="search.everywhere.popup" timestamp="1612304549929">
+    <state x="303" y="81" width="672" height="678" key="search.everywhere.popup" timestamp="1612460512288">
       <screen x="0" y="0" width="1280" height="760" />
     </state>
-    <state x="303" y="81" width="672" height="678" key="search.everywhere.popup/0.0.1280.760@0.0.1280.760" timestamp="1612304549929" />
+    <state x="303" y="81" width="672" height="678" key="search.everywhere.popup/0.0.1280.760@0.0.1280.760" timestamp="1612460512288" />
   </component>
 </project>

@@ -23,6 +23,8 @@ class Donor extends Seeder
             DB::table('donors')->insert([
                 'donor_name' => $faker -> name,
                 'administrator_ID' => $faker -> randomElement($admins),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s')
             ]);
         }
 

@@ -36,4 +36,4 @@ Route::get('/officer','App\Http\Controllers\OfficerController@view');
 Route::post('/addofficer','App\Http\Controllers\OfficerController@addofficer');
 
 
-Route::get('/salary','App\Http\Controllers\DonorController@payments');
+Route::any('/salary','App\Http\Controllers\DonorController@payments');

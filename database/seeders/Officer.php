@@ -25,14 +25,16 @@ class Officer extends Seeder
         $class = array("National Referral", "Regional Referral", "General");
         $postion = array("Health Officer", "Senior health Officer", "Consultant");
 
-        foreach (range(1,100) as $index){
+        foreach (range(1,20) as $index){
             DB::table('officers')->insert([
                 'officer_name' => $faker -> firstName,
                 'waiting' => $faker ->boolean,
                 'password' => $faker -> password,
                 'officer_position' => $faker -> randomElement($postion),
-                'head_ID' => $faker -> randomElement($hospitals),
+                'head_ID' => $faker -> randomElement($heads),
                 'administrator_ID' => $faker -> randomElement($admins),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s'),
             ]);
         }
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDonationsTable extends Migration
+class CreateUsedDonationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateDonationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('donations', function (Blueprint $table) {
-            $table->bigIncrements("donation_ID");
+        Schema::create('used_donations', function (Blueprint $table) {
+            $table->unsignedBigInteger("donation_ID")->primary();
             $table->string("donation_month");
             $table->float("amount_donated");
             $table->unsignedBigInteger("donor_ID")->index();
@@ -23,6 +23,7 @@ class CreateDonationsTable extends Migration
 
             $table->foreign("administrator_ID")->references("id")->on("users")->onDelete("restrict");
             $table->foreign("donor_ID")->references("donor_ID")->on("donors")->onDelete("cascade");
+
         });
     }
 
@@ -33,6 +34,6 @@ class CreateDonationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('donations');
+        Schema::dropIfExists('used_donations');
     }
 }

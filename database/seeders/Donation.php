@@ -19,12 +19,14 @@ class Donation extends Seeder
 
         $admins = \App\Models\User::all()->pluck('id')->toArray();
         $donors = \App\Models\Donor::all()->pluck('donor_ID')->toArray();
-        foreach (range(1,50) as $index){
+        foreach (range(1,5) as $index){
             DB::table('donations')->insert([
                 'donation_month' => $faker ->date('d-m-Y'),
-                'amount_donated' => $faker -> numberBetween(500000, 1000000),
+                'amount_donated' => $faker -> numberBetween(1, 200),
                 'donor_ID' => $faker -> randomElement($donors),
                 'administrator_ID' => $faker -> randomElement($admins),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s')
             ]);
         }
     }

@@ -33,7 +33,7 @@ class OfficerController extends Controller
             ->select('head_ID')
             ->get();
 
-        $least = 3;
+        $least = 15;
         $full= true;
         $hospital = 0;
         foreach ($head as $h)

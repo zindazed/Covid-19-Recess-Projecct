@@ -18,11 +18,11 @@ class Hospital extends Seeder
     {
         $faker = Faker::create();
 
-        $admin = \App\Models\User::all()->pluck('id')->toArray();
+        $admins = \App\Models\User::all()->pluck('id')->toArray();
         $category = array("Private", "Public");
         $class = array("National Referral", "Regional Referral", "General");
         $postion = array("Head", "Superintendent", "Director");
-        foreach (range(1, 50) as $index) {
+        foreach (range(1, 5) as $index) {
             DB::table('hospitals')->insert([
                 'hospital_name' => $faker->name,
                 'category' => $faker->randomElement($category),
@@ -33,7 +33,9 @@ class Hospital extends Seeder
                 'Email' => $faker->email,
                 'password' => $faker->password,
                 'officer_position' => $faker->randomElement($postion),
-                'administrator_ID' => $faker->randomElement($admin),
+                'administrator_ID' => $faker->randomElement($admins),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s'),
             ]);
 
         }
