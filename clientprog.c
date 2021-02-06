@@ -3,28 +3,46 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
-//#include "patientStructure.h"
-#define MAX 80
+#define MAX 150
 #define PORT 8080
 #define SA struct sockaddr
-//client program that fetches commands from the user
-int main(int argc, char **argv)
+
+void func(int sockfd)
+{
+	char command[MAX];
+	char feedback[MAX];
+	int n;
+	for (;;) {
+		bzero(command, sizeof(command));
+
+		n = 0;
+		while ((command[n++] = getchar()) != '\n')
+			;
+		write(sockfd, command, sizeof(command));
+	
+		bzero(feedback, sizeof(feedback));
+		read(sockfd, feedback, sizeof(feedback));
+		printf("From Server : %s", feedback);
+
+		bzero(command, sizeof(command));
+		n = 0;
+		// copy server message in command
+		while ((command[n++] = getchar()) != '\n')
+			;
+		// and send that command to server
+		write(sockfd, command, sizeof(command));
+
+		if ((strncmp(feedback, "exit", 4)) == 0) {
+			printf("Client Exit...\n");
+			break;
+		}
+	}
+}
+
+int main()
 {
 	int sockfd, connfd;
 	struct sockaddr_in servaddr, cli;
-
-	char patient_info[5];
-
-	//struct
-	struct patient
-{
-    char patient_name[20];
-    char date[10];
-    char gender;
-    char category[15];
-};struct patient p;
-
-	//note, argv1 is the command
 
 	// socket create and varification
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -49,64 +67,10 @@ int main(int argc, char **argv)
 	else
 		printf("connected to the server..\n");
 
-	//sending the command to the server
-        //cchecking if command is correct
-        if(strncmp(argv[1], "Addpatient",10)==0){
-	        //send arguments to server
-	          // char patient_info[50];
-				//for(int i = 1; i<=argc; i++){
-			    	//printf("arg %d is %s, ",i, argv[i]);
-			    	//assign a value to the structure var
-			    	char *patientName = argv[2];
-			    	char *Date = argv[3];
-			    	char *Gender = argv[4];
-			    	char *Category = argv[5];
-			    	// inserting structure vslues into an array
-			    	//patient_info[5] = { patientName, Date, Gender, Category };
-			    	patient_info[0]= patientName;
-			    	patient_info[0]= Date;
-			    	patient_info[0]= Gender;
-			    	patient_info[0]= Category;
-			    	//send the array to the server
-			    	if(send(sockfd, &patient_info, (int)sizeof(patient_info), 0)<0){
-			    		puts("send failed");
-			    		return 1;
-			    	}else{
-			    		puts("message sent");
-					  // Receive a reply from the server
-			    	}
-				   // if (recv(sock, &server_reply, 10 * sizeof(int), 0) < 0) {
-				     //   puts("recv failed");
-				    //    return 0;
-				  //  }
-
-	        puts("Addpatient entered");
-	        //break;
-	        }else if(strncmp(argv[1], "Addpatientlist",14)==0){
-	        //send stdering to server program
-	        puts("Addpatientlist entered");
-	        //break;
-	        }else if(strncmp(argv[1], "Check_status",12)==0){
-	        //send string to server program
-	        puts("Check_status entered");
-	        //break;
-	        puts("Check_status entered");
-	        }else if(strncmp(argv[1], "Search",6)==0){
-	        //send string to server program
-	        puts("Search entered");
-	        //break;
-	        }else {
-	        //puts("you have entered a wrong command\n to show commands available");
-	        //puts("commands available\n1. Addpatient patientname, dtae, gender, category\n2. Addpatientlist\n3. Check_status\n4. Search <criteria>\n5. Addpatient filename.txt");
-        }
-        //sending the command
-	//int *stringLen;
-	//char *string = argv[argc];
-
-
-
+	// function for chat
+	func(sockfd);
 
 	// close the socket
 	close(sockfd);
-return 0;
 }
+
