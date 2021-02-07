@@ -29,11 +29,20 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        foreach (range(1,20) as $index){
+        foreach (range(1,5) as $index){
             DB::table('donors')->insert([
                 'donor_name' => $faker -> name,
-                'donation_month' => $faker ->month,
-                'amount_donated' => $faker -> numberBetween(50, 100),
+                'administrator_ID' => $faker -> randomElement($admins),
+            ]);
+        }
+
+        $admins = \App\Models\User::all()->pluck('id')->toArray();
+        $donors = \App\Models\Donor::all()->pluck('donor_ID')->toArray();
+        foreach (range(1,50) as $index){
+            DB::table('donations')->insert([
+                'amount_donated' => $faker -> numberBetween(500000, 1000000),
+                'donor_ID' => $faker -> randomElement($donors),
+                'donation_month' => $faker ->date('d-m-Y'),
                 'administrator_ID' => $faker -> randomElement($admins),
             ]);
         }
@@ -58,7 +67,7 @@ class DatabaseSeeder extends Seeder
         $postion = array("Head", "Superintendent", "Director");
 
 
-        foreach (range(1, 155) as $index) {
+        foreach (range(1, 50) as $index) {
             DB::table('hospitals')->insert([
                 'hospital_name' => $faker->name,
                 'category' => $faker->randomElement($category),
@@ -79,7 +88,7 @@ class DatabaseSeeder extends Seeder
 
 
         $postion = array("Health Officer", "Senior health Officer", "Consultant");
-        foreach (range(1,20) as $index){
+        foreach (range(1,100) as $index){
             DB::table('officers')->insert([
                 'officer_name' => $faker -> firstName,
                 'waiting' => $faker ->boolean,
@@ -91,7 +100,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $officers = \App\Models\Officer::all()->pluck('officer_ID')->toArray();
-        foreach (range(1,20) as $index){
+        foreach (range(1,100) as $index){
             DB::table('officer_patients')->insert([
                 'officer_ID' => $faker ->randomElement($officers),
                 'patient_ID' => $faker -> randomElement($patients),

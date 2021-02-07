@@ -19,7 +19,6 @@ class CreateDonationsTable extends Migration
             $table->string("amount_donated");
             $table->unsignedBigInteger("donor_ID")->index();
             $table->unsignedBigInteger("administrator_ID")->index();
-            $table->timestamps();
 
             $table->foreign("administrator_ID")->references("id")->on("users")->onDelete("restrict");
             $table->foreign("donor_ID")->references("donor_ID")->on("donors")->onDelete("cascade");

@@ -22,7 +22,7 @@ class Donor extends Seeder
         $class = array("", "Regional Referral", "General");
         foreach (range(1,5) as $index){
             DB::table('donors')->insert([
-                'donor_name' => $faker -> name,
+                'donor_name' => $faker -> firstName,
                 'administrator_ID' => $faker -> randomElement($admins),
             ]);
         }

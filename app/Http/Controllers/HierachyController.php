@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\DB;
 
 class HierachyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function display()
     {
 //        $id = 319;
@@ -28,7 +33,7 @@ class HierachyController extends Controller
 
         $g_heads = DB::Table('hospitals')
             ->select('head_name', 'head_ID', 'District')
-            ->where('officer_position', '=', 'General head')
+            ->where('officer_position', '=', 'Head')
             ->where('class', '=', 'General')
             ->get();
 

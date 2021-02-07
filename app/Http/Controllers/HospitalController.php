@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hospital;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class HospitalController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     function addhospital(Request $req)
     {
         $hospital = new Hospital;
@@ -33,6 +40,12 @@ class HospitalController extends Controller
                 break;
             case "National Referral":
                 $hospital->officer_position = 'Director';
+
+                $new_user = new User();
+                $new_user->name = $req->head_name;
+                $new_user->email = $req->Email;
+                $new_user->password = Hash::make($req->password);
+                $new_user->save();
                 break;
         }
 

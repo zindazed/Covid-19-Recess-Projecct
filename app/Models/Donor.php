@@ -9,9 +9,7 @@ class Donor extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
     protected $table = 'donors';
-    public function administrator()
-    {
-        return $this->belongsTo(User::class);
-    }
+
 }

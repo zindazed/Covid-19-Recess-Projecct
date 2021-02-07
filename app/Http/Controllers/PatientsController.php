@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Patient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\Types\Context;
 use PhpParser\Node\Expr\Array_;
 
 class PatientsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function display(){
         $months_patients=array(0,0,0,-1,-1,-1,0,0,0,0,0,0);
         $percentages = array();
@@ -33,7 +39,35 @@ class PatientsController extends Controller
         }
 
         $patients = Patient::paginate(4);
+
+        $positive_cases = DB::Table('patients')
+            ->select('patient_name', 'case_type')
+            ->where('case_type', '=', 'postive')
+            ->get();
+
+        $False_positive_cases = DB::Table('patients')
+            ->select('patient_name', 'case_type')
+            ->where('case_type', '=', 'false positive')
+            ->get();
+
+        $Asymptomatic = DB::Table('patients')
+            ->select('patient_name', 'case_type')
+            ->where('category', '=', 'Asymptomatic')
+            ->get();
+
+        $Symptomatics = DB::Table('patients')
+            ->select('patient_name', 'case_type')
+            ->where('category', '=', 'Symptomatic')
+            ->get();
+
+
+
         return view('patients', [
+            'Symptomatics' => $Symptomatics,
+            'Asymptomatic' => $Asymptomatic,
+            'positive_cases' => $positive_cases,
+            'False_positive_cases' => $False_positive_cases,
+            'patients_all' => Patient::all(),
             'patients'=>$patients,
             'data'=>$months_patients,
             'all_patients'=>$patients_graph

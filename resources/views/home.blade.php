@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard - Brand</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
@@ -26,15 +26,18 @@
             <div class="container-fluid d-flex flex-column p-0">
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="/"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/home"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/donations"><i class="fa fa-dollar"></i><span>Money distribution</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/patients"><i class="fas fa-table"></i><span>patients&nbsp;</span></a></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"><a class="nav-link" href="/hierachy"><i class="fa fa-area-chart"></i><span>Organisation chart</span></a></li>
-
-                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>register</a>
-                        <div class="dropdown-menu"><a class="dropdown-item" href="register"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
+                    @if(Auth::user()->is_admin == 1)
+                    <li class="nav-item dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>register</a>
+                        <div class="dropdown-menu"><a class="dropdown-item" href="register"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a>
+                            <a class="dropdown-item" href="hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
                     </li>
+                    @endif
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -65,15 +68,13 @@
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h6 class="text-primary font-weight-bold m-0">donations made by well wishers</h6>
-                                    <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                        <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
-                                            <p class="text-center dropdown-header">Well wishers</p><a class="dropdown-item" href="#">Ashraf</a><a class="dropdown-item" href="#">Bashir</a><a class="dropdown-item" href="#">Twalib Juma</a><a class="dropdown-item" href="#">A-brians</a><a class="dropdown-item" href="#">Zinda zed</a>
-                                        </div>
-                                    </div>
                                 </div>
-                                <div class="chart-area" style="margin-top: 10px;">
-                                    <canvas id="chbar1">
-                                    </canvas>
+                                <div class="card-body" style="padding: 0px!important;">
+                                    <div class="chart-area" style="margin-top: 10px;">
+                                        <p class="text-center ">All well wishers</p>
+                                        <canvas id="chbar1">
+                                        </canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -81,29 +82,30 @@
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h6 class="text-primary font-weight-bold m-0">donations made in a given month</h6>
-                                    <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                        <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
-                                            <p class="text-center dropdown-header">Months</p><a class="dropdown-item" href="#">January</a><a class="dropdown-item" href="#">Febuary</a><a class="dropdown-item" href="#">March</a><a class="dropdown-item" href="#">April</a><a class="dropdown-item" href="#">May</a><a class="dropdown-item" href="#">June</a><a class="dropdown-item" href="#">July</a><a class="dropdown-item" href="#">August</a><a class="dropdown-item" href="#">September</a><a class="dropdown-item" href="#">October</a><a class="dropdown-item" href="#">November</a><a class="dropdown-item" href="#">December</a>
-                                        </div>
-                                    </div>
+
                                 </div>
-
-                                <div class="chart-area" style="margin-top: 10px;">
-                                    <canvas id="chbar2">
-                                    </canvas>
-
+                                <div class="card-body " style="padding: 0px!important;">
+                                    <div class="chart-area" style="margin-top: 10px;">
+                                        <p class="text-center ">JULY</p>
+                                        <canvas id="chbar2">
+                                        </canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="width: 50%;">
-                        <div class="col">
-                            <div class="card shadow mb-4">
+
+                    <div class="row" style="width: 50%;" >
+                        <div class="col " style="width: 100%;">
+                            <div class="card shadow mb-4"  >
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary font-weight-bold m-0"><br>variation in Percentage change in enrollment figures<br><br></h6>
+                                    <h6 class="text-primary font-weight-bold m-0">variation in Percentage change in enrollment figures</h6>
                                 </div>
-                                <div class="card-body">
-                                    <div class="chart-area"><canvas data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;percentages&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;0&quot;,&quot;10000&quot;,&quot;5000&quot;,&quot;15000&quot;,&quot;10000&quot;,&quot;20000&quot;,&quot;15000&quot;,&quot;25000&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;beginAtZero&quot;:false,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:true},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;beginAtZero&quot;:false,&quot;padding&quot;:20}}]}}}"></canvas></div>
+                                <div class="card-body" >
+                                    <div class="chart-area" style="margin-top: 10px;">
+                                        <canvas id="chbar3" >
+                                        </canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +114,7 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2021</span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © CodeValley 2021</span></div>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
@@ -167,6 +169,37 @@
         };
 
         var chBar = document.getElementById("chbar2");
+        if (chBar){
+            new Chart(chBar, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            });
+        }
+    </script>
+
+    <script>
+        var cdata = {!! json_encode($data1) !!};
+        var chartData = {
+            labels: ["jan","feb", "mar","apr","may","june","july","aug","sept","oct","nov","dec"],
+
+            datasets: [{
+                data: cdata,
+            }]
+        };
+
+        var chBar = document.getElementById("chbar3");
         if (chBar){
             new Chart(chBar, {
                 type: 'bar',

@@ -15,21 +15,23 @@
 </head>
 
 <body id="page-top">
-
-    <div id="wrapper">
+@include('layouts.app')
+    <div id="wrapper" style="margin-top: -50px;">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0">
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/') }}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/home') }}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money distribution</span></a></li>
                     <li class="nav-item"><a class="nav-link active" href="{{ url('/patients') }}"><i class="fas fa-table"></i><span>patients&nbsp;</span></a></li>
 
                     <li class="nav-item"></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/orgchart') }}"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/hierachy') }}"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
+                    @if(Auth::user()->is_admin == 1)
                     <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>register</a>
                         <div class="dropdown-menu"><a class="dropdown-item" href="register"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="hospital.html"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
                     </li>
+                    @endif
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></div>
             </div>
@@ -43,9 +45,24 @@
                 </nav>
                 <div class="container-fluid">
                     <div class="card shadow" style="margin-top: 17px;">
-                        <div class="card-header d-flex py-3">
-                            <p class="text-primary m-0 font-weight-bold">enrolled patients</p>
-                            <p style="margin-left: 9px;font-size: 25px;border-style: solid;border-color: var(--blue);background: var(--blue);color: var(--white);border-radius: 13px;">{{$all_patients->count()}}</p>
+                        <div class="row" style="margin-bottom: 9px;">
+                            <div class="col text-left d-flex justify-content-center">
+                                <div class="text-center">
+                                    <h6 class="text-primary font-weight-bold m-0">enrolled patients</h6><button class="btn btn-primary" type="button" style="background: var(--cyan);width: 100%;padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-left: 4px;margin-top: 8px;">{{$patients_all->count()}}</button>
+                                </div>
+                                <div class="text-center" style="margin-left: 38px;">
+                                    <h6 class="text-primary font-weight-bold m-0">Positive cases</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$positive_cases->count()}}</button>
+                                </div>
+                                <div class="text-center" style="margin-left: 38px;">
+                                    <h6 class="text-primary font-weight-bold m-0">False positive cases</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$False_positive_cases->count()}}</button>
+                                </div>
+                                <div class="text-center" style="margin-left: 38px;">
+                                    <h6 class="text-primary font-weight-bold m-0">Symptomatics</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$Symptomatics->count()}}</button>
+                                </div>
+                                <div class="text-center" style="margin-left: 38px;">
+                                    <h6 class="text-primary font-weight-bold m-0">Asymptomatic</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$Asymptomatic->count()}}</button>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
