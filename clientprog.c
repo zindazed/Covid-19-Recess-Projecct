@@ -32,6 +32,9 @@ void func(int sockfd)
 		// and send that command to server
 		write(sockfd, command, sizeof(command));
 
+		bzero(feedback, sizeof(feedback));
+		read(sockfd, feedback, sizeof(feedback));
+
 		if ((strncmp(feedback, "exit", 4)) == 0) {
 			printf("Client Exit...\n");
 			break;
@@ -73,4 +76,5 @@ int main()
 	// close the socket
 	close(sockfd);
 }
+
 

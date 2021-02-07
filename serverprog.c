@@ -45,7 +45,7 @@ void addPatient(char **arr2){
     puts("Cannot open file");
     }
     //append the structure data into the file
-    fprintf(fp,"%s \t %s \t %s \t %s", arr2[1], arr2[2], arr2[3], arr2[4]);
+    fprintf(fp,"%s\t%s\t%s\t%s", arr2[1], arr2[2], arr2[3], arr2[4]);
 
     fclose(fp);
 }
@@ -56,22 +56,39 @@ int Check_status(){
     int count=0; //initialising record counter
     FILE *fp; // declaring the file pointer
     char str[1000]; //definig string to hold patient records
-    char* patientfile = "patient.txt"; //creating a variable name for the patient file
 
-    fp = fopen(patientfile, "r"); //opening the patient file in read mode
+    fp = fopen("patient.txt", "r"); //opening the patient file in read mode
     if (fp == NULL){
-        printf("Failed to open %s",patientfile);
+        printf("Failed to open patient file");
         exit(0); //close the program incase the file cannot be opened
     }
 
     while (fgets(str, 1000, fp) != NULL){
         count=count+1; //counting the number of records in the patient file        }
+    	printf("%d", count);
     }
     fclose(fp); //close the patient file
     //sedn the number of records in the patient file to the client
     return count;
 }
-
+//search function
+void search(char **ar){
+       FILE *fp; // declaring the file pointer
+    char str[1000]; //definig string to hold patient records
+        fp = fopen("patient.txt","r"); //opening the patient file in read mode
+    if (fp == NULL){
+        printf("Failed to open the patient file");
+        exit(0); //close the program incase the file cannot be opened
+    }
+    //reading strings from the patient file
+    while (fgets(str, 1000, fp) != NULL){
+        //searching for the criteria in each of the reacords
+        if((strstr(str,ar[1])) != NULL){
+        puts(str); //printing to the screen whatever string contains the required criteria
+        }
+    }
+        fclose(fp); //close the patient file
+}
 // Function designed for communication between client and server.
 void func(int sockfd)
 {
@@ -81,15 +98,15 @@ void func(int sockfd)
 	// infinite loop
 	for (;;) { //forever loop
 		bzero(command, MAX);
-		if ((strncmp(command, "exit", 4)) == 0) {
-		printf("serve stopped...\n");
-	  	//send feedback message to client
-	    char feedback0[MAX] = "server stopped";
-		// sending feedback to the client
-		bzero(feedback0, MAX);
-		write(sockfd, feedback0, sizeof(feedback0));
-		break;
-		}
+			if ((strncmp(command, "exit", 4)) == 0) {
+			printf("serve stopped...\n");
+		  	//send feedback message to client
+		    char feedback0[MAX] = "server stopped";
+			// sending feedback to the client
+			bzero(feedback0, MAX);
+			write(sockfd, feedback0, sizeof(feedback0));
+			break;
+			}
 		// read the message from client and copy it in command
 		read(sockfd, command, sizeof(command));
 
@@ -112,39 +129,45 @@ void func(int sockfd)
 				write(sockfd, feedback, sizeof(feedback));
 	        }else if(strncmp(command, "Addpatientlist",14)==0){ //FOR ADDPATIENTLIST
 	        //send stdering to server program
-				char *ARR[2];//array to store strings from input
+				char *ARR[1];//array to store strings from input
 				char *p1;//pointer to the delimeter
 			    int y = 0;
 			    p1 = strtok(command, " ");//getting the first token before the first delimeter using the strtok func
    				 // Checks for delimeter
 			    while (p1 != 0) {
 			    	ARR[y++]=p1;
-			        printf(" %s", p1);
 			        // Use of strtok
 			        // go through other tokens
-			        p1 = strtok(0, ", "); //pointing to the next delimeter
+			        p1 = strtok(0, " "); //pointing to the next delimeter
 			    }
 			    addPatientlist(ARR);//adds patient to the patient file
 	        	//send feedback message to client
 	        	char feedback2[MAX] = "patient list has been added";
 				// // sending feedback to the client
-				bzero(feedback2, MAX);
+				//bzero(feedback2, MAX);
 				write(sockfd, feedback2, sizeof(feedback2));
 	        }else if(strncmp(command, "Check_status",12)==0){ //FOR CHECK_STATUS
 	        	int number = Check_status();
-		        printf("there are %d patients in the patient file\n", Check_status());
-		        //char feedback3 ;
-		        //feedback3 = (char) number;
-				// // sending feedback to the client
+		       // printf("there are %d patients in the patient file\n", Check_status());
+		        char feedback3 = (char) Check_status();
+				// sending feedback to the client
 				//bzero(feedback3, sizeof(feedback3));
-				//write(sockfd, feedback3, sizeof(feedback3));
+				write(sockfd, feedback3, sizeof(feedback3));
 	        }else if(strncmp(command, "Search",6)==0){ //FOR SEARCH
-		        //send string to server program
-		        puts("Search entered");
+		        char *ARR3[1];//array to store strings from input
+			    char *p1;//pointer to the delimeter
+			    int y = 0;
+			    p1 = strtok(command, " ");//getting the first token before the first delimeter using the strtok func
+			    while (p1 != 0) {
+			        ARR3[y++]=p1;
+			        p1 = strtok(0, " "); //pointing to the next delimeter
+			    }
+			    search(ARR3);
 		        //break;
 	        }else if(strncmp(command, "help", 4)==0){//FOR HELP
 	        	char feedback5[MAX] = "Check_status, help, Search <criteria>, Addpatientlist <patientlistfilename.txt>, Addpatient";
 				// // sending feedback to the client
+				Check_status();
 				bzero(feedback5, MAX);
 				write(sockfd, feedback5, sizeof(feedback5));
 	        }else { //IF COMMAND IS WRONG
@@ -210,7 +233,7 @@ int main()
 	else
 		printf("server acccept the client...\n");
 
-	//verification
+	// verification
 
 	// Function for chatting between client and server
 	func(connfd);
