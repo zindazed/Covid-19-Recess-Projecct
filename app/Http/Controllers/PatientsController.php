@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\Types\Context;
@@ -10,20 +11,19 @@ use PhpParser\Node\Expr\Array_;
 
 class PatientsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function display(){
-        $name = ['as', 'zed'];
-        $months_patients=array(0,0,0,-1,-1,-1,0,0,0,0,0,0);
+        $months_patients=array(0,0,0,0,0,0,0,0,0,0,0,0,0);
         $percentages = array();
-        $patients_graph = Patient::all();
+        $patients_graph = DB::table("patients")
+            ->select("*")
+            ->where("date_of_identification","like",Carbon::now()->format("Y")."%")
+            ->get();
+
+        //Patient::all();
 
         foreach ($patients_graph as $p){
             $date = $p->date_of_identification;
-            $month = (int)substr($date, 3, -5)-1;
+            $month = Carbon::parse($date)->format("m") - 1;
             for ($i=0; $i<sizeof($months_patients); $i++){
                 if ($i == $month){
                     $months_patients[$i]++;
@@ -31,7 +31,7 @@ class PatientsController extends Controller
             }
         }
 
-        for ($x=0; $x<11; $x++){
+        for ($x=0; $x<12; $x++){
             if ($months_patients[$x]==0)
                 $percentage = 0;
             else
@@ -70,9 +70,8 @@ class PatientsController extends Controller
             'False_positive_cases' => $False_positive_cases,
             'patients_all' => Patient::all(),
             'patients'=>$patients,
-            'data'=>$months_patients,
-            'all_patients'=>$patients_graph,
-            'name'=>$name,
+            'data'=>$percentages,
+            'all_patients'=>$patients_graph
         ]);
     }
 }

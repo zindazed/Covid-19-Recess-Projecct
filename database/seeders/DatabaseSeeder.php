@@ -75,6 +75,14 @@ class DatabaseSeeder extends Seeder
                 ]);}
         }
 
+        $donor = \App\Models\Donor::all()->pluck('donor_ID')->toArray();
+        foreach (range(1,1) as $index){
+            DB::table('ids')->insert([
+                'number' => $faker->randomElement($donor),
+                'month' => $faker->randomElement($months),
+            ]);
+        }
+
         $category = array("Private", "Public");
         $class = array("National Referral", "Regional Referral", "General");
         $postion = array("Head", "Superintendent", "Director");

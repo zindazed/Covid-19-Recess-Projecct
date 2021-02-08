@@ -184,8 +184,6 @@ class DonorController extends Controller
                     $used->amount_donated = $donation->amount_donated;
                     $used->donor_ID = $donation->donor_ID;
                     $used->administrator_ID = $donation->administrator_ID;
-                    $used->created_at = $donation->created_at;
-                    $used->updated_at = $donation->updated_at;
                     $used->save();
                 }
 
@@ -209,11 +207,11 @@ class DonorController extends Controller
                     ->where("Date", "=", "$time")
                     ->first();
 
-                $donors = DB::Table('donors')
+                $all_donors = DB::Table('donors')
                     ->select('donor_ID', 'donor_name')
                     ->get();
 
-                //displaying the graph
+                //////displaying the graph donation amde by well wishers graph////////////////
                 $donations = DB::Table('donations')
                     ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
                     ->get();
@@ -227,6 +225,24 @@ class DonorController extends Controller
                         if ($i == $month) {
                             $months_donations[$i] += $ammount;
                         }
+                    }
+                }
+
+                /////graph for donations made in a given month////////
+                $month_donations = array();//array to contain donations money for donor in a give month
+                $month_donors = array();//array to contains donors in a give month
+                foreach ($donations as $d){
+                    $date = $d->donation_month;
+                    $month = (int)substr($date, 3, -5);
+                    if ($month == 7){
+                        $donors = DB::Table('donors')
+                            ->select('donor_ID', 'donor_name')
+                            ->where('donor_ID', '=', $d->donor_ID)
+                            ->get();
+                        foreach ($donors as $do){
+                            $month_donors[] = $do->donor_name;
+                        }
+                        $month_donations[] = $d->amount_donated;
                     }
                 }
                 $month = DB::Table('months')
@@ -244,12 +260,17 @@ class DonorController extends Controller
                     'salary' => $salary,
                     'all_officers' => Officer::all(),
                     'months' => $month,
-                    'donors' => $donors,
+                    'donors' => $all_donors,
                     'data' => $months_donations,
                     'consultants' => $consultant,
+                    'selected_donor' => '',
+                    'selected_month' => '',
+                    'month_donations' => $month_donations,
+                    'month_donor' => $month_donors,
                 ]);
             }
         } catch (QueryException $ex) {
+            $time = Carbon::now()->format('Y-m');
             $officers = DB::table("officers")
                 ->select("officer_name", "officer_position", "officer_ID")
                 ->where("Retired", "=", "0");
@@ -268,11 +289,11 @@ class DonorController extends Controller
                 ->where("Date", "=", "$time")
                 ->first();
 
-            $donors = DB::Table('donors')
+            $all_donors = DB::Table('donors')
                 ->select('donor_ID', 'donor_name')
                 ->get();
 
-            //displaying the graph
+            //////displaying the graph donation amde by well wishers graph////////////////
             $donations = DB::Table('donations')
                 ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
                 ->get();
@@ -288,6 +309,24 @@ class DonorController extends Controller
                     }
                 }
             }
+
+            /////graph for donations made in a given month////////
+            $month_donations = array();//array to contain donations money for donor in a give month
+            $month_donors = array();//array to contains donors in a give month
+            foreach ($donations as $d){
+                $date = $d->donation_month;
+                $month = (int)substr($date, 3, -5);
+                if ($month == 7){
+                    $donors = DB::Table('donors')
+                        ->select('donor_ID', 'donor_name')
+                        ->where('donor_ID', '=', $d->donor_ID)
+                        ->get();
+                    foreach ($donors as $do){
+                        $month_donors[] = $do->donor_name;
+                    }
+                    $month_donations[] = $d->amount_donated;
+                }
+            }
             $month = DB::Table('months')
                 ->select('id', 'month_name')
                 ->get();
@@ -301,9 +340,13 @@ class DonorController extends Controller
                 'salary' => $salary,
                 'all_officers' => Officer::all(),
                 'months' => $month,
-                'donors' => $donors,
+                'donors' => $all_donors,
                 'data' => $months_donations,
                 'consultants' => $consultant,
+                'selected_donor' => '',
+                'selected_month' => '',
+                'month_donations' => $month_donations,
+                'month_donor' => $month_donors,
             ]);
         }
     }
@@ -504,19 +547,62 @@ class DonorController extends Controller
 
     public function show($id)
     {
+        $time = Carbon::now()->format('Y-m');
+        $officers = DB::table("officers")
+            ->select("officer_name", "officer_position", "officer_ID")
+            ->where("Retired", "=", "0");
+
+        $heads = DB::table("hospitals")
+            ->select("head_name", "officer_position", "head_ID");
+
+        $workers = DB::table("users")
+            ->select("name", "position", "id")
+            ->union($heads)
+            ->union($officers)
+            ->paginate(10);
+
+        $salary = DB::table("salaries")
+            ->select("*")
+            ->where("Date", "=", "$time")
+            ->first();
+
         ///////for displaying donations for a selected donor/////////////
+        if (is_numeric($id)) {
+            $nid = $id;
+            DB::table("ids")
+                ->update(["number"=>$nid]);
+
+            $a_id = DB::table("ids")
+                ->select("*")
+                ->first();
+            $mid = $a_id->month;
+        }
+        else
+        {
+            $mid = $id;
+            DB::table("ids")
+                ->update(["month"=>$mid]);
+
+            $a_id = DB::table("ids")
+                ->select("*")
+                ->first();
+            $nid = $a_id->number;
+        }
+//        echo "$mid<br>$nid";
+//        exit();
+
         $all_donors = DB::Table('donors')
             ->select('donor_ID', 'donor_name')
             ->get();
 
         $selected_donor = DB::Table('donors')
             ->select('donor_ID', 'donor_name')
-            ->where('donor_ID', '=', $id)
+            ->where('donor_ID', '=', $nid)
             ->get();
 
         $donations_for_donors = DB::Table('donations')
             ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
-            ->where('donor_ID', '=', $id)
+            ->where('donor_ID', '=', $nid)
             ->get();
 
         $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -538,10 +624,9 @@ class DonorController extends Controller
         $month_donations = array();//array to contain donations money for donor in a give month
         $month_donors = array();//array to contains donors in a give month
         foreach ($donations as $d){
-            $date = $d->donation_month;
-            $month = (int)substr($date, 3, -5);
+            $month = Carbon::parse($d->donation_month)->monthName;
 
-            if ($month == $id){
+            if ($month == $mid){
                 $donors = DB::Table('donors')
                     ->select('donor_ID', 'donor_name')
                     ->where('donor_ID', '=', $d->donor_ID)
@@ -560,19 +645,24 @@ class DonorController extends Controller
         /////get selected month/////
         $selected_month = DB::Table('months')
             ->select('id', 'month_name')
-            ->where('month_name', '=', $id)
+            ->where('month_name', '=', $mid)
+            ->get();
+
+        $consultant = DB::table("consultants")
+            ->select("*")
             ->get();
 
 
         return view('distribution', [
-            'officers' => Officer::paginate(10),
+            'officers' => $workers,
+            'salary' => $salary,
             'all_officers' => Officer::all(),
             'donors' => $all_donors,
             'data' => $months_donations,
             'selected_donor' => $selected_donor,
             'selected_month' => $selected_month,
             'months' => $months,
-
+            'consultants' => $consultant,
             'month_donations' => $month_donations,
             'month_donor' => $month_donors,
         ]);
