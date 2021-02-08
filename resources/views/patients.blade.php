@@ -21,19 +21,18 @@
             <div class="container-fluid d-flex flex-column p-0">
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/home') }}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money distribution</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ url('/patients') }}"><i class="fas fa-table"></i><span>patients&nbsp;</span></a></li>
-
+                    <li class="nav-item"><a class="nav-link" href="/home"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money Distribution</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/patients') }}"><i class="fas fa-table"></i><span>Patients&nbsp;</span></a></li>
                     <li class="nav-item"></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/hierachy') }}"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
-                    @if(Auth::user()->is_admin == 1)
-                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>register</a>
-                        <div class="dropdown-menu"><a class="dropdown-item" href="/officer"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="/hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/hierachy"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
+                    @if(Auth::user()->position == 'Administrator')
+                        <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>Register</a>
+                            <div class="dropdown-menu"><a class="dropdown-item" href="/officer"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health Officer</a><a class="dropdown-item" href="/hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
+                        </li>
                     @endif
                 </ul>
-                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></div>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
         </nav>
         <div class="d-flex flex-column" id="content-wrapper">
@@ -48,13 +47,13 @@
                         <div class="row" style="margin-bottom: 9px;">
                             <div class="col text-left d-flex justify-content-center">
                                 <div class="text-center">
-                                    <h6 class="text-primary font-weight-bold m-0">enrolled patients</h6><button class="btn btn-primary" type="button" style="background: var(--cyan);width: 100%;padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-left: 4px;margin-top: 8px;">{{$patients_all->count()}}</button>
+                                    <h6 class="text-primary font-weight-bold m-0">Enrolled Patients</h6><button class="btn btn-primary" type="button" style="background: var(--cyan);width: 100%;padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-left: 4px;margin-top: 8px;">{{$patients_all->count()}}</button>
                                 </div>
                                 <div class="text-center" style="margin-left: 38px;">
-                                    <h6 class="text-primary font-weight-bold m-0">Positive cases</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$positive_cases->count()}}</button>
+                                    <h6 class="text-primary font-weight-bold m-0">Positive Cases</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$positive_cases->count()}}</button>
                                 </div>
                                 <div class="text-center" style="margin-left: 38px;">
-                                    <h6 class="text-primary font-weight-bold m-0">False positive cases</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$False_positive_cases->count()}}</button>
+                                    <h6 class="text-primary font-weight-bold m-0">False Positive Cases</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$False_positive_cases->count()}}</button>
                                 </div>
                                 <div class="text-center" style="margin-left: 38px;">
                                     <h6 class="text-primary font-weight-bold m-0">Symptomatics</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$Symptomatics->count()}}</button>
@@ -72,7 +71,7 @@
                                             <th>Name</th>
                                             <th>Date</th>
                                             <th>Gender</th>
-                                            <th>Case type</th>
+                                            <th>Case Type</th>
                                             <th>category</th>
                                         </tr>
                                     </thead>
@@ -92,7 +91,7 @@
                                             <td><strong>Name</strong></td>
                                             <td><strong>Date</strong></td>
                                             <td><strong>Gender</strong></td>
-                                            <td><strong>Case type</strong></td>
+                                            <td><strong>Case Type</strong></td>
                                             <td><strong>Category</strong></td>
                                             <td></td>
                                         </tr>
@@ -113,7 +112,7 @@
                             <div class="col-lg-7 col-xl-8 align-self-baseline">
                                 <div class="card shadow mb-4">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h6 class="text-primary font-weight-bold m-0"><br>variation in Percentage change in enrollment figures<br><br></h6>
+                                        <h6 class="text-primary font-weight-bold m-0"><br>Variation in Percentage Change in Enrollment Figures<br><br></h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="chart-area">

@@ -21,17 +21,15 @@
             <div class="container-fluid d-flex flex-column p-0">
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="/home"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/donations"><i class="fa fa-dollar"></i><span>Money distribution</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/patients"><i class="fas fa-table"></i><span>patients&nbsp;</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/home"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money Distribution</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/patients') }}"><i class="fas fa-table"></i><span>Patients&nbsp;</span></a></li>
                     <li class="nav-item"></li>
-                    <li class="nav-item"><a class="nav-link" href="/hierachy"><i class="fa fa-area-chart"></i><span>Organisation chart</span></a></li>
-                    @if(Auth::user()->is_admin == 1)
-                    <li class="nav-item dropdown">
-                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>register</a>
-                        <div class="dropdown-menu"><a class="dropdown-item" href="register"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a>
-                            <a class="dropdown-item" href="hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/hierachy"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
+                    @if(Auth::user()->position == 'Administrator')
+                        <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>Register</a>
+                            <div class="dropdown-menu"><a class="dropdown-item" href="/officer"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health Officer</a><a class="dropdown-item" href="/hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
+                        </li>
                     @endif
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
@@ -48,13 +46,13 @@
                     <div class="row" style="margin-bottom: 9px;">
                         <div class="col text-left d-flex justify-content-center">
                             <div class="text-center">
-                                <h6 class="text-primary font-weight-bold m-0">enrolled patients</h6><button class="btn btn-primary" type="button" style="background: var(--cyan);width: 100%;padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-left: 4px;margin-top: 8px;">{{$patients->count()}}</button>
+                                <h6 class="text-primary font-weight-bold m-0">Enrolled Patients</h6><button class="btn btn-primary" type="button" style="background: var(--cyan);width: 100%;padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-left: 4px;margin-top: 8px;">{{$patients->count()}}</button>
                             </div>
                             <div class="text-center" style="margin-left: 38px;">
                                 <h6 class="text-primary font-weight-bold m-0">Number of Officers</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$officers->count()}}</button>
                             </div>
                             <div class="text-center" style="margin-left: 38px;">
-                                <h6 class="text-primary font-weight-bold m-0">Available donation funds</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$total}}</button>
+                                <h6 class="text-primary font-weight-bold m-0">Available Donation Funds</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$total}}</button>
                             </div>
                         </div>
                     </div>
@@ -62,11 +60,11 @@
                         <div class="col">
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary font-weight-bold m-0">donations made by well wishers</h6>
+                                    <h6 class="text-primary font-weight-bold m-0">Donations Made By Well Wishers</h6>
                                 </div>
                                 <div class="card-body" style="padding: 0px!important;">
                                     <div class="chart-area" style="margin-top: 10px;">
-                                        <p class="text-center ">All well wishers</p>
+                                        <p class="text-center ">All Well Wishers</p>
                                         <canvas id="chbar1">
                                         </canvas>
                                     </div>
@@ -76,7 +74,7 @@
                         <div class="col">
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary font-weight-bold m-0">donations made in a given month</h6>
+                                    <h6 class="text-primary font-weight-bold m-0">Donations Made in a Given Month</h6>
 
                                 </div>
                                 <div class="card-body " style="padding: 0px!important;">
@@ -94,7 +92,7 @@
                         <div class="col " style="width: 100%;">
                             <div class="card shadow mb-4"  >
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary font-weight-bold m-0">variation in Percentage change in enrollment figures</h6>
+                                    <h6 class="text-primary font-weight-bold m-0">Variation in Percentage Change in Enrollment Figures</h6>
                                 </div>
                                 <div class="card-body" >
                                     <div class="chart-area" style="margin-top: 10px;">

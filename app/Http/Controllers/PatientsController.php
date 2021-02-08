@@ -16,6 +16,7 @@ class PatientsController extends Controller
     }
 
     public function display(){
+        $name = ['as', 'zed'];
         $months_patients=array(0,0,0,-1,-1,-1,0,0,0,0,0,0);
         $percentages = array();
         $patients_graph = Patient::all();
@@ -70,7 +71,8 @@ class PatientsController extends Controller
             'patients_all' => Patient::all(),
             'patients'=>$patients,
             'data'=>$months_patients,
-            'all_patients'=>$patients_graph
+            'all_patients'=>$patients_graph,
+            'name'=>$name,
         ]);
     }
 }

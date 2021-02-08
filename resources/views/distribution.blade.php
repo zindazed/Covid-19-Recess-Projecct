@@ -22,13 +22,13 @@
             <hr class="sidebar-divider my-0">
             <ul class="nav navbar-nav text-light" id="accordionSidebar">
                 <li class="nav-item"><a class="nav-link" href="/home"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                <li class="nav-item"><a class="nav-link active" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money distribution</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/patients') }}"><i class="fas fa-table"></i><span>patients&nbsp;</span></a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money Distribution</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/patients') }}"><i class="fas fa-table"></i><span>Patients&nbsp;</span></a></li>
                 <li class="nav-item"></li>
-                <li class="nav-item"><a class="nav-link" href="/hierachy"><i class="fa fa-area-chart"></i><span>Organisation chart</span></a></li>
-                @if(Auth::user()->is_admin == 1)
-                <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>register</a>
-                    <div class="dropdown-menu"><a class="dropdown-item" href="/officer"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="/hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
+                <li class="nav-item"><a class="nav-link" href="/hierachy"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
+                @if(Auth::user()->position == 'Administrator')
+                <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>Register</a>
+                    <div class="dropdown-menu"><a class="dropdown-item" href="/officer"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health Officer</a><a class="dropdown-item" href="/hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
                 </li>
                 @endif
             </ul>
@@ -222,7 +222,7 @@
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in" style="width: 200px;">
                                         <p class="text-center dropdown-header">months</p>
                                         @foreach($months as $month)
-                                            <a class="dropdown-item" href="{{$month->id}}">{{$month->month_name}}</a>
+                                            <a class="dropdown-item" href="{{$month->month_name}}">{{$month->month_name}}</a>
                                         @endforeach
                                     </div>
                                 </div>

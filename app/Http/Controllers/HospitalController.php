@@ -50,6 +50,7 @@ class HospitalController extends Controller
                 $new_user->name = $req->head_name;
                 $new_user->email = $req->Email;
                 $new_user->password = Hash::make($req->password);
+                $new_user->position = 'Director';
                 $new_user->save();
                 break;
         }

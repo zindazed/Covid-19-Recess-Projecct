@@ -495,12 +495,10 @@ class DonorController extends Controller
             'data' => $months_donations,
             'selected_donor' => '',
             'selected_month' => '',
-
             'month_donations' => $month_donations,
             'month_donor' => $month_donors,
             'salary' => $salary,
             'consultants' => $consultants,
-
         ]);
     }
 
@@ -562,7 +560,7 @@ class DonorController extends Controller
         /////get selected month/////
         $selected_month = DB::Table('months')
             ->select('id', 'month_name')
-            ->where('id', '=', $id)
+            ->where('month_name', '=', $id)
             ->get();
 
 
