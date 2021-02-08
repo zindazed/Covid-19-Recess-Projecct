@@ -23,7 +23,7 @@ class Patient extends Seeder
         foreach (range(1,10) as $index){
             DB::table('patients')->insert([
                 'patient_name' => $faker ->firstName,
-                'date_of_identification' => $faker -> date(),
+                'date_of_identification' => $faker -> dateTimeBetween(Carbon::now()->subYear(),Carbon::now()->addYear()),
                 'category' => $faker -> randomElement($category),
                 'gender' => $faker ->  randomElement($gendar),
                 'case_type' => $faker -> randomElement($case_type),

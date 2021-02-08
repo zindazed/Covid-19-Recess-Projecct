@@ -64,8 +64,22 @@ class DatabaseSeeder extends Seeder
                 'amount_donated' => $faker ->numberBetween(50,100),
                 'donor_ID' => $faker -> randomElement($donors),
                 'administrator_ID' => $faker -> randomElement($admins),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+            ]);
+        }
+
+        $months = array("January", "February", "March",'April','May','June','July','August','September','October','November','December');
+        foreach (range(1,1) as $index){
+            foreach ($months as $m){
+                DB::table('months')->insert([
+                    'month_name' => $m,
+                ]);}
+        }
+
+        $donor = \App\Models\Donor::all()->pluck('donor_ID')->toArray();
+        foreach (range(1,1) as $index){
+            DB::table('ids')->insert([
+                'number' => $faker->randomElement($donor),
+                'month' => $faker->randomElement($months),
             ]);
         }
 

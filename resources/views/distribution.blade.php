@@ -222,7 +222,7 @@
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in" style="width: 200px;">
                                         <p class="text-center dropdown-header">months</p>
                                         @foreach($months as $month)
-                                            <a class="dropdown-item" href="{{$month->id}}">{{$month->month_name}}</a>
+                                            <a class="dropdown-item" href="{{$month->month_name}}">{{$month->month_name}}</a>
                                         @endforeach
                                     </div>
                                 </div>
