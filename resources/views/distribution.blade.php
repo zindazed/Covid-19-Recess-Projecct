@@ -39,7 +39,7 @@
         <div id="content">
             <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
                 <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                    <h1 style="margin-top: 4px;">Donations and distribution</h1>
+                    <h1 style="margin-top: 4px;">Donations and Distribution</h1>
                 </div>
             </nav>
             <div class="container-fluid" style="margin-top: 12px;">
@@ -137,7 +137,7 @@
                 </div>
                 <div class="card shadow" style="margin-top: 14px;">
                     <div class="card-header py-3">
-                        <p class="text-primary m-0 font-weight-bold">Staff paid by system</p>
+                        <p class="text-primary m-0 font-weight-bold">Staff Paid by System</p>
                     </div>
                     <div class="card-body">
                         <div class="row justify-content-end">
@@ -188,10 +188,10 @@
                     <div class="col">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary font-weight-bold m-0">donations made by well wishers</h6>
+                                <h6 class="text-primary font-weight-bold m-0">Donations Made by Well Wishers</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in" style="width: 200px;">
-                                        <p class="text-center dropdown-header">Well wishers</p>
+                                        <p class="text-center dropdown-header">Well Wishers</p>
                                         @foreach($donors as $d)
                                          <a class="dropdown-item" href="{{$d->donor_ID}}">{{$d->donor_name}}</a>
                                         @endforeach
@@ -217,7 +217,7 @@
                     <div class="col">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary font-weight-bold m-0">donations made by well wishers</h6>
+                                <h6 class="text-primary font-weight-bold m-0">Donations Made by Well Wishers</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in" style="width: 200px;">
                                         <p class="text-center dropdown-header">months</p>

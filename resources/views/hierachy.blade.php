@@ -22,8 +22,8 @@
             <hr class="sidebar-divider my-0">
             <ul class="nav navbar-nav text-light" id="accordionSidebar">
                 <li class="nav-item"><a class="nav-link" href="/home"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money distribution</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/patients') }}"><i class="fas fa-table"></i><span>patients&nbsp;</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money Distribution</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/patients') }}"><i class="fas fa-table"></i><span>Patients&nbsp;</span></a></li>
                 <li class="nav-item"></li>
                 @if(Auth::user()->is_admin == 1)
                 <li class="nav-item"><a class="nav-link active" href="{{ url('/hierachy') }}"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
@@ -44,7 +44,7 @@
             </nav>
             <div class="row">
                 <div class="col">
-                    <div style="margin-left: 5px;margin-right: 5px;margin-bottom: 12px;margin-top: 6px;"><a class="btn btn-primary text-left" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button" style="width: 100%;"><i class="fa fa-chevron-right"></i>&nbsp;National referral hospitals</a>
+                    <div style="margin-left: 5px;margin-right: 5px;margin-bottom: 12px;margin-top: 6px;"><a class="btn btn-primary text-left" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button" style="width: 100%;"><i class="fa fa-chevron-right"></i>&nbsp;National Referral Hospitals</a>
                         <div class="collapse show" id="collapse-1">
                             @foreach($directors as $d)
                             <div style="margin-left: 27px;"><a class="btn btn-primary text-left" data-toggle="collapse" aria-expanded="false" aria-controls="collapse-2" href="#collapse{{$d->head_ID}}" role="button" style="width: 100%;margin-top: 3px;background: var(--cyan);"><i class="fa fa-chevron-right"></i>&nbsp;{{$d->head_name}}</a>
@@ -59,7 +59,7 @@
                             @endforeach
                         </div>
                     </div>
-                    <div style="margin-left: 5px;margin-right: 5px;margin-bottom: 12px;"><a class="btn btn-primary text-left" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button" style="width: 100%;"><i class="fa fa-chevron-right"></i>&nbsp;Regional referral hospital</a>
+                    <div style="margin-left: 5px;margin-right: 5px;margin-bottom: 12px;"><a class="btn btn-primary text-left" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button" style="width: 100%;"><i class="fa fa-chevron-right"></i>&nbsp;Regional Referral Hospital</a>
                         <div class="collapse show" id="collapse-4">
                             @foreach($supretendants as $sup)
                                 <div style="margin-left: 27px;"><a class="btn btn-primary text-left" data-toggle="collapse" aria-expanded="false" aria-controls="collapse-2" href="#collapse{{$sup->head_ID}}" role="button" style="width: 100%;margin-top: 3px;background: var(--cyan);"><i class="fa fa-chevron-right"></i>&nbsp;{{$sup->head_name}}</a>
@@ -74,7 +74,7 @@
                             @endforeach
                         </div>
                     </div>
-                    <div style="margin-left: 5px;margin-right: 5px;margin-bottom: 2px;"><a class="btn btn-primary text-left" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-6" href="#collapse-6" role="button" style="width: 100%;"><i class="fa fa-chevron-right"></i>&nbsp;General Referral hospital</a>
+                    <div style="margin-left: 5px;margin-right: 5px;margin-bottom: 2px;"><a class="btn btn-primary text-left" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-6" href="#collapse-6" role="button" style="width: 100%;"><i class="fa fa-chevron-right"></i>&nbsp;General Hospital</a>
                         <div class="collapse show" id="collapse-6">
                             @foreach($general_heads as $g_head)
                                 <div style="margin-left: 27px;"><a class="btn btn-primary text-left" data-toggle="collapse" aria-expanded="false" aria-controls="collapse-2" href="#collapse{{$g_head->head_ID}}" role="button" style="width: 100%;margin-top: 3px;background: var(--cyan);"><i class="fa fa-chevron-right"></i>&nbsp;{{$g_head->head_name}}</a>

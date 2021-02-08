@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="460ea1a4-3671-42fb-abde-adf648d43134" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DonorController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/DonorController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PatientsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PatientsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_02_04_205416_create_used_donations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_02_04_205416_create_used_donations_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Patient.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/distribution.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/distribution.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/hierachy.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/hierachy.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
