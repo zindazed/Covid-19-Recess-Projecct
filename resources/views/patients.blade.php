@@ -29,7 +29,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ url('/hierachy') }}"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
                     @if(Auth::user()->is_admin == 1)
                     <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>register</a>
-                        <div class="dropdown-menu"><a class="dropdown-item" href="register"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="hospital.html"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
+                        <div class="dropdown-menu"><a class="dropdown-item" href="/officer"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="/hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
                     </li>
                     @endif
                 </ul>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>distribution</title>
+    <title>Distribution</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
@@ -28,7 +28,7 @@
                 <li class="nav-item"><a class="nav-link" href="/hierachy"><i class="fa fa-area-chart"></i><span>Organisation chart</span></a></li>
                 @if(Auth::user()->is_admin == 1)
                 <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#" style="padding-left: 18px;"><i class="fa fa-pencil"></i>register</a>
-                    <div class="dropdown-menu"><a class="dropdown-item" href="register"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
+                    <div class="dropdown-menu"><a class="dropdown-item" href="/officer"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health officer</a><a class="dropdown-item" href="/hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
                 </li>
                 @endif
             </ul>
@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col">
                         <div style="margin-bottom: 10px;"><a class="btn btn-primary" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button">enter donation</a>
-                            <div class="collapse " id="collapse-1">
+                            <div class="collapse" id="collapse-1">
                                 <form style="padding-left: 7px;padding-bottom: 5px;background: var(--white);" action="/donations" method="post">
                                     @csrf
                                     <label style="color: var(--blue);">Ammount:</label>
@@ -74,35 +74,64 @@
                             <table class="table my-0" id="dataTable">
                                 <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Officer</th>
                                     <th>Ammount</th>
+                                    <th>Position</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-
-                                        @foreach($officers as $of)
-                                        <tr>
-                                            <td>{{$of->officer_name}}</td>
-                                            <td>{{$of->monthly_payment}}</td>
-                                        </tr>
-                                        @endforeach
+                                        @if($officers and $salary)
+                                            @foreach($officers as $of)
+                                            <tr>
+                                                <td>{{$of->id}}</td>
+                                                <td>{{$of->name}}</td>
+                                                @switch($of->position)
+                                                    @case("Health Officer")
+                                                        <td>{{$salary->Officer}}</td>
+                                                        @break
+                                                    @case("Senior health Officer")
+                                                    @case("Consultant")
+                                                        <td>{{$salary->Senior_Officer}}</td>
+                                                        @break
+                                                    @case("Head")
+                                                        <td>{{$salary->Head}}</td>
+                                                        @break
+                                                    @case("Superintendent")
+                                                        <td>{{$salary->Superintendent}}</td>
+                                                        @break
+                                                    @case("Director")
+                                                        <td>{{$salary->Director}}</td>
+                                                        @break
+                                                    @case("Administrator")
+                                                        <td>{{$salary->Administrator}}</td>
+                                                        @break
+                                                @endswitch
+                                                <td>{{$of->position}}</td>
+                                            </tr>
+                                            @endforeach
+                                        @endif
                                         </tbody>
                                         <tfoot>
                                         <tr>
+                                    <td><strong>ID</strong></td>
                                     <td><strong>Officer</strong></td>
                                     <td><strong>Ammount</strong></td>
+                                    <td><strong>Position</strong></td>
                                 </tr>
                                 </tfoot>
                             </table>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 align-self-center">
-                                <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing {{$officers->count()}} of
-                                    {{$all_officers->count()}} Officers</p>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                {!! $officers->links() !!}
-                            </div>
+                            @if($officers and $salary)
+                                <div class="col-md-6 align-self-center">
+                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing {{$officers->count()}} of
+                                        {{$all_officers->count()}} Officers</p>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    {!! $officers->links() !!}
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -120,31 +149,30 @@
                             <table class="table my-0" id="dataTable">
                                 <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Officer</th>
                                     <th>Ammount</th>
+                                    <th>Position</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
-                                    <td>Akello Agela</td>
-                                    <td>$162,700</td>
-                                </tr>
-                                <tr>
-                                    <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar2.jpeg">Angelica Ramos</td>
-                                    <td>Muhumza Eric</td>
-                                    <td>$1,200,000</td>
-                                </tr>
-                                <tr>
-                                    <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar3.jpeg">Ashton Cox</td>
-                                    <td>Nakanjako Aisha</td>
-                                    <td>$86,000</td>
-                                </tr>
+                                @if($consultants)
+                                    @foreach($consultants as $of)
+                                        <tr>
+                                            <td>{{$of->officer_ID}}</td>
+                                            <td>{{$of->officer_name}}</td>
+                                            <td>10</td>
+                                            <td>{{$of->officer_position}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                                 </tbody>
                                 <tfoot>
                                 <tr>
+                                    <td><strong>ID</strong></td>
                                     <td><strong>Officer</strong></td>
                                     <td><strong>Ammount</strong></td>
+                                    <td><strong>Position</strong></td>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -152,17 +180,6 @@
                         <div class="row">
                             <div class="col-md-6 align-self-center">
                                 <p id="dataTable_info-1" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
-                            </div>
-                            <div class="col-md-6">
-                                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                                    <ul class="pagination">
-                                        <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
-                                    </ul>
-                                </nav>
                             </div>
                         </div>
                     </div>

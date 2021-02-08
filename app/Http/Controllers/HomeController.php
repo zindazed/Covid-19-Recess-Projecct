@@ -14,10 +14,6 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Show the application dashboard.
@@ -52,7 +48,7 @@ class HomeController extends Controller
             }
         }
 
-        ///////////////graph display for donations made in a given month//////////////////
+        /////////////graph display for donations made in a given month//////////////////
         //getting all donors
 
         $month_donations = array();//array to contain donations money for donor in a give month
@@ -67,6 +63,7 @@ class HomeController extends Controller
                     ->get();
                 foreach ($donors as $do){
                     $month_donors[] = $do->donor_name;
+
                 }
                 $month_donations[] = $d->amount_donated;
             }
@@ -132,6 +129,7 @@ class HomeController extends Controller
                 $percentage = ($months_patients[$x+1]-$months_patients[$x])/$months_patients[$x];
             $percentages[] = $percentage;
         }
+
 
         return view('home',[
             'patients' => Patient::all(),

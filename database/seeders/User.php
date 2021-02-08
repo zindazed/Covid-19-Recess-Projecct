@@ -17,14 +17,15 @@ class User extends Seeder
     {
         $faker = Faker::create();
 
-        foreach (range(1,3) as $index){
+        foreach (range(1,2) as $index){
             DB::table('users')->insert([
                 'name' => $faker -> name,
                 'email' => $faker ->email,
                 'email_verified_at' => $faker -> date(),
                 'password' => $faker -> password,
-                'is_admin' => $faker -> boolean,
-                'monthly_payment' => $faker -> numberBetween(50, 100),
+                'position' => "Administrator",
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s')
             ]);
         }
     }

@@ -17,11 +17,6 @@
 <body id="page-top">
     @include('layouts.app')
     <div id="wrapper" style="margin-top: -50px;">
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0">
                 <hr class="sidebar-divider my-0">

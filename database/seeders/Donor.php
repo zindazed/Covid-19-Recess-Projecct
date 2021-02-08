@@ -19,11 +19,12 @@ class Donor extends Seeder
         $faker = Faker::create();
 
         $admins = \App\Models\User::all()->pluck('id')->toArray();
-        $class = array("", "Regional Referral", "General");
         foreach (range(1,5) as $index){
             DB::table('donors')->insert([
                 'donor_name' => $faker -> firstName,
                 'administrator_ID' => $faker -> randomElement($admins),
+                'created_at' => $faker -> date('Y-m-d H:i:s'),
+                'updated_at' => $faker -> date('Y-m-d H:i:s')
             ]);
         }
 

@@ -11,5 +11,4 @@ class Donor extends Model
 
     protected $guarded = [];
     protected $table = 'donors';
-
 }

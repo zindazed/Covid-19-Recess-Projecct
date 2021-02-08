@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Officer extends Model
+class UsedDonation extends Model
 {
     use HasFactory;
-    Protected $table = 'officers';
+    use HasFactory;
+    protected $guarded = [];
+    protected $table = 'used_donations';
 }

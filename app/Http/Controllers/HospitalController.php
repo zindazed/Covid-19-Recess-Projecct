@@ -11,9 +11,14 @@ use Illuminate\Support\Facades\Hash;
 
 class HospitalController extends Controller
 {
-    public function __construct()
+
+    function view()
     {
-        $this->middleware('auth');
+        $message = 0;
+        return view("hospital", [
+            "message" => $message
+        ]);
+
     }
 
     function addhospital(Request $req)
