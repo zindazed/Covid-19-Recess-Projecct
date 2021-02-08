@@ -21,6 +21,7 @@ class CreateSalariesTable extends Migration
             $table->float("Officer");
             $table->float("Senior_Officer");
             $table->float("Head");
+            $table->float("Paid_Consultants");
             $table->float("saved");
 
         });

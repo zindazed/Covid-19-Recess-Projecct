@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Donation;
 use App\Models\Officer;
+use App\Models\RetiredOfficer;
 use App\Models\Salary;
+use App\Models\Consultant;
 use App\Models\UsedDonation;
+use App\Models\WaitingList;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\Types\Array_;
 
@@ -17,86 +22,60 @@ class DonorController extends Controller
 
     function payments()
     {
-        $amount = DB::table("donations")
-            ->select(DB::raw("SUM(amount_donated) as salary"))
-            ->get();
-        $total = $amount[0]->salary;
-        if(!$total)
+        try
         {
-            $total = 0;
-        }
 
-        $time = Carbon::now()->subMonth()->format('Y-m');
-        $last=DB::table("salaries")
-            ->select("saved")
-            ->where("Date","=","$time")
-            ->first();
-
-        if($last)
-            $total = $total + $last->saved;
-
-        //first subtract that of paid promoted consultants
-        //will be implemented after promotion is done
-
-        $pos_num = array();
-        $postion1 = array("Head", "Superintendent", "Director");
-        foreach ($postion1 as $position)
-        {
-            $ids = DB::table("hospitals")
-                ->select("head_ID")
-                ->where("officer_position","=","$position")
+            $amount = DB::table("donations")
+                ->select(DB::raw("SUM(amount_donated) as salary"))
                 ->get();
-            $pos_num["$position"] = count($ids);
-        }
+            $total = $amount[0]->salary;
+            if (!$total) {
+                $total = 0;
+            }
 
-        $postion2 = array("Health Officer", "Senior health Officer", "Consultant");
-        foreach ($postion2 as $position)
-        {
-            $ids = DB::table("officers")
-                ->select("officer_ID")
-                ->where("officer_position","=","$position")
+            $time = Carbon::now()->subMonth()->format('Y-m');
+            $last = DB::table("salaries")
+                ->select("saved")
+                ->where("Date", "=", "$time")
+                ->first();
+
+            if ($last)
+                $total = $total + $last->saved;
+
+            //first subtract that of paid promoted consultants
+            //will be implemented after promotion is done
+            $consultants = $this->promotion();
+            $total = $total - (10 * count($consultants));
+
+            $pos_num = array();
+            $postion1 = array("Head", "Superintendent", "Director");
+            foreach ($postion1 as $position) {
+                $ids = DB::table("hospitals")
+                    ->select("head_ID")
+                    ->where("officer_position", "=", "$position")
+                    ->get();
+                $pos_num["$position"] = count($ids);
+            }
+
+            $postion2 = array("Health Officer", "Senior health Officer", "Consultant");
+            foreach ($postion2 as $position) {
+                $ids = DB::table("officers")
+                    ->select("officer_ID")
+                    ->where("officer_position", "=", "$position")
+                    ->where("Retired", "=", "0")
+                    ->get();
+                $pos_num["$position"] = count($ids);
+            }
+
+            $ids = DB::table("users")
+                ->select("id")
+                ->where("position", "=", "Administrator")
                 ->get();
-            $pos_num["$position"] = count($ids);
-        }
+            $pos_num["admin"] = count($ids);
 
-        $ids = DB::table("users")
-            ->select("id")
-            ->where("position","=","Administrator")
-            ->get();
-        $pos_num["admin"] = count($ids);
+            $salary = new Salary();
 
-        $salary = new Salary();
-
-        if($total <= 100)
-        {
-            $saved = $total;
-            $director = 0;
-            $superintendent = 0;
-            $administrator = 0;
-            $officer = 0;
-            $senior_officer = 0;
-            $head = 0;
-        }
-        else
-        {
-            $saved = 100;
-            $director = 5;
-            $superintendent = ($director/2);
-            $administrator = ((3/4)*$superintendent);
-            $officer = ((8/5)*$administrator);
-            $senior_officer = ($officer + (6/100)*$officer);
-            $head = ($officer + (3.5/100)*$officer);
-
-            $excess = $total-( $saved+
-                    ($director* $pos_num["Director"])+
-                    ($superintendent* $pos_num["Superintendent"])+
-                    ($administrator* $pos_num["admin"])+
-                    ($officer * $pos_num["Health Officer"])+
-                    ($senior_officer* ($pos_num["Consultant"] + $pos_num["Senior health Officer"]))+
-                    ($head* $pos_num["Head"])
-                );
-            if($excess < 0)
-            {
+            if ($total <= 100) {
                 $saved = $total;
                 $director = 0;
                 $superintendent = 0;
@@ -104,61 +83,97 @@ class DonorController extends Controller
                 $officer = 0;
                 $senior_officer = 0;
                 $head = 0;
-            }
-            else
-            {
-                while(1)
-                {
-                    $director = $director + (5 / 100 * $excess);
-                    $superintendent = $superintendent + ((5 / 100 * $excess) / 2);
-                    $administrator = ((3 / 4) * $superintendent);
-                    $officer = ((8 / 5) * $administrator);
-                    $senior_officer = ($officer + (6 / 100) * $officer);
-                    $head = ($officer + (3.5 / 100) * $officer);
+            } else {
+                $saved = 100;
+                $director = 5;
+                $superintendent = ($director / 2);
+                $administrator = ((3 / 4) * $superintendent);
+                $officer = ((8 / 5) * $administrator);
+                $senior_officer = ($officer + (6 / 100) * $officer);
+                $head = ($officer + (3.5 / 100) * $officer);
 
-                    $more_excess = $total - ($saved +
-                            ($director * $pos_num["Director"]) +
-                            ($superintendent * $pos_num["Superintendent"]) +
-                            ($administrator * $pos_num["admin"]) +
-                            ($officer * $pos_num["Health Officer"]) +
-                            ($senior_officer * ($pos_num["Consultant"] + $pos_num["Senior health Officer"])) +
-                            ($head * $pos_num["Head"])
-                        );
-
-                    if ($more_excess <= 1)
-                    {
-                        $director = $director - (5 / 100 * $excess);
-                        $superintendent = $superintendent - ((5 / 100 * $excess) / 2);
+                $excess = $total - ($saved +
+                        ($director * $pos_num["Director"]) +
+                        ($superintendent * $pos_num["Superintendent"]) +
+                        ($administrator * $pos_num["admin"]) +
+                        ($officer * $pos_num["Health Officer"]) +
+                        ($senior_officer * ($pos_num["Consultant"] + $pos_num["Senior health Officer"])) +
+                        ($head * $pos_num["Head"])
+                    );
+                if ($excess < 0) {
+                    $saved = $total;
+                    $director = 0;
+                    $superintendent = 0;
+                    $administrator = 0;
+                    $officer = 0;
+                    $senior_officer = 0;
+                    $head = 0;
+                } else {
+                    while (1) {
+                        $director = $director + (5 / 100 * $excess);
+                        $superintendent = $superintendent + ((5 / 100 * $excess) / 2);
                         $administrator = ((3 / 4) * $superintendent);
                         $officer = ((8 / 5) * $administrator);
                         $senior_officer = ($officer + (6 / 100) * $officer);
                         $head = ($officer + (3.5 / 100) * $officer);
-                        $saved = $saved + $excess;
-                        break;
-                    } else {
-                        $excess = $more_excess;
+
+                        $more_excess = $total - ($saved +
+                                ($director * $pos_num["Director"]) +
+                                ($superintendent * $pos_num["Superintendent"]) +
+                                ($administrator * $pos_num["admin"]) +
+                                ($officer * $pos_num["Health Officer"]) +
+                                ($senior_officer * ($pos_num["Consultant"] + $pos_num["Senior health Officer"])) +
+                                ($head * $pos_num["Head"])
+                            );
+
+                        if ($more_excess <= 1) {
+                            $director = $director - (5 / 100 * $excess);
+                            $superintendent = $superintendent - ((5 / 100 * $excess) / 2);
+                            $administrator = ((3 / 4) * $superintendent);
+                            $officer = ((8 / 5) * $administrator);
+                            $senior_officer = ($officer + (6 / 100) * $officer);
+                            $head = ($officer + (3.5 / 100) * $officer);
+                            $saved = $saved + $excess;
+                            break;
+                        } else {
+                            $excess = $more_excess;
+                        }
                     }
                 }
             }
-        }
 
-        $time = Carbon::now()->format('Y-m');
+            $time = Carbon::now()->format('Y-m');
 
-        $salary->Date = $time;
-        $salary->Director = $director;
-        $salary->Superintendent = $superintendent;
-        $salary->Administrator = $administrator;
-        $salary->Officer = $officer;
-        $salary->Senior_Officer = $senior_officer;
-        $salary->Head = $head;
-        $salary->saved = $saved;
+            $salary->Date = $time;
+            $salary->Director = $director;
+            $salary->Superintendent = $superintendent;
+            $salary->Administrator = $administrator;
+            $salary->Officer = $officer;
+            $salary->Senior_Officer = $senior_officer;
+            $salary->Paid_Consultants = count($consultants);
+            $salary->Head = $head;
+            $salary->saved = $saved;
 
-        try
-        {
+
             if ($salary->save()) {
                 $donations = DB::table("donations")
                     ->select("*")
                     ->get();
+
+                DB::table("consultants")->delete();
+
+                foreach ($consultants as $officer)
+                {
+                    $consultant = new Consultant();
+
+                    $consultant->officer_ID = $officer->officer_ID;
+                    $consultant->officer_name = $officer->officer_name;
+                    $consultant->password = $officer->password;
+                    $consultant->officer_position = $officer->officer_position;
+                    $consultant->head_ID = $officer->head_ID;
+                    $consultant->administrator_ID = $officer->administrator_ID;
+                    $consultant->save();
+                }
 
                 foreach ($donations as $donation) {
                     $used = new UsedDonation();
@@ -176,53 +191,254 @@ class DonorController extends Controller
 
                 DB::table("donations")->delete();
 
-                $officers=DB::table("officers")
-                    ->select("officer_name","officer_position","officer_ID");
+                $officers = DB::table("officers")
+                    ->select("officer_name", "officer_position", "officer_ID")
+                    ->where("Retired", "=", "0");
 
-                $heads=DB::table("hospitals")
-                    ->select("head_name","officer_position","head_ID");
+                $heads = DB::table("hospitals")
+                    ->select("head_name", "officer_position", "head_ID");
 
-                $workers=DB::table("users")
+                $workers = DB::table("users")
                     ->select("name", "position", "id")
                     ->union($heads)
                     ->union($officers)
                     ->paginate(10);
 
-                $salary=DB::table("salaries")
+                $salary = DB::table("salaries")
                     ->select("*")
-                    ->where("Date","=","$time")
+                    ->where("Date", "=", "$time")
                     ->first();
 
-                return view('distribution', array_merge([
+                $donors = DB::Table('donors')
+                    ->select('donor_ID', 'donor_name')
+                    ->get();
+
+                //displaying the graph
+                $donations = DB::Table('donations')
+                    ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+                    ->get();
+
+                $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                foreach ($donations as $d) {
+                    $date = $d->donation_month;
+                    $month = (int)substr($date, 3, -5) - 1;
+                    $ammount = (int)$d->amount_donated;
+                    for ($i = 0; $i < sizeof($months_donations); $i++) {
+                        if ($i == $month) {
+                            $months_donations[$i] += $ammount;
+                        }
+                    }
+                }
+                $month = DB::Table('months')
+                    ->select('id', 'month_name')
+                    ->get();
+
+                $consultant = DB::table("consultants")
+                    ->select("*")
+                    ->get();
+
+                $this->waiting();
+
+                return view('distribution', [
                     'officers' => $workers,
                     'salary' => $salary,
-                ],$this->display()));
+                    'all_officers' => Officer::all(),
+                    'months' => $month,
+                    'donors' => $donors,
+                    'data' => $months_donations,
+                    'consultants' => $consultant,
+                ]);
             }
-        }
-        catch (QueryException $ex)
-        {
-            $salary=DB::table("salaries")
-                ->select("*")
-                ->where("Date","=","$time")
-                ->first();
+        } catch (QueryException $ex) {
+            $officers = DB::table("officers")
+                ->select("officer_name", "officer_position", "officer_ID")
+                ->where("Retired", "=", "0");
 
-            $officers=DB::table("officers")
-                ->select("officer_name","officer_position","officer_ID");
+            $heads = DB::table("hospitals")
+                ->select("head_name", "officer_position", "head_ID");
 
-            $heads=DB::table("hospitals")
-                ->select("head_name","officer_position","head_ID");
-
-            $workers=DB::table("users")
+            $workers = DB::table("users")
                 ->select("name", "position", "id")
                 ->union($heads)
                 ->union($officers)
                 ->paginate(10);
 
-            return view('distribution', array_merge([
+            $salary = DB::table("salaries")
+                ->select("*")
+                ->where("Date", "=", "$time")
+                ->first();
+
+            $donors = DB::Table('donors')
+                ->select('donor_ID', 'donor_name')
+                ->get();
+
+            //displaying the graph
+            $donations = DB::Table('donations')
+                ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+                ->get();
+
+            $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            foreach ($donations as $d) {
+                $date = $d->donation_month;
+                $month = (int)substr($date, 3, -5) - 1;
+                $ammount = (int)$d->amount_donated;
+                for ($i = 0; $i < sizeof($months_donations); $i++) {
+                    if ($i == $month) {
+                        $months_donations[$i] += $ammount;
+                    }
+                }
+            }
+            $month = DB::Table('months')
+                ->select('id', 'month_name')
+                ->get();
+
+            $consultant = DB::table("consultants")
+                ->select("*")
+                ->get();
+
+            return view('distribution', [
                 'officers' => $workers,
                 'salary' => $salary,
-            ],$this->display()));
+                'all_officers' => Officer::all(),
+                'months' => $month,
+                'donors' => $donors,
+                'data' => $months_donations,
+                'consultants' => $consultant,
+            ]);
         }
+    }
+
+    public function promotion()
+    {
+        $officers = DB::table("officers")
+            ->select("*")
+            ->get();
+
+        $counter = 0;
+        $consultants = array();
+        foreach ($officers as $officer) {
+            $patients = DB::table("officer_patients")
+                ->select("patient_ID")
+                ->where("officer_ID", "=", "$officer->officer_ID")
+                ->get();
+            $num = count($patients);
+            $position = $officer->officer_position;
+
+            if ($num >= 4 && $position == "Health Officer") {
+                DB::table("officers")
+                    ->where("officer_ID", "=", "$officer->officer_ID")
+                    ->update(["officer_position" => "Senior health Officer"]);
+
+                $head = DB::Table('hospitals')
+                    ->select('head_ID')
+                    ->where("class", "=", "Regional Referral")
+                    ->get();
+
+                $least = 100;
+                $hospital = 0;
+                foreach ($head as $h) {
+                    $headed = DB::Table('officers')
+                        ->select('officer_ID')
+                        ->where("head_ID", "=", $h->head_ID)
+                        ->get();
+                    $num = count($headed);
+                    if ($num < $least) {
+                        $least = $num;
+                        $hospital = $h->head_ID;
+                    }
+                }
+
+                $officer->head_ID = $hospital;
+                DB::Table('officers')
+                    ->where("officer_ID", "=", "$officer->officer_ID")
+                    ->update(["head_ID" => "$hospital"]);
+
+            }
+            if ($num >= 8 && $position == "Senior health Officer") {
+                $officer->officer_position="Consultant";
+                $consultants[$counter] = $officer;
+                $counter++;
+                DB::table("officers")
+                    ->where("officer_ID", "=", "$officer->officer_ID")
+                    ->update(["officer_position" => $officer->officer_position]);
+
+                    $waiter = new WaitingList();
+
+                    $waiter->officer_ID = $officer->officer_ID;
+                    $waiter->officer_name = $officer->officer_name;
+                    $waiter->password = $officer->password;
+                    $waiter->officer_position = $officer->officer_position;
+                    $waiter->head_ID = $officer->head_ID;
+                    $waiter->administrator_ID = $officer->administrator_ID;
+                    $waiter->save();
+            }
+
+            $then = Carbon::parse($officer->updated_at)->format("i");
+            $now = Carbon::now()->format("i");
+            $nationals =  DB::table('hospitals')->select("head_ID")
+                ->where("class","=","National Referral")
+                ->get();
+            foreach ($nationals as $national)
+                if (($now - $then >= 1) && ($officer->head_ID == $national->head_ID)) {
+                    DB::Table('officers')
+                        ->where("officer_ID", "=", "$officer->officer_ID")
+                        ->update(["Retired" => true]);
+                }
+        }
+        return $consultants;
+    }
+
+    public function waiting()
+    {
+        $waiters = DB::Table('waiting_lists')
+            ->select('*')
+            ->get();
+
+        if ($waiters)
+            foreach ($waiters as $waiter)
+            {
+                $officer = DB::table("officers")
+                    ->select("*")
+                    ->where("officer_ID", "=", "$waiter->officer_ID")
+                    ->first();
+
+                $head = DB::Table('hospitals')
+                ->select('head_ID')
+                ->where("class", "=", "National Referral")
+                ->get();
+
+                $least = 200;
+                $hospital = 0;
+                $full = true;
+                foreach ($head as $h) {
+                    $headed = DB::Table('officers')
+                        ->select('officer_ID')
+                        ->where("head_ID", "=", $h->head_ID)
+                        ->where("Retired", "=", "0")
+                        ->get();
+                    $num = count($headed);
+                    if ($num < $least) {
+                        $least = $num;
+                        $hospital = $h->head_ID;
+                        $full = false;
+                    }
+                }
+
+                if($full)
+                    break;
+                else
+                {
+                    $officer->head_ID = $hospital;
+                    DB::table('officers')
+                        ->where("officer_ID", "=", "$officer->officer_ID")
+                        ->update(["head_ID" => "$hospital","updated_at"=>Carbon::now()]);
+
+                    DB::table("waiting_lists")
+                        ->where("officer_ID", "=", "$waiter->officer_ID")
+                        ->delete();
+                }
+            }
+
     }
 
     public function display()
@@ -236,14 +452,14 @@ class DonorController extends Controller
             ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
             ->get();
 
-        $months_donations=array(0,0,0,0,0,0,0,0,0,0,0,0);
-        foreach ($donations as $d){
+        $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        foreach ($donations as $d) {
             $date = $d->donation_month;
-            $month = (int)substr($date, 3, -5)-1;
+            $month = (int)substr($date, 3, -5) - 1;
             $ammount = (int)$d->amount_donated;
-            for ($i=0; $i<sizeof($months_donations); $i++){
-                if ($i == $month){
-                    $months_donations[$i]+=$ammount;
+            for ($i = 0; $i < sizeof($months_donations); $i++) {
+                if ($i == $month) {
+                    $months_donations[$i] += $ammount;
                 }
             }
         }
@@ -251,20 +467,18 @@ class DonorController extends Controller
             ->select('id', 'month_name')
             ->get();
 
-        return([
+        $workers = null;
+        $salary = null;
+        $consultants = null;
+        return view('distribution', [
+            'officers' => $workers,
             'all_officers' => Officer::all(),
             'months' => $month,
             'donors' => $donors,
             'data' => $months_donations,
-            ]);
-//        return view('distribution', [
-//            'officers' => $workers,
-//            'all_officers' => Officer::all(),
-//            'months' => $month,
-//            'donors' => $donors,
-//            'data' => $months_donations,
-//            'salary' => $salary,
-//        ]);
+            'salary' => $salary,
+            'consultants' => $consultants,
+        ]);
     }
 
     public function show($donor)

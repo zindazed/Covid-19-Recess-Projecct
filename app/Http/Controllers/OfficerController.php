@@ -31,6 +31,7 @@ class OfficerController extends Controller
 
         $head = DB::Table('hospitals')
             ->select('head_ID')
+            ->where("class","=","General")
             ->get();
 
         $least = 15;

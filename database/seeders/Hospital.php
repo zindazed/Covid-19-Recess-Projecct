@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Administrator;
+use Carbon\Carbon;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -22,20 +23,20 @@ class Hospital extends Seeder
         $category = array("Private", "Public");
         $class = array("National Referral", "Regional Referral", "General");
         $postion = array("Head", "Superintendent", "Director");
-        foreach (range(1, 5) as $index) {
+        foreach (range(1, 1) as $index) {
             DB::table('hospitals')->insert([
                 'hospital_name' => $faker->name,
                 'category' => $faker->randomElement($category),
-                'class' => $faker->randomElement($class),
+                'class' => "National Referral",//$faker->randomElement($class),
                 'district' => $faker->state,
 
                 'head_name' => $faker->firstName,
                 'Email' => $faker->email,
                 'password' => $faker->password,
-                'officer_position' => $faker->randomElement($postion),
+                'officer_position' => "Director",//$faker->randomElement($postion),
                 'administrator_ID' => $faker->randomElement($admins),
-                'created_at' => $faker -> date('Y-m-d H:i:s'),
-                'updated_at' => $faker -> date('Y-m-d H:i:s'),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),//$faker -> date('Y-m-d H:i:s'),
             ]);
 
         }

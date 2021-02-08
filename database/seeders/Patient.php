@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -19,15 +20,15 @@ class Patient extends Seeder
         $category = array("Symptomatic", "Asymptomatic");
         $gendar = array("M", "F");
         $case_type = array("postive", "false positive");
-        foreach (range(1,20) as $index){
+        foreach (range(1,10) as $index){
             DB::table('patients')->insert([
                 'patient_name' => $faker ->firstName,
                 'date_of_identification' => $faker -> date(),
                 'category' => $faker -> randomElement($category),
                 'gender' => $faker ->  randomElement($gendar),
                 'case_type' => $faker -> randomElement($case_type),
-                'created_at' => $faker -> date('Y-m-d H:i:s'),
-                'updated_at' => $faker -> date('Y-m-d H:i:s')
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),//$faker -> date('Y-m-d H:i:s')
             ]);
         }
     }
