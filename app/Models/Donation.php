@@ -10,4 +10,5 @@ class Donation extends Model
     use HasFactory;
     protected $guarded = [];
     protected $table = 'donations';
+    public $timestamps = false;
 }

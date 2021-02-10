@@ -16,7 +16,7 @@ class CreateUsedDonationsTable extends Migration
         Schema::create('used_donations', function (Blueprint $table) {
             $table->unsignedBigInteger("donation_ID")->primary();
             $table->string("donation_month");
-            $table->float("amount_donated");
+            $table->string("amount_donated");
             $table->unsignedBigInteger("donor_ID")->index();
             $table->unsignedBigInteger("administrator_ID")->index();
 

@@ -15,14 +15,14 @@ class CreateSalariesTable extends Migration
     {
         Schema::create('salaries', function (Blueprint $table) {
             $table->string("Date")->primary();
-            $table->float("Director");
-            $table->float("Superintendent");
-            $table->float("Administrator");
-            $table->float("Officer");
-            $table->float("Senior_Officer");
-            $table->float("Head");
-            $table->float("Paid_Consultants");
-            $table->float("saved");
+            $table->string("Director");
+            $table->string("Superintendent");
+            $table->string("Administrator");
+            $table->string("Officer");
+            $table->string("Senior_Officer");
+            $table->string("Head");
+            $table->string("Paid_Consultants");
+            $table->string("saved");
 
         });
     }

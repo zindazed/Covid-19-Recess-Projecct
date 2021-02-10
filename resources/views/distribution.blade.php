@@ -22,7 +22,7 @@
             <hr class="sidebar-divider my-0">
             <ul class="nav navbar-nav text-light" id="accordionSidebar">
                 <li class="nav-item"><a class="nav-link" href="/home"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                <li class="nav-item"><a class="nav-link active" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money Distribution</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/donations') }}"><i class="fa fa-dollar"></i><span>Money Distribution</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('/patients') }}"><i class="fas fa-table"></i><span>Patients&nbsp;</span></a></li>
                 <li class="nav-item"></li>
                 <li class="nav-item"><a class="nav-link" href="/hierachy"><i class="fa fa-area-chart"></i><span>Hierachy</span></a></li>
@@ -43,7 +43,7 @@
                 </div>
             </nav>
             <div class="container-fluid" style="margin-top: 12px;">
-                @if(Auth::user()->is_admin == 1)
+                @if(Auth::user()->position == 'Administrator')
                 <div class="row">
                     <div class="col">
                         <div style="margin-bottom: 10px;"><a class="btn btn-primary" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button">enter donation</a>
@@ -54,8 +54,6 @@
                                     <input class="form-control" type="text" style="width: 200px;" name="ammount" required="true">
                                     <label style="color: var(--blue);">donor name:</label>
                                     <input class="form-control" type="text" style="width: 200px;" name="donor" required="true">
-                                    <label style="color: var(--blue);">Date e.g 12/02/2015:</label>
-                                    <input class="form-control" type="text" style="width: 200px;" name="date" required="true">
                                     <button class="btn btn-primary" type="submit" style="margin-top: 8px;font-size: 14px;background: var(--blue);padding-top: 0px;padding-bottom: 1px;">add</button>
                                 </form>
                             </div>
@@ -234,7 +232,7 @@
                                     <p class="text-center ">{{$sm->month_name}}</p>
                                     @endforeach
                                 @else
-                                    <p class="text-center ">July</p>
+                                    <p class="text-center ">{{ \Carbon\Carbon::now()->monthName}}</p>
                                 @endif
                                 <div class="chart-area">
                                     <canvas id="chbar2">

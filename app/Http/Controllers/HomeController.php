@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Officer;
 use App\Models\Patient;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -56,7 +57,7 @@ class HomeController extends Controller
         foreach ($donations as $d){
             $date = $d->donation_month;
             $month = (int)substr($date, 3, -5);
-            if ($month == 7){
+            if ($month == Carbon::now()->format('m')){
                 $donors = DB::Table('donors')
                     ->select('donor_ID', 'donor_name')
                     ->where('donor_ID', '=', $d->donor_ID)
