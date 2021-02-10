@@ -3,42 +3,65 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
-#define MAX 150
+#include <unistd.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#define MAX 1500
 #define PORT 8080
+#define max 100
 #define SA struct sockaddr
+int authentication(int sockfd){
+    char password[10];
+    char username[max];
+    char district[10];
+    char feed[max];
+   
+    //bzero(username, sizeof(username)); //prepare memory for username
+    puts("enter username");
+    scanf("%s", username);
+    //bzero(password, sizeof(password));
+    puts("enter password");
+    scanf("%s", password);
+   
+    puts("enter district");
+    //bzero(district, sizeof(district));
+    scanf("%s", district);
 
-void func(int sockfd)
+    char str[max];
+    strcat(username, " ");
+    strcat(username, password);
+    strcat(username, " ");
+    strcat(username, district);
+  //  printf("%s and %s and %s\n", username, password, district );
+    printf("%s\n", username);
+    write(sockfd, username, sizeof(username)); //send the username and password
+
+    bzero(feed, sizeof(feed)); //receive the authentication feedback
+   	read(sockfd, feed, sizeof(feed));//receive feed
+   	printf("Authentication message from server :  %s\n",feed);
+
+   	//then continue to the next function
+
+}
+
+void funcCom(int sockfd)
 {
 	char command[MAX];
 	char feedback[MAX];
 	int n;
 	for (;;) {
-		bzero(command, sizeof(command));
+		bzero(command, sizeof(command));//prepare memory for command
 
 		n = 0;
-		while ((command[n++] = getchar()) != '\n')
+		puts("enter command");
+		while ((command[n++] = getchar()) != '\n')//fetch command
 			;
-		write(sockfd, command, sizeof(command));
-	
-		bzero(feedback, sizeof(feedback));
-		read(sockfd, feedback, sizeof(feedback));
-		printf("From Server : %s", feedback);
+		write(sockfd, command, sizeof(command)); //send command
 
-		bzero(command, sizeof(command));
-		n = 0;
-		// copy server message in command
-		while ((command[n++] = getchar()) != '\n')
-			;
-		// and send that command to server
-		write(sockfd, command, sizeof(command));
-
-		bzero(feedback, sizeof(feedback));
-		read(sockfd, feedback, sizeof(feedback));
-
-		if ((strncmp(feedback, "exit", 4)) == 0) {
-			printf("Client Exit...\n");
-			break;
-		}
+		bzero(feedback, sizeof(feedback));//prepare memory for feedback
+		read(sockfd, feedback, sizeof(feedback)); //store feedback in feedback
+		printf("From Server : %s\n", feedback); //display feedback
 	}
 }
 
@@ -51,7 +74,7 @@ int main()
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd == -1) {
 		printf("socket creation failed...\n");
-		exit(0);
+		exit(1);
 	}
 	else
 		printf("Socket successfully created..\n");
@@ -65,13 +88,14 @@ int main()
 	// connect the client socket to server socket
 	if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0) {
 		printf("connection with the server failed...\n");
-		exit(0);
+		exit(1);
 	}
 	else
 		printf("connected to the server..\n");
 
+	authentication(sockfd);
 	// function for chat
-	func(sockfd);
+	funcCom(sockfd);
 
 	// close the socket
 	close(sockfd);

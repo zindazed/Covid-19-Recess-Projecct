@@ -5,39 +5,51 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <mysql.h>
+#include <unistd.h>
 #define MAX 150
+#define max 100
 #define PORT 8080
 #define SA struct sockaddr
-
 //addpatientlist filename function
-void addPatientlist(char **arr)
+void addPatientlist(int sockfd, char **patarr)
 {
 	FILE *fs, *ft;
 	char ch;
-	fs = fopen (arr[1], "r");
+	printf("\n%s", patarr[1]);
+	int wx = strlen(patarr[1]); //stripping off the last character and assignin it to zero
+    patarr[1][wx-1] = 0;
+	// char *pat= patarr[1];
+	// printf("\n%s", patarr[1]);
+	fs = fopen(patarr[1], "r");
 	if (fs == NULL){
 		puts ("Cannot open source file");
 		exit(1);
 	}
 
-	ft = fopen ("patient.txt", "a");
+	ft = fopen("patient.txt", "a");//open the target file(ie; patient file)
 	if (ft == NULL){
 		puts ("Cannot open target file");
-		fclose(fs);
 		exit(1);
-	}
-
+    }
 	while(1){
 		ch = fgetc(fs);
 		if(ch == EOF)
-		break ;
+			break;
 		else
 		fputc(ch,ft);
 	}
-	fclose(fs);
-	fclose(ft);
+	fclose(ft);//close the patient file
+	fclose(fs); //close the source file
+	fs = fopen(patarr[1],"w");//reopen the source file in write mode to delete its content
+	fclose(fs);//close the source file
+	 //send feedback message to client
+	char feedback2[MAX] = "patient-list has been added";
+	write(sockfd, feedback2, sizeof(feedback2));
 }
-void addPatient(char **arr2){
+
+//addpatient function
+void addPatient(int sockfd, char **arr2){
 
     FILE *fp;
     fp = fopen("patient.txt", "a");
@@ -46,55 +58,127 @@ void addPatient(char **arr2){
     }
     //append the structure data into the file
     fprintf(fp,"%s\t%s\t%s\t%s", arr2[1], arr2[2], arr2[3], arr2[4]);
-
     fclose(fp);
+    char feedback[MAX] = "patient has been added";
+	// sending feedback to the client
+	write(sockfd, feedback, sizeof(feedback));
+
 }
 
 //check-status
 //basher
-int Check_status(){
+int Check_status(int sockfd){
     int count=0; //initialising record counter
-    FILE *fp; // declaring the file pointer
+    FILE *fw; // declaring the file pointer
     char str[1000]; //definig string to hold patient records
 
-    fp = fopen("patient.txt", "r"); //opening the patient file in read mode
-    if (fp == NULL){
+    fw = fopen("patient.txt", "r"); //opening the patient file in read mode
+    if (fw == NULL){
         printf("Failed to open patient file");
         exit(0); //close the program incase the file cannot be opened
     }
 
-    while (fgets(str, 1000, fp) != NULL){
+    while (fgets(str, 1000, fw) != NULL){
         count=count+1; //counting the number of records in the patient file        }
     	printf("%d", count);
     }
-    fclose(fp); //close the patient file
+    fclose(fw); //close the patient file
     //sedn the number of records in the patient file to the client
     return count;
 }
 //search function
-void search(char **ar){
-       FILE *fp; // declaring the file pointer
+void search(int sockfd, char **ar){
+	puts("heey");
+    FILE *fr; // declaring the file pointer
     char str[1000]; //definig string to hold patient records
-        fp = fopen("patient.txt","r"); //opening the patient file in read mode
-    if (fp == NULL){
+    fr = fopen("patient.txt","r"); //opening the patient file in read mode
+    if (fr == NULL){
         printf("Failed to open the patient file");
         exit(0); //close the program incase the file cannot be opened
     }
+    int w = strlen(ar[1]); //stripping off the last character and assignin it to zero
+
+    ar[1][w-1] = 0;
+    printf("%s\n",ar[1]);
+    char *ar8 = ar[1];
+    printf("%s\n", ar8);//
+   // printf("%s\n", sizeof(ar8));
     //reading strings from the patient file
-    while (fgets(str, 1000, fp) != NULL){
+    while (fgets(str, 1000, fr) != NULL){
+    	//puts(str);
         //searching for the criteria in each of the reacords
-        if((strstr(str,ar[1])) != NULL){
-        puts(str); //printing to the screen whatever string contains the required criteria
+
+        if((strstr(str, ar[1])) != NULL){
+        	//printf("%s\n",str);
+       		write(sockfd, str, sizeof(str)); //send the search query back to the client
         }
     }
-        fclose(fp); //close the patient file
+
+        fclose(fr); //close the patient file
 }
+
+//authentication
+int authenticate(int sockfd){
+    char credentials[max];
+
+    bzero(credentials, max); //prepare memory for pass
+    read(sockfd, credentials, sizeof(credentials)); //read username and password from client and store it in pass
+    printf("%s\n", credentials);
+
+    char *credarr[3];//array to store strings from input
+    char *s;//pointer to the delimeter
+    int d = 0;
+    char feed[max] = "Success, continue";
+//    write(sockfd, feed, sizeof(feed));//send feed to the client
+    s = strtok(credentials, " ");//getting the first token before the first delimeter using the strtok func
+     // Checks for delimeter
+    while (s != 0) {
+     credarr[d++]=s;
+     s = strtok(0, " "); //pointing to the next delimeter in the comand
+    }
+    printf("%s %s %s\n",credarr[0],credarr[1], credarr[2]);
+
+    MYSQL *conn; //mysql connect variable
+   char *server = "localhost";
+   char *user = "root";
+   char *password1 = "";
+   char *database = "patients";
+   conn = mysql_init(NULL); //initializing the connection variable
+
+   /* Connect to database */
+   if(!mysql_real_connect(conn, server, user, password1, database, 3308, NULL, 0)){
+   	  char error[30]="connection to database error";
+   	  write(sockfd, error, sizeof(error));
+      fprintf(stderr, "%s\n", mysql_error(conn)); //message to client here
+      exit(1);
+   }
+
+   char query[1024]; //buffer to store the query
+   //cater for the variables to sit in the query
+   //NOTE; credarr[0] is the username, and credarr[1] is the password all from client
+   snprintf(query, sizeof(query),"SELECT name, password, retired FROM pats WHERE name = ('%s') AND password = ('%s')", credarr[0], credarr[1] );
+
+  if(mysql_query(conn, query)){
+    fprintf(stderr, "%s\n", mysql_error(conn)); //message to client here
+    char valid[20] = "validation failed";
+    write(sockfd, valid, sizeof(valid));
+    exit(1);
+    }
+
+    printf("success\n");
+    //proceed to the rest of the program ie call funcCom()
+
+return 0;
+}
+
 // Function designed for communication between client and server.
 void func(int sockfd)
 {
 	char command[MAX];
 	int n;
 	int num;
+	// char strr[20]="Addpatient";
+	// char strr1[20]="Addpatientlist";
 	// infinite loop
 	for (;;) { //forever loop
 		bzero(command, MAX);
@@ -109,10 +193,23 @@ void func(int sockfd)
 			}
 		// read the message from client and copy it in command
 		read(sockfd, command, sizeof(command));
-
+		printf("%s\n", command);
 		//checking if command is correct
-			if(strncmp(command, "Addpatient",10)==0){ //FOR ADDPATIENT
+		if(strncmp("Addpatientlist", command,14)==0){ //FOR ADDPATIENTLIST
+	        	printf("addpatientlist");
+				char *ARR[2];//array to store strings from input
+				char *p1;//pointer to the delimeter
+				int y = 0;
+				p1 = strtok(command, " ");//getting the first token before the first delimeter using the strtok func
+			   				 // Checks for delimeter
+				while (p1 != 0) {
+					ARR[y++]=p1;
+				 	p1 = strtok(0, " "); //pointing to the next delimeter
+				 }
+				addPatientlist(sockfd, ARR); //adds patient to the patient file
+			}else if(strncmp(command,"Addpatient",10)==0){ //FOR ADDPATIENT
 	        //send arguments to server
+				puts("addpatient");
 				char *arr[4];//array to store strings from input
 				char *p;//pointer to the delimeter
 			    int i = 0;
@@ -122,39 +219,18 @@ void func(int sockfd)
 			    	arr[i++]=p;
 			        p = strtok(0, ", "); //pointing to the next delimeter in the comand
 			    }
-			    addPatient(arr);//adds patient to the patient file
-			    char feedback[MAX] = "patient has been added";
-				// // sending feedback to the client
-				//bzero(feedback1, MAX);
-				write(sockfd, feedback, sizeof(feedback));
-	        }else if(strncmp(command, "Addpatientlist",14)==0){ //FOR ADDPATIENTLIST
-	        //send stdering to server program
-				char *ARR[1];//array to store strings from input
-				char *p1;//pointer to the delimeter
-			    int y = 0;
-			    p1 = strtok(command, " ");//getting the first token before the first delimeter using the strtok func
-   				 // Checks for delimeter
-			    while (p1 != 0) {
-			    	ARR[y++]=p1;
-			        // Use of strtok
-			        // go through other tokens
-			        p1 = strtok(0, " "); //pointing to the next delimeter
-			    }
-			    addPatientlist(ARR);//adds patient to the patient file
-	        	//send feedback message to client
-	        	char feedback2[MAX] = "patient list has been added";
-				// // sending feedback to the client
-				//bzero(feedback2, MAX);
-				write(sockfd, feedback2, sizeof(feedback2));
+			    addPatient(sockfd, arr);//adds patient to the patient file
+
 	        }else if(strncmp(command, "Check_status",12)==0){ //FOR CHECK_STATUS
-	        	int number = Check_status();
+	        	puts("check");
+	        	int number = Check_status(sockfd);
 		       // printf("there are %d patients in the patient file\n", Check_status());
-		        char feedback3 = (char) Check_status();
+		        char feedback3 = (char) Check_status(sockfd);
 				// sending feedback to the client
 				//bzero(feedback3, sizeof(feedback3));
-				write(sockfd, feedback3, sizeof(feedback3));
+			//	write(sockfd, feedback3, sizeof(feedback3));
 	        }else if(strncmp(command, "Search",6)==0){ //FOR SEARCH
-		        char *ARR3[1];//array to store strings from input
+		        char *ARR3[2];//array to store strings from input
 			    char *p1;//pointer to the delimeter
 			    int y = 0;
 			    p1 = strtok(command, " ");//getting the first token before the first delimeter using the strtok func
@@ -162,13 +238,13 @@ void func(int sockfd)
 			        ARR3[y++]=p1;
 			        p1 = strtok(0, " "); //pointing to the next delimeter
 			    }
-			    search(ARR3);
+
+			    printf("%s and %s", ARR3[0], ARR3[1]);
+			    search(sockfd, ARR3);
 		        //break;
 	        }else if(strncmp(command, "help", 4)==0){//FOR HELP
 	        	char feedback5[MAX] = "Check_status, help, Search <criteria>, Addpatientlist <patientlistfilename.txt>, Addpatient";
-				// // sending feedback to the client
-				Check_status();
-				bzero(feedback5, MAX);
+				//bzero(feedback5, MAX);
 				write(sockfd, feedback5, sizeof(feedback5));
 	        }else { //IF COMMAND IS WRONG
 		       	char feedback6[MAX] = "the command you have entered is wrong, check your command again. type 'help' to list the commands available";
@@ -179,14 +255,9 @@ void func(int sockfd)
 	        //puts("commands available\n1. Addpatient patientname, dtae, gender, category\n2. Addpatientlist\n3. Check_status\n4. Search <criteria>\n5. Addpatient filename.txt");
         	}
   	}
-
-		// and send that buffer to client
-		write(sockfd, command, sizeof(command));
 }
 
-
-//func decs
-// Driver function
+//the server main
 int main()
 {
 	int sockfd, connfd, len;
@@ -234,13 +305,14 @@ int main()
 		printf("server acccept the client...\n");
 
 	// verification
-
-	// Function for chatting between client and server
+	// authenticate(connfd);
+	// // Function for chatting between client and server
 	func(connfd);
 
 	// After chatting close the socket
 	close(sockfd);
 }
+
 
 
 
