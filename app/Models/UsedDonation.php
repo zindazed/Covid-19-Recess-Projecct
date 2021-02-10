@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class UsedDonation extends Model
 {
     use HasFactory;
-    use HasFactory;
     protected $guarded = [];
     protected $table = 'used_donations';
 }
