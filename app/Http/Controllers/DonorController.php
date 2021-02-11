@@ -156,14 +156,7 @@ class DonorController extends Controller
 
 
             if ($salary->save()) {
-                $donations = DB::table("donations")
-                    ->select("*")
-                    ->get();
-
-
                 DB::table("consultants")->delete();
-
-
 
                 foreach ($consultants as $officer)
                 {
@@ -178,7 +171,9 @@ class DonorController extends Controller
                     $consultant->save();
                 }
 
-
+                $donations = DB::table("donations")
+                    ->select("*")
+                    ->get();
 
                 foreach ($donations as $donation) {
                     $used = new UsedDonation();
@@ -191,8 +186,6 @@ class DonorController extends Controller
                     $used->administrator_ID = $donation->administrator_ID;
                     $used->save();
                 }
-
-
 
                 DB::table("donations")->delete();
 
@@ -214,19 +207,40 @@ class DonorController extends Controller
                     ->where("Date", "=", "$time")
                     ->first();
 
+                $donations1 = DB::Table('donations')
+                    ->select('donor_ID');
+
+                $donations = DB::table("used_donations")
+                    ->select('donor_ID')
+                    ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+                    ->union($donations1)
+                    ->get();
+
+                $donor_ids = array();
+
+                foreach ($donations as $donation){
+                    $donor_ids[] = $donation->donor_ID;
+                }
+
                 $all_donors = DB::Table('donors')
                     ->select('donor_ID', 'donor_name')
+                    ->whereIn('donor_ID', $donor_ids)
                     ->get();
 
                 //////displaying the graph donation amde by well wishers graph////////////////
-                $donations = DB::Table('donations')
+                $donations_for_donors = DB::Table('donations')
+                    ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
+
+                $donations = DB::table("used_donations")
                     ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+                    ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+                    ->union($donations_for_donors)
                     ->get();
 
                 $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
                 foreach ($donations as $d) {
                     $date = $d->donation_month;
-                    $month = (int)substr($date, 3, -5) - 1;
+                    $month = Carbon::parse($date)->format("m") - 1;
                     $ammount = (int)$d->amount_donated;
                     for ($i = 0; $i < sizeof($months_donations); $i++) {
                         if ($i == $month) {
@@ -236,22 +250,40 @@ class DonorController extends Controller
                 }
 
                 /////graph for donations made in a given month////////
-                $month_donations = array();//array to contain donations money for donor in a give month
+                $donations_for_donors = DB::Table('donations')
+                    ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
+
+                $donations = DB::table("used_donations")
+                    ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+                    ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+                    ->union($donations_for_donors)
+                    ->get();
+
                 $month_donors = array();//array to contains donors in a give month
                 foreach ($donations as $d){
-                    $date = $d->donation_month;
-                    $month = (int)substr($date, 3, -5);
-                    if ($month == 7){
-                        $donors = DB::Table('donors')
+                    $month = Carbon::parse($d->donation_month)->monthName;
+                    if ($month == Carbon::now()->monthName){
+                        $donor = DB::Table('donors')
                             ->select('donor_ID', 'donor_name')
                             ->where('donor_ID', '=', $d->donor_ID)
-                            ->get();
-                        foreach ($donors as $do){
-                            $month_donors[] = $do->donor_name;
+                            ->first();
+
+                        if (!array_key_exists($donor->donor_name, $month_donors)){
+                            $month_donors[$donor->donor_name] = $d->amount_donated;
+                        }else{
+                            $month_donors[$donor->donor_name] = $month_donors[$donor->donor_name] + $d->amount_donated;
                         }
-                        $month_donations[] = $d->amount_donated;
+
                     }
+
                 }
+                $keys = array();
+                $values = array();
+                foreach ($month_donors as $key=>$value){
+                    $keys[] = $key;
+                    $values[] = $value;
+                }
+
                 $month = DB::Table('months')
                     ->select('id', 'month_name')
                     ->get();
@@ -262,7 +294,12 @@ class DonorController extends Controller
 
                 $this->waiting();
 
+                $n_donor = false;
+                $n_donation = false;
+
                 return view('distribution', [
+                    'new_donor'=> $n_donor,
+                    'new_donation'=>$n_donation,
                     'officers' => $workers,
                     'salary' => $salary,
                     'all_officers' => Officer::all(),
@@ -272,8 +309,8 @@ class DonorController extends Controller
                     'consultants' => $consultant,
                     'selected_donor' => '',
                     'selected_month' => '',
-                    'month_donations' => $month_donations,
-                    'month_donor' => $month_donors,
+                    'month_donor' => $keys,
+                    'month_donations' => $values,
                 ]);
             }
         } catch (QueryException $ex) {
@@ -296,19 +333,40 @@ class DonorController extends Controller
                 ->where("Date", "=", "$time")
                 ->first();
 
+            $donations1 = DB::Table('donations')
+                ->select('donor_ID');
+
+            $donations = DB::table("used_donations")
+                ->select('donor_ID')
+                ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+                ->union($donations1)
+                ->get();
+
+            $donor_ids = array();
+
+            foreach ($donations as $donation){
+                $donor_ids[] = $donation->donor_ID;
+            }
+
             $all_donors = DB::Table('donors')
                 ->select('donor_ID', 'donor_name')
+                ->whereIn('donor_ID', $donor_ids)
                 ->get();
 
             //////displaying the graph donation amde by well wishers graph////////////////
-            $donations = DB::Table('donations')
+            $donations_for_donors = DB::Table('donations')
+                ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
+
+            $donations = DB::table("used_donations")
                 ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+                ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+                ->union($donations_for_donors)
                 ->get();
 
             $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
             foreach ($donations as $d) {
                 $date = $d->donation_month;
-                $month = (int)substr($date, 3, -5) - 1;
+                $month = Carbon::parse($date)->format("m") - 1;
                 $ammount = (int)$d->amount_donated;
                 for ($i = 0; $i < sizeof($months_donations); $i++) {
                     if ($i == $month) {
@@ -318,22 +376,40 @@ class DonorController extends Controller
             }
 
             /////graph for donations made in a given month////////
-            $month_donations = array();//array to contain donations money for donor in a give month
+            $donations_for_donors = DB::Table('donations')
+                ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
+
+            $donations = DB::table("used_donations")
+                ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+                ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+                ->union($donations_for_donors)
+                ->get();
+
             $month_donors = array();//array to contains donors in a give month
             foreach ($donations as $d){
-                $date = $d->donation_month;
-                $month = (int)substr($date, 3, -5);
-                if ($month == 7){
-                    $donors = DB::Table('donors')
+                $month = Carbon::parse($d->donation_month)->monthName;
+                if ($month == Carbon::now()->monthName){
+                    $donor = DB::Table('donors')
                         ->select('donor_ID', 'donor_name')
                         ->where('donor_ID', '=', $d->donor_ID)
-                        ->get();
-                    foreach ($donors as $do){
-                        $month_donors[] = $do->donor_name;
+                        ->first();
+
+                    if (!array_key_exists($donor->donor_name, $month_donors)){
+                        $month_donors[$donor->donor_name] = $d->amount_donated;
+                    }else{
+                        $month_donors[$donor->donor_name] = $month_donors[$donor->donor_name] + $d->amount_donated;
                     }
-                    $month_donations[] = $d->amount_donated;
+
                 }
+
             }
+            $keys = array();
+            $values = array();
+            foreach ($month_donors as $key=>$value){
+                $keys[] = $key;
+                $values[] = $value;
+            }
+
             $month = DB::Table('months')
                 ->select('id', 'month_name')
                 ->get();
@@ -342,7 +418,12 @@ class DonorController extends Controller
                 ->select("*")
                 ->get();
 
+            $n_donor = false;
+            $n_donation = false;
+
             return view('distribution', [
+                'new_donor'=> $n_donor,
+                'new_donation'=>$n_donation,
                 'officers' => $workers,
                 'salary' => $salary,
                 'all_officers' => Officer::all(),
@@ -352,8 +433,8 @@ class DonorController extends Controller
                 'consultants' => $consultant,
                 'selected_donor' => '',
                 'selected_month' => '',
-                'month_donations' => $month_donations,
-                'month_donor' => $month_donors,
+                'month_donor' => $keys,
+                'month_donations' => $values,
             ]);
         }
     }
@@ -492,9 +573,15 @@ class DonorController extends Controller
 
     public function display()
     {
-        $donations = DB::Table('donations')
+        $donations1 = DB::Table('donations')
+            ->select('donor_ID');
+
+        $donations = DB::table("used_donations")
             ->select('donor_ID')
+            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+            ->union($donations1)
             ->get();
+
         $donor_ids = array();
 
         foreach ($donations as $donation){
@@ -507,14 +594,19 @@ class DonorController extends Controller
             ->get();
 
         //////displaying the graph donation amde by well wishers graph////////////////
-        $donations = DB::Table('donations')
+        $donations_for_donors = DB::Table('donations')
+            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
+
+        $donations = DB::table("used_donations")
             ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+            ->union($donations_for_donors)
             ->get();
 
         $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         foreach ($donations as $d) {
             $date = $d->donation_month;
-            $month = (int)substr($date, 3, -5) - 1;
+            $month = Carbon::parse($date)->format("m") - 1;
             $ammount = (int)$d->amount_donated;
             for ($i = 0; $i < sizeof($months_donations); $i++) {
                 if ($i == $month) {
@@ -524,46 +616,44 @@ class DonorController extends Controller
         }
 
         /////graph for donations made in a given month////////
-        $month_donations = array();//array to contain donations money for donor in a give month
+        $donations_for_donors = DB::Table('donations')
+            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
+
+        $donations = DB::table("used_donations")
+            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+            ->union($donations_for_donors)
+            ->get();
+
         $month_donors = array();//array to contains donors in a give month
         foreach ($donations as $d){
-            $date = $d->donation_month;
-            $month = (int)substr($date, 3, -5);
-            if ($month == Carbon::now()->format('m')){
-                $donors = DB::Table('donors')
+            $month = Carbon::parse($d->donation_month)->monthName;
+            if ($month == Carbon::now()->monthName){
+                $donor = DB::Table('donors')
                     ->select('donor_ID', 'donor_name')
                     ->where('donor_ID', '=', $d->donor_ID)
-                    ->get();
-                foreach ($donors as $do){
-                    $month_donors[] = $do->donor_name;
+                    ->first();
+
+                if (!array_key_exists($donor->donor_name, $month_donors)){
+                    $month_donors[$donor->donor_name] = $d->amount_donated;
+                }else{
+                    $month_donors[$donor->donor_name] = $month_donors[$donor->donor_name] + $d->amount_donated;
                 }
-                $month_donations[] = $d->amount_donated;
+
             }
+
         }
+        $keys = array();
+        $values = array();
+        foreach ($month_donors as $key=>$value){
+            $keys[] = $key;
+            $values[] = $value;
+        }
+
         $month = DB::Table('months')
             ->select('id', 'month_name')
             ->get();
 
-        $workers = null;
-        $salary = null;
-        $consultants = null;
-        return view('distribution', [
-            'officers' => $workers,
-            'all_officers' => Officer::all(),
-            'months' => $month,
-            'donors' => $all_donors,
-            'data' => $months_donations,
-            'selected_donor' => '',
-            'selected_month' => '',
-            'month_donations' => $month_donations,
-            'month_donor' => $month_donors,
-            'salary' => $salary,
-            'consultants' => $consultants,
-        ]);
-    }
-
-    public function show($id)
-    {
         $time = Carbon::now()->format('Y-m');
 
         $officers = DB::table("officers")
@@ -584,6 +674,32 @@ class DonorController extends Controller
             ->where("Date", "=", "$time")
             ->first();
 
+        $consultants = DB::table("consultants")
+            ->select("*")
+            ->get();
+
+        $n_donor = false;
+        $n_donation = false;
+
+        return view('distribution', [
+            'new_donor'=> $n_donor,
+            'new_donation'=>$n_donation,
+            'officers' => $workers,
+            'all_officers' => Officer::all(),
+            'months' => $month,
+            'donors' => $all_donors,
+            'data' => $months_donations,
+            'selected_donor' => '',
+            'selected_month' => '',
+            'month_donor' => $keys,
+            'month_donations' => $values,
+            'salary' => $salary,
+            'consultants' => $consultants,
+        ]);
+    }
+
+    public function show($id)
+    {
         ///////for displaying donations for a selected donor/////////////
         if (is_numeric($id)) {
             $nid = $id;
@@ -606,48 +722,109 @@ class DonorController extends Controller
                 ->first();
             $nid = $a_id->number;
         }
-//        echo "$mid<br>$nid";
-//        exit();
+        if ($nid == -1)
+        {
+            $donations1 = DB::Table('donations')
+                ->select('donor_ID');
 
-        $donations = DB::Table('donations')
-            ->select('donor_ID')
-            ->get();
-        $donor_ids = array();
-        foreach ($donations as $donation){
-            $donor_ids[] = $donation->donor_ID;
+            $donations = DB::table("used_donations")
+                ->select('donor_ID')
+                ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+                ->union($donations1)
+                ->get();
+
+            $donor_ids = array();
+
+            foreach ($donations as $donation){
+                $donor_ids[] = $donation->donor_ID;
+            }
+
+            $all_donors = DB::Table('donors')
+                ->select('donor_ID', 'donor_name')
+                ->whereIn('donor_ID', $donor_ids)
+                ->get();
+
+            $selected_donor = null;
+
+            //////displaying the graph donation amde by well wishers graph////////////////
+            $donations_for_donors = DB::Table('donations')
+                ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
+
+            $donations = DB::table("used_donations")
+                ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+                ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+                ->union($donations_for_donors)
+                ->get();
+
+            $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            foreach ($donations as $d) {
+                $date = $d->donation_month;
+                $month = Carbon::parse($date)->format("m") - 1;
+                $ammount = (int)$d->amount_donated;
+                for ($i = 0; $i < sizeof($months_donations); $i++) {
+                    if ($i == $month) {
+                        $months_donations[$i] += $ammount;
+                    }
+                }
+            }
         }
+        else {
+            $donations1 = DB::Table('donations')
+                ->select('donor_ID');
+
+            $donations = DB::table("used_donations")
+                ->select('donor_ID')
+                ->where("donation_month", 'like', "%" . Carbon::now()->format('Y'))
+                ->union($donations1)
+                ->get();
+            $donor_ids = array();
+            foreach ($donations as $donation) {
+                $donor_ids[] = $donation->donor_ID;
+            }
 
 
-        $all_donors = DB::Table('donors')
-            ->select('donor_ID', 'donor_name')
-            ->whereIn('donor_ID', $donor_ids)
-            ->get();
+            $all_donors = DB::Table('donors')
+                ->select('donor_ID', 'donor_name')
+                ->whereIn('donor_ID', $donor_ids)
+                ->get();
 
-        $selected_donor = DB::Table('donors')
-            ->select('donor_ID', 'donor_name')
-            ->where('donor_ID', '=', $nid)
-            ->get();
+            $selected_donor = DB::Table('donors')
+                ->select('donor_ID', 'donor_name')
+                ->where('donor_ID', '=', $nid)
+                ->get();
 
-        $donations_for_donors = DB::Table('donations')
-            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
-            ->where('donor_ID', '=', $nid)
-            ->get();
+            $donations = DB::Table('donations')
+                ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+                ->where('donor_ID', '=', $nid);
 
-        $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        foreach ($donations_for_donors as $d) {
-            $date = $d->donation_month;
-            $month = (int)substr($date, 3, -5) - 1;
-            $ammount = (int)$d->amount_donated;
-            for ($i = 0; $i < sizeof($months_donations); $i++) {
-                if ($i == $month) {
-                    $months_donations[$i] += $ammount;
+            $donations_for_donors = DB::table("used_donations")
+                ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+                ->where("donation_month", 'like', "%" . Carbon::now()->format('Y'))
+                ->where('donor_ID', '=', $nid)
+                ->union($donations)
+                ->get();
+
+            $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            foreach ($donations_for_donors as $d) {
+                $date = $d->donation_month;
+                $month = Carbon::parse($date)->format("m") - 1;
+                $ammount = (int)$d->amount_donated;
+                for ($i = 0; $i < sizeof($months_donations); $i++) {
+                    if ($i == $month) {
+                        $months_donations[$i] += $ammount;
+                    }
                 }
             }
         }
 
         /////graph for donations of a selected month////////
-        $donations = DB::Table('donations')
+        $donations_for_donors = DB::Table('donations')
+            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
+
+        $donations = DB::table("used_donations")
             ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+            ->union($donations_for_donors)
             ->get();
 
         $month_donors = array();//array to contains donors in a give month
@@ -685,12 +862,36 @@ class DonorController extends Controller
             ->where('month_name', '=', $mid)
             ->get();
 
+        $time = Carbon::now()->format('Y-m');
+
+        $officers = DB::table("officers")
+            ->select("officer_name", "officer_position", "officer_ID")
+            ->where("Retired", "=", "0");
+
+        $heads = DB::table("hospitals")
+            ->select("head_name", "officer_position", "head_ID");
+
+        $workers = DB::table("users")
+            ->select("name", "position", "id")
+            ->union($heads)
+            ->union($officers)
+            ->paginate(10);
+
+        $salary = DB::table("salaries")
+            ->select("*")
+            ->where("Date", "=", "$time")
+            ->first();
+
         $consultant = DB::table("consultants")
             ->select("*")
             ->get();
 
+        $n_donor = false;
+        $n_donation = false;
 
         return view('distribution', [
+            'new_donor'=> $n_donor,
+            'new_donation'=>$n_donation,
             'officers' => $workers,
             'salary' => $salary,
             'all_officers' => Officer::all(),
@@ -720,8 +921,9 @@ class DonorController extends Controller
                 $donation->administrator_ID = Auth::user()->id;
 
 
-                $donation->save();
+                $n_donation = $donation->save();
             }
+                $n_donor = false;
         }
         else{
             $new_donor = new Donor;
@@ -730,7 +932,7 @@ class DonorController extends Controller
             $new_donor->administrator_ID = Auth::user()->id;
 
 
-            $new_donor->save();
+            $n_donor = $new_donor->save();
 
             $newly_entered_donor = DB::Table('donors')
                 ->select('donor_ID', 'donor_name')
@@ -745,7 +947,7 @@ class DonorController extends Controller
                 $new_donation->donor_ID = $d->donor_ID;
             }
             $new_donation->administrator_ID = Auth::user()->id;
-            $new_donation->save();
+            $n_donation = $new_donation->save();
         }
 
         $time = Carbon::now()->format('Y-m');
@@ -779,7 +981,7 @@ class DonorController extends Controller
         $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         foreach ($donations as $d) {
             $date = $d->donation_month;
-            $month = (int)substr($date, 3, -5) - 1;
+            $month = Carbon::parse($date)->format("m") - 1;
             $ammount = (int)$d->amount_donated;
             for ($i = 0; $i < sizeof($months_donations); $i++) {
                 if ($i == $month) {
@@ -789,22 +991,40 @@ class DonorController extends Controller
         }
 
         /////graph for donations made in a given month////////
-        $month_donations = array();//array to contain donations money for donor in a give month
+        $donations_for_donors = DB::Table('donations')
+            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
+
+        $donations = DB::table("used_donations")
+            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+            ->union($donations_for_donors)
+            ->get();
+
         $month_donors = array();//array to contains donors in a give month
         foreach ($donations as $d){
-            $date = $d->donation_month;
-            $month = (int)substr($date, 3, -5);
-            if ($month == 7){
-                $donors = DB::Table('donors')
+            $month = Carbon::parse($d->donation_month)->monthName;
+            if ($month == Carbon::now()->monthName){
+                $donor = DB::Table('donors')
                     ->select('donor_ID', 'donor_name')
                     ->where('donor_ID', '=', $d->donor_ID)
-                    ->get();
-                foreach ($donors as $do){
-                    $month_donors[] = $do->donor_name;
+                    ->first();
+
+                if (!array_key_exists($donor->donor_name, $month_donors)){
+                    $month_donors[$donor->donor_name] = $d->amount_donated;
+                }else{
+                    $month_donors[$donor->donor_name] = $month_donors[$donor->donor_name] + $d->amount_donated;
                 }
-                $month_donations[] = $d->amount_donated;
+
             }
+
         }
+        $keys = array();
+        $values = array();
+        foreach ($month_donors as $key=>$value){
+            $keys[] = $key;
+            $values[] = $value;
+        }
+
         $month = DB::Table('months')
             ->select('id', 'month_name')
             ->get();
@@ -823,8 +1043,10 @@ class DonorController extends Controller
             'consultants' => $consultant,
             'selected_donor' => '',
             'selected_month' => '',
-            'month_donations' => $month_donations,
-            'month_donor' => $month_donors,
+            'month_donor' => $keys,
+            'month_donations' => $values,
+            'new_donor'=> $n_donor,
+            'new_donation'=>$n_donation,
 
             ]);
     }

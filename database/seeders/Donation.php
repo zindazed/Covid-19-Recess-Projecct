@@ -22,7 +22,7 @@ class Donation extends Seeder
         $donors = \App\Models\Donor::all()->pluck('donor_ID')->toArray();
         foreach (range(1,20) as $index){
             DB::table('donations')->insert([
-                'donation_month' => $faker ->date('d-m-Y'),
+                'donation_month' => $faker ->dateTimeBetween(Carbon::now()->subYear(),Carbon::now()->addYear())->format("d-m-Y"),
                 'amount_donated' => 1000,
                 'donor_ID' => $faker -> randomElement($donors),
                 'administrator_ID' => $faker -> randomElement($admins),

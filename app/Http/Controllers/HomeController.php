@@ -32,90 +32,100 @@ class HomeController extends Controller
             $total_donations = $total_donations + (int)$d->amount_donated;
         }
 
-        //graph display of donations made by well wishers
-        $donations = DB::Table('donations')
-            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+        $donations1 = DB::Table('donations')
+            ->select('donor_ID');
+
+        $donations = DB::table("used_donations")
+            ->select('donor_ID')
+            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+            ->union($donations1)
             ->get();
 
-        $months_donations=array(0,0,0,0,0,0,0,0,0,0,0,0);
-        foreach ($donations as $d){
+        $donor_ids = array();
+
+        foreach ($donations as $donation){
+            $donor_ids[] = $donation->donor_ID;
+        }
+
+        $all_donors = DB::Table('donors')
+            ->select('donor_ID', 'donor_name')
+            ->whereIn('donor_ID', $donor_ids)
+            ->get();
+
+        //////displaying the graph donation amde by well wishers graph////////////////
+        $donations_for_donors = DB::Table('donations')
+            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
+
+        $donations = DB::table("used_donations")
+            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+            ->union($donations_for_donors)
+            ->get();
+
+        $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        foreach ($donations as $d) {
             $date = $d->donation_month;
-            $month = (int)substr($date, 3, -5)-1;
+            $month = Carbon::parse($date)->format("m") - 1;
             $ammount = (int)$d->amount_donated;
-            for ($i=0; $i<sizeof($months_donations); $i++){
-                if ($i == $month){
-                    $months_donations[$i]+=$ammount;
+            for ($i = 0; $i < sizeof($months_donations); $i++) {
+                if ($i == $month) {
+                    $months_donations[$i] += $ammount;
                 }
             }
         }
 
-        /////////////graph display for donations made in a given month//////////////////
-        //getting all donors
+        /////graph for donations made in a given month////////
+        $donations_for_donors = DB::Table('donations')
+            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
 
-        $month_donations = array();//array to contain donations money for donor in a give month
+        $donations = DB::table("used_donations")
+            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
+            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
+            ->union($donations_for_donors)
+            ->get();
+
         $month_donors = array();//array to contains donors in a give month
         foreach ($donations as $d){
-            $date = $d->donation_month;
-            $month = (int)substr($date, 3, -5);
-            if ($month == Carbon::now()->format('m')){
-                $donors = DB::Table('donors')
+            $month = Carbon::parse($d->donation_month)->monthName;
+            if ($month == Carbon::now()->monthName){
+                $donor = DB::Table('donors')
                     ->select('donor_ID', 'donor_name')
                     ->where('donor_ID', '=', $d->donor_ID)
-                    ->get();
-                foreach ($donors as $do){
-                    $month_donors[] = $do->donor_name;
+                    ->first();
 
+                if (!array_key_exists($donor->donor_name, $month_donors)){
+                    $month_donors[$donor->donor_name] = $d->amount_donated;
+                }else{
+                    $month_donors[$donor->donor_name] = $month_donors[$donor->donor_name] + $d->amount_donated;
                 }
-                $month_donations[] = $d->amount_donated;
+
             }
+
+        }
+        $keys = array();
+        $values = array();
+        foreach ($month_donors as $key=>$value){
+            $keys[] = $key;
+            $values[] = $value;
         }
 
-//        $month_donations = array(0,0,0,0,0,0);//array to contain donations money for donor in a give month
-//        $month_donors = array();//array to contains donors in a give month
-//        foreach ($donations as $d){
-//            $date = $d->donation_month;
-//            $month = (int)substr($date, 3, -5);
-//            if ($month == 6){
-//                $donors = DB::Table('donors')
-//                    ->select('donor_ID', 'donor_name')
-//                    ->where('donor_ID', '=', $d->donor_ID)
-//                    ->get();
-//                foreach ($donors as $do){
-//                    $month_donors[] = $do->donor_name;
-//                    $ammount = (int)$d->amount_donated;
-//                    for ($i=0; $i<sizeof($month_donations); $i++){
-//                        if ($i == $do->donor_ID){
-//                            $month_donations[$i]+=$ammount;
-//                        }
-//                    }
-//                }
-////                $month_donations[] = $d->amount_donated;
-//            }
-//        }
-//
-////        $reverted_donors = array_reverse($month_donors, true);
-//
-//        for ($i=0; $i<sizeof($month_donors); $i++){
-//            if ($month_donors[$i] == $month_donors[$i+1] ){
-//                unset($month_donors[$i+1]);
-//            }
-//        }
-//
-//
-//        for ($i=0; $i<(sizeof($month_donations)+1); $i++){
-//            if ($month_donations[$i] == 0){
-//                unset($month_donations[$i]);
-//            }
-//
-//        }
+        $month = DB::Table('months')
+            ->select('id', 'month_name')
+            ->get();
+
         ///////////patients graph//////////
-        $months_patients=array(0,0,0,-1,-1,-1,0,0,0,0,0,0);
+        $months_patients=array(0,0,0,0,0,0,0,0,0,0,0,0,0);
         $percentages = array();
-        $patients_graph = Patient::all();
+        $patients_graph = DB::table("patients")
+            ->select("*")
+            ->where("date_of_identification","like",Carbon::now()->format("Y")."%")
+            ->get();
+
+        //Patient::all();
 
         foreach ($patients_graph as $p){
             $date = $p->date_of_identification;
-            $month = (int)substr($date, 3, -5)-1;
+            $month = Carbon::parse($date)->format("m") - 1;
             for ($i=0; $i<sizeof($months_patients); $i++){
                 if ($i == $month){
                     $months_patients[$i]++;
@@ -123,7 +133,7 @@ class HomeController extends Controller
             }
         }
 
-        for ($x=0; $x<11; $x++){
+        for ($x=0; $x<12; $x++){
             if ($months_patients[$x]==0)
                 $percentage = 0;
             else
@@ -137,10 +147,10 @@ class HomeController extends Controller
             'officers' => Officer::all(),
             'total' => $total_donations,
             'data' => $months_donations,
-            'month_donations' => $month_donations,
-            'month_donor' => $month_donors,
+            'month_donor' => $keys,
+            'month_donations' => $values,
 
-            'data1'=>$months_patients,
+            'data1'=>$percentages,
         ]);
     }
 }

@@ -55,6 +55,15 @@
                                     <label style="color: var(--blue);">donor name:</label>
                                     <input class="form-control" type="text" style="width: 200px;" name="donor" required="true">
                                     <button class="btn btn-primary" type="submit" style="margin-top: 8px;font-size: 14px;background: var(--blue);padding-top: 0px;padding-bottom: 1px;">add</button>
+                                    @if($new_donation)
+                                        <script>
+                                            if ({!! json_encode($new_donor) !!})
+                                                var msg = "The new donor and the n";
+                                            else
+                                                var msg = "N";
+                                            window.alert(msg+"ew donations have been successfully added");
+                                        </script>
+                                    @endif
                                 </form>
                             </div>
                         </div>
@@ -64,10 +73,10 @@
                 <div class="card shadow">
                     <div class="card-header py-3">
                         <div class="col">
-                            <div style="margin-bottom: 10px;"><a class="btn btn-primary" aria-expanded="true" aria-controls="collapse-1" href="salary" role="button">Generate Monthly Payments</a></div>
+                            <div style="margin-bottom: 10px;"><a class="btn btn-primary" aria-expanded="true" aria-controls="collapse-1" href="salary#salary" role="button">Generate Monthly Payments</a></div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" id="salary">
                         <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
                             <table class="table my-0" id="dataTable">
                                 <thead>
@@ -190,13 +199,14 @@
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in" style="width: 200px;">
                                         <p class="text-center dropdown-header">Well Wishers</p>
+                                        <a class="dropdown-item" href="-1#graph">All Donors</a>
                                         @foreach($donors as $d)
-                                         <a class="dropdown-item" href="{{$d->donor_ID}}">{{$d->donor_name}}</a>
+                                         <a class="dropdown-item" href="{{$d->donor_ID}}#graph">{{$d->donor_name}}</a>
                                         @endforeach
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" id="graph">
 
                                 @if($selected_donor)
                                     @foreach($selected_donor as $s)
@@ -220,12 +230,12 @@
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in" style="width: 200px;">
                                         <p class="text-center dropdown-header">months</p>
                                         @foreach($months as $month)
-                                            <a class="dropdown-item" href="{{$month->month_name}}">{{$month->month_name}}</a>
+                                            <a class="dropdown-item" href="{{$month->month_name}}#graph2">{{$month->month_name}}</a>
                                         @endforeach
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" id="graph2">
 
                                 @if($selected_month)
                                     @foreach($selected_month as $sm)
