@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b326f633-4213-4bad-87d6-de4d2c179a82" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/views/layouts/nav.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/distribution.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/distribution.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/hierachy.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/hierachy.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/patients.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/patients.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,14 +174,18 @@
       <screen x="0" y="0" width="1280" height="760" />
     </state>
     <state x="370" y="134" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1280.760@0.0.1280.760" timestamp="1613000353198" />
-    <state x="421" y="100" key="RollbackChangesDialog" timestamp="1613117917734">
+    <state x="475" y="303" key="NewPhpFileDialog" timestamp="1613181847062">
       <screen x="0" y="0" width="1280" height="760" />
     </state>
-    <state x="421" y="100" key="RollbackChangesDialog/0.0.1280.760@0.0.1280.760" timestamp="1613117917734" />
-    <state x="296" y="170" key="run.anything.popup" timestamp="1612978776770">
+    <state x="475" y="303" key="NewPhpFileDialog/0.0.1280.760@0.0.1280.760" timestamp="1613181847062" />
+    <state x="421" y="100" key="RollbackChangesDialog" timestamp="1613187773664">
       <screen x="0" y="0" width="1280" height="760" />
     </state>
-    <state x="296" y="170" key="run.anything.popup/0.0.1280.760@0.0.1280.760" timestamp="1612978776770" />
+    <state x="421" y="100" key="RollbackChangesDialog/0.0.1280.760@0.0.1280.760" timestamp="1613187773664" />
+    <state x="296" y="170" key="run.anything.popup" timestamp="1613187429895">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="296" y="170" key="run.anything.popup/0.0.1280.760@0.0.1280.760" timestamp="1613187429895" />
     <state x="303" y="81" width="672" height="678" key="search.everywhere.popup" timestamp="1613120953036">
       <screen x="0" y="0" width="1280" height="760" />
     </state>
