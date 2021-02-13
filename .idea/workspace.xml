@@ -2,21 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b326f633-4213-4bad-87d6-de4d2c179a82" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DonorController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/DonorController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OfficerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OfficerController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/Donation.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Donation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/Id.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Id.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/img/dogs/image3.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/login.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/login.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/distribution.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/distribution.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/hierachy.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/hierachy.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/patients.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/patients.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings">
+  <component name="ComposerSettings" doNotAsk="true">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -155,7 +155,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1612978167102</updated>
-      <workItem from="1612978184529" duration="13696000" />
+      <workItem from="1612978184529" duration="25542000" />
+      <workItem from="1613117715923" duration="15695000" />
     </task>
     <servers />
   </component>
@@ -170,9 +171,17 @@
       <screen x="0" y="0" width="1280" height="760" />
     </state>
     <state x="370" y="134" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1280.760@0.0.1280.760" timestamp="1613000353198" />
+    <state x="421" y="100" key="RollbackChangesDialog" timestamp="1613117917734">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="421" y="100" key="RollbackChangesDialog/0.0.1280.760@0.0.1280.760" timestamp="1613117917734" />
     <state x="296" y="170" key="run.anything.popup" timestamp="1612978776770">
       <screen x="0" y="0" width="1280" height="760" />
     </state>
     <state x="296" y="170" key="run.anything.popup/0.0.1280.760@0.0.1280.760" timestamp="1612978776770" />
+    <state x="303" y="81" width="672" height="678" key="search.everywhere.popup" timestamp="1613120953036">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="303" y="81" width="672" height="678" key="search.everywhere.popup/0.0.1280.760@0.0.1280.760" timestamp="1613120953036" />
   </component>
 </project>

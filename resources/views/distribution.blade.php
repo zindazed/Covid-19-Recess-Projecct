@@ -31,8 +31,7 @@
                     <div class="dropdown-menu"><a class="dropdown-item" href="/officer"><i class="fa fa-male" style="width: 9px;height: 16px;font-size: 19px;"></i>&nbsp;Health Officer</a><a class="dropdown-item" href="/hospital"><i class="fa fa-institution" style="width: 11px;height: 16px;"></i>&nbsp;Hospital</a></div>
                 </li>
                 @endif
-            </ul>
-            <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </ul>        
         </div>
     </nav>
     <div class="d-flex flex-column" id="content-wrapper">
@@ -46,13 +45,13 @@
                 @if(Auth::user()->position == 'Administrator')
                 <div class="row">
                     <div class="col">
-                        <div style="margin-bottom: 10px;"><a class="btn btn-primary" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button">enter donation</a>
+                        <div style="margin-bottom: 10px;"><a class="btn btn-primary" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button">Enter Donation</a>
                             <div class="collapse" id="collapse-1">
                                 <form style="padding-left: 7px;padding-bottom: 5px;background: var(--white);" action="/donations" method="post">
                                     @csrf
-                                    <label style="color: var(--blue);">Ammount:</label>
+                                    <label style="color: var(--blue);">Amount in Million UGX:</label>
                                     <input class="form-control" type="text" style="width: 200px;" name="ammount" required="true">
-                                    <label style="color: var(--blue);">donor name:</label>
+                                    <label style="color: var(--blue);">Donor Name:</label>
                                     <input class="form-control" type="text" style="width: 200px;" name="donor" required="true">
                                     <button class="btn btn-primary" type="submit" style="margin-top: 8px;font-size: 14px;background: var(--blue);padding-top: 0px;padding-bottom: 1px;">add</button>
                                     @if($new_donation)
@@ -83,7 +82,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Officer</th>
-                                    <th>Ammount</th>
+                                    <th>Amount</th>
                                     <th>Position</th>
                                         </tr>
                                         </thead>
@@ -123,18 +122,14 @@
                                         <tr>
                                     <td><strong>ID</strong></td>
                                     <td><strong>Officer</strong></td>
-                                    <td><strong>Ammount</strong></td>
+                                    <td><strong>Amount</strong></td>
                                     <td><strong>Position</strong></td>
                                 </tr>
                                 </tfoot>
                             </table>
                         </div>
                         <div class="row">
-                            @if($officers and $salary)
-                                <div class="col-md-6 align-self-center">
-                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing {{$officers->count()}} of
-                                        {{$all_officers->count()}} Officers</p>
-                                </div>
+                            @if($officers and $salary)                               
                                 <div class="d-flex justify-content-center">
                                     {!! $officers->links() !!}
                                 </div>
@@ -158,7 +153,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Officer</th>
-                                    <th>Ammount</th>
+                                    <th>Amount</th>
                                     <th>Position</th>
                                 </tr>
                                 </thead>
@@ -178,16 +173,13 @@
                                 <tr>
                                     <td><strong>ID</strong></td>
                                     <td><strong>Officer</strong></td>
-                                    <td><strong>Ammount</strong></td>
+                                    <td><strong>Amount</strong></td>
                                     <td><strong>Position</strong></td>
                                 </tr>
                                 </tfoot>
                             </table>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6 align-self-center">
-                                <p id="dataTable_info-1" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
-                            </div>
+                        <div class="row">                            
                         </div>
                     </div>
                 </div>

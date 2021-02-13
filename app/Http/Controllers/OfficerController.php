@@ -27,7 +27,7 @@ class OfficerController extends Controller
         $officer->password = $req->password;
 
         $officer->Retired = false;
-        $officer->officer_position = "Officer";
+        $officer->officer_position = "Health Officer";
 
         $head = DB::Table('hospitals')
             ->select('head_ID')

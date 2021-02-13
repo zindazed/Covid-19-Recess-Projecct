@@ -32,7 +32,6 @@
                         </li>
                     @endif
                 </ul>
-                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
         </nav>
         <div class="d-flex flex-column" id="content-wrapper">
@@ -52,7 +51,7 @@
                                 <h6 class="text-primary font-weight-bold m-0">Number of Officers</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$officers->count()}}</button>
                             </div>
                             <div class="text-center" style="margin-left: 38px;">
-                                <h6 class="text-primary font-weight-bold m-0">Available Donation Funds</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$total}}</button>
+                                <h6 class="text-primary font-weight-bold m-0">Available Donation Funds</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">UGX {{$total}}M</button>
                             </div>
                         </div>
                     </div>
@@ -138,9 +137,23 @@
                     scales: {
                         yAxes: [{
                             ticks: {
-                                beginAtZero: true
-                            }
-                        }]
+                                fontColor: "rgb(78,115,223)",
+                                beginAtZero: true,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Million UGX",
+                            },
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontColor: "rgb(78,115,223)",                       
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "months",
+                            },
+                        }],                                  
                     },
                     legend: {
                         display: false
