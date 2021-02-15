@@ -159,7 +159,7 @@ class HomeController extends Controller
 
         $waiting = DB::table("waiting_lists")
             ->select("*")
-            ->paginate(5,["*"],"waiting")->fragment("wait");
+            ->paginate(3,["*"],"waiting")->fragment("wait");
 
         return view('home',[
             'patients' => Patient::all(),

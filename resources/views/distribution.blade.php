@@ -22,7 +22,7 @@
         <div id="content">
             <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
                 <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                    <h1 style="margin-top: 4px;">Donations and Distribution</h1>
+                    <h1 style="margin-top: 4px;">Donations</h1>
                 </div>
             </nav>
             <div class="container-fluid" style="margin-top: 12px;">
@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 @endif
-                <div class="card shadow">
+                <div class="card shadow" style="min-width: 500px;">
                     <div class="card-header py-3">
                         <div class="col" id="salary">
                             <div style="margin-bottom: 10px;"><p class="text-primary m-0 font-weight-bold">Monthly Payments</p></div>
@@ -61,7 +61,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
-                            <table class="table my-0" id="dataTable">
+                            <table class="table my-0" id="dataTable" style="min-width: 500px;">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -121,7 +121,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card shadow" style="margin-top: 14px;">
+                <div class="card shadow" style="margin-top: 14px; min-width: 500px;">
                     <div class="card-header py-3" id="system">
                         <p class="text-primary m-0 font-weight-bold">Staff Paid by System</p>
                     </div>
@@ -132,7 +132,7 @@
                             </div>
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable-2" role="grid" aria-describedby="dataTable_info">
-                            <table class="table my-0" id="dataTable">
+                            <table class="table my-0" id="dataTable" style="min-width: 500px;">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -172,13 +172,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="row" style="width: 100%; margin-top: 50px;">
+                    <div class="col zed" style="width: 45%; min-width: 400px;">
+                        <div class="card shadow mb-4 zed">
+                            <div class="zed card-header d-flex justify-content-between align-items-center" style="min-width: 400px;">
                                 <h6 class="text-primary font-weight-bold m-0">Donations Made by Well Wishers</h6>
-                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in" style="width: 200px;">
+                                <div class="zed dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="zed dropdown-menu shadow dropdown-menu-right animated--fade-in" style="width: 200px;">
                                         <p class="text-center dropdown-header">Well Wishers</p>
                                         <a class="dropdown-item" href="-1#graph">All Donors</a>
                                         @foreach($donors as $d)
@@ -187,7 +187,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body" id="graph">
+                            <div class="card-body zed" id="graph" style="min-width: 400px;">
 
                                 @if($selected_donor)
                                     @foreach($selected_donor as $s)
@@ -196,19 +196,19 @@
                                 @else
                                     <p class="text-center ">All Donors</p>
                                 @endif
-                                <div class="chart-area">
+                                <div class="chart-area zed" style="width: auto; height: fit-content; margin: auto">
                                     <canvas id="chbar">
                                     </canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="zed col" style="width: 45%; min-width: 400px; margin: auto">
+                        <div class="zed card shadow mb-4">
+                            <div class="zed card-header d-flex justify-content-between align-items-center" style="min-width: 400px;">
                                 <h6 class="text-primary font-weight-bold m-0">Donations Made by Well Wishers</h6>
-                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in" style="width: 200px;">
+                                <div class="zed dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="zed dropdown-menu shadow dropdown-menu-right animated--fade-in" style="width: 200px;">
                                         <p class="text-center dropdown-header">months</p>
                                         @foreach($months as $month)
                                             <a class="dropdown-item" href="{{$month->month_name}}#graph2">{{$month->month_name}}</a>
@@ -216,7 +216,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body" id="graph2">
+                            <div class="card-body zed" id="graph2" style="min-width: 400px;">
 
                                 @if($selected_month)
                                     @foreach($selected_month as $sm)
@@ -225,7 +225,7 @@
                                 @else
                                     <p class="text-center ">{{ \Carbon\Carbon::now()->monthName}}</p>
                                 @endif
-                                <div class="chart-area">
+                                <div class="chart-area zed" style="width: auto; height: fit-content; margin: auto">
                                     <canvas id="chbar2">
                                     </canvas>
                                 </div>

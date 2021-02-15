@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="assets/css/untitled.css">
 </head>
 
-<body id="page-top">
+<body id="page-top" style="min-width: 600px">
 @include('layouts.app')
     <div id="wrapper" style="margin-top: -50px;">
         @include('layouts.nav')
@@ -40,13 +40,13 @@
                         </div>
                     </div>
                     <div class="row" style="width: 100%;">
-                        <div class="col" style="width: 45%;">
+                        <div class="col" style="width: 45%; min-width: 400px;">
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h6 class="text-primary font-weight-bold m-0">Donations Made By Well Wishers</h6>
                                 </div>
                                 <div class="card-body" style="padding: 0px!important;">
-                                    <div class="chart-area" style="margin-top: 10px;">
+                                    <div class="chart-area" style="margin-top: 10px; height: fit-content"">
                                         <p class="text-center ">All Well Wishers</p>
                                         <canvas id="chbar1">
                                         </canvas>
@@ -61,7 +61,7 @@
 
                                 </div>
                                 <div class="card-body " style="padding: 0px!important;">
-                                    <div class="chart-area" style="margin-top: 10px;">
+                                    <div class="chart-area" style="margin-top: 10px;height: fit-content"">
                                         <p class="text-center ">{{ \Carbon\Carbon::now()->monthName}}</p>
                                         <canvas id="chbar2">
                                         </canvas>
@@ -72,26 +72,26 @@
                     </div>
 
                     <div class="row" style="width: 100%;" >
-                        <div class="col" style="width: 45%;">
+                        <div class="col" style="width: 45%; min-width: 400px;">
                             <div class="card shadow mb-4"  >
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h6 class="text-primary font-weight-bold m-0">Variation in Percentage Change in Enrollment Figures</h6>
                                 </div>
                                 <div class="card-body" >
-                                    <div class="chart-area" style="margin-top: 10px;">
+                                    <div class="chart-area" style="margin-top: 10px;height: fit-content"">
                                         <canvas id="chbar3">
                                         </canvas>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col" style="width: 45%;">
+                        <div class="col" style="width: 45%; min-width: 400px;">
                             <div class="card shadow mb-4"  >
                                 <div class="card-header d-flex justify-content-between align-items-center" id="wait">
                                     <h6 class="text-primary font-weight-bold m-0">Waiting list</h6>
                                 </div>
                                 <div class="card-body" >
-                                    <div class="chart-area" style="margin-top: 10px;">
+                                    <div class="chart-area" style="margin-top: 10px; height: fit-content">
                                         <table class="table my-0" id="dataTable">
                                             <thead>
                                             <tr>
@@ -131,7 +131,7 @@
                                     <h6 class="text-primary font-weight-bold m-0">Promoted and Retired Officers</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-area" style="margin-top: 10px;">
+                                    <div class="chart-area" style="margin-top: 10px;height: fit-content">
                                         <table class="table my-0" id="dataTable">
                                             <thead>
                                             <tr>

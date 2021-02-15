@@ -5,17 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b326f633-4213-4bad-87d6-de4d2c179a82" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/public/assets/css/responsive.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DonorController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/DonorController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Patient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/Officer_patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Officer_patient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/Patient.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/distribution.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/distribution.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/patients.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/patients.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +20,13 @@
   <component name="ComposerSettings" doNotAsk="true">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -151,6 +153,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -169,7 +172,7 @@
       <workItem from="1613308407898" duration="481000" />
       <workItem from="1613309299057" duration="4850000" />
       <workItem from="1613314213277" duration="2940000" />
-      <workItem from="1613326114903" duration="18411000" />
+      <workItem from="1613326114903" duration="34275000" />
     </task>
     <servers />
   </component>
@@ -192,10 +195,10 @@
       <screen x="0" y="0" width="1280" height="760" />
     </state>
     <state x="475" y="303" key="NewPhpFileDialog/0.0.1280.760@0.0.1280.760" timestamp="1613181847062" />
-    <state x="421" y="100" key="RollbackChangesDialog" timestamp="1613335066308">
+    <state x="421" y="100" key="RollbackChangesDialog" timestamp="1613361264458">
       <screen x="0" y="0" width="1280" height="760" />
     </state>
-    <state x="421" y="100" key="RollbackChangesDialog/0.0.1280.760@0.0.1280.760" timestamp="1613335066308" />
+    <state x="421" y="100" key="RollbackChangesDialog/0.0.1280.760@0.0.1280.760" timestamp="1613361264458" />
     <state x="0" y="0" width="845" height="498" key="dock-window-1" timestamp="1613310621419">
       <screen x="0" y="0" width="1280" height="760" />
     </state>

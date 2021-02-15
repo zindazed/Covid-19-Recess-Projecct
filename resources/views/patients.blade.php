@@ -12,25 +12,26 @@
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Registration-Form-with-Photo.css">
     <link rel="stylesheet" href="assets/css/untitled.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 
-<body id="page-top">
+<body id="page-top" style="min-width: 528px">
 @include('layouts.app')
-    <div id="wrapper" style="margin-top: -50px;">
+    <div id="wrapper" style="margin-top: -50px;" >
         @include('layouts.nav')
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                        <h1>Patients</h1>
+                        <h1 style="text-align: left">Patients</h1>
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <div class="card shadow" style="margin-top: 17px;">
-                        <div class="row" style="margin-bottom: 9px;">
-                            <div class="col text-left d-flex justify-content-center">
-                                <div class="text-center">
-                                    <h6 class="text-primary font-weight-bold m-0">Enrolled Patients</h6><button class="btn btn-primary" type="button" style="background: var(--cyan);width: 100%;padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-left: 4px;margin-top: 8px;">{{$patients_all->count()}}</button>
+                    <div class="card shadow" style="margin-top: 17px; text-align: center; min-width: 450px">
+                        <div class="row" style="margin-bottom: 9px; margin: auto; width: 75%; min-width: 400px">
+                            <div class="col text-left justify-content-center">
+                                <div class="text-center" style="margin-left: 38px;">
+                                    <h6 class="text-primary font-weight-bold m-0">Enrolled Patients</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$patients_all->count()}}</button>
                                 </div>
                                 <div class="text-center" style="margin-left: 38px;">
                                     <h6 class="text-primary font-weight-bold m-0">Positive Cases</h6><button class="btn btn-primary" type="button" style="width: 100%;background: var(--cyan);padding-top: 0px;padding-bottom: 0px;font-size: 25px;margin-top: 8px;">{{$positive_cases->count()}}</button>
@@ -82,17 +83,13 @@
                                 </table>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 align-self-center">
-                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing {{$patients->count()}} of
-                                        {{$all_patients->count()}} Patients</p>
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    {!! $patients->links() !!}
+                                <div class="d-flex justify-content-center pagination mx-auto">
+                                    {!! $patients->onEachSide(1)->links() !!}
                                 </div>
                             </div>
                         </div>
-                        <div class="row justify-content-center">
-                            <div class="col-lg-7 col-xl-8 align-self-baseline">
+                        <div class="row justify-content-center" style="width: 100%;">
+                            <div class="col-lg-7 col-xl-8 align-self-baseline" style="width: 75%; min-width: 400px; height: fit-content">
                                 <div class="card shadow mb-4">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h6 class="text-primary font-weight-bold m-0"><br>Variation in Percentage Change in Enrollment Figures<br><br></h6>
