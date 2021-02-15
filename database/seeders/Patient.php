@@ -20,7 +20,7 @@ class Patient extends Seeder
         $category = array("Symptomatic", "Asymptomatic");
         $gendar = array("M", "F");
         $case_type = array("postive", "false positive");
-        foreach (range(1,10) as $index){
+        foreach (range(1,500) as $index){
             DB::table('patients')->insert([
                 'patient_name' => $faker ->firstName,
                 'date_of_identification' => $faker -> dateTimeBetween(Carbon::now()->subYear(),Carbon::now()->addYear()),

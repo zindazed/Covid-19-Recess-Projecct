@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consultant;
 use App\Models\Officer;
 use App\Models\Patient;
+use App\Models\PromotedOfficer;
+use App\Models\WaitingList;
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -141,6 +146,20 @@ class HomeController extends Controller
             $percentages[] = $percentage;
         }
 
+        DB::table("promoted_officers")
+            ->whereDate("created_at","<=",Carbon::now()->subMonth())
+            ->delete();
+
+        $this->promotion();
+        $this->waiting();
+
+        $promoted = DB::table("promoted_officers")
+            ->select("*")
+            ->paginate(5,["*"],"promotion")->fragment("promote");
+
+        $waiting = DB::table("waiting_lists")
+            ->select("*")
+            ->paginate(5,["*"],"waiting")->fragment("wait");
 
         return view('home',[
             'patients' => Patient::all(),
@@ -151,6 +170,220 @@ class HomeController extends Controller
             'month_donations' => $values,
 
             'data1'=>$percentages,
+            'waiting'=>$waiting,
+            'promoted'=>$promoted,
         ]);
     }
+
+    public function promotion()
+    {
+        $officers = DB::table("officers")
+            ->select("*")
+            ->get();
+
+        foreach ($officers as $officer) {
+            $patients = DB::table("officer_patients")
+                ->select("patient_ID")
+                ->where("officer_ID", "=", "$officer->officer_ID")
+                ->get();
+            $num = count($patients);
+            $position = $officer->officer_position;
+
+            if ($num >= 3 && $position == "Health Officer") {
+                DB::table("officers")
+                    ->where("officer_ID", "=", "$officer->officer_ID")
+                    ->update(["officer_position" => "Senior health Officer"]);
+
+                $promoted = new PromotedOfficer();
+                $promoted->officer_ID = $officer->officer_ID;
+                $promoted->officer_name = $officer->officer_name;
+                $promoted->officer_position = "Senior health Officer";
+
+                $hospital = DB::Table('hospitals')
+                    ->select('hospital_name')
+                    ->where("head_ID", "=", "$officer->head_ID")
+                    ->first();
+
+                $promoted->previous_hospital = $hospital->hospital_name;
+
+                $head = DB::Table('hospitals')
+                    ->select('head_ID','hospital_name')
+                    ->where("class", "=", "Regional Referral")
+                    ->get();
+
+                $least = 100;
+                $hospital = 0;
+                foreach ($head as $h) {
+                    $headed = DB::Table('officers')
+                        ->select('officer_ID')
+                        ->where("head_ID", "=", $h->head_ID)
+                        ->get();
+                    $num = count($headed);
+                    if ($num < $least) {
+                        $least = $num;
+                        $hospital = $h;
+                    }
+                }
+
+                $promoted->new_hospital = $hospital->hospital_name;
+                try {
+                    $promoted->save();
+                }catch (QueryException $ex)
+                {
+                    DB::table("promoted_officers")
+                        ->where("officer_ID","=","$officer->officer_ID")
+                        ->update(["officer_position"=>"$promoted->officer_position",
+                            "previous_hospital"=>$promoted->previous_hospital,
+                            "new_hospital"=>$promoted->new_hospital
+                        ]);
+                }
+
+                $officer->head_ID = $hospital->head_ID;
+                DB::Table('officers')
+                    ->where("officer_ID", "=", "$officer->officer_ID")
+                    ->update(["head_ID" => "$hospital->head_ID"]);
+
+            }
+            if ($num >= 5 && $position == "Senior health Officer") {
+                $officer->officer_position="Consultant";
+                $consultant = new Consultant();
+
+                $consultant->officer_ID = $officer->officer_ID;
+                $consultant->officer_name = $officer->officer_name;
+                $consultant->password = $officer->password;
+                $consultant->officer_position = $officer->officer_position;
+                $consultant->head_ID = $officer->head_ID;
+                $consultant->administrator_ID = $officer->administrator_ID;
+                $consultant->save();
+
+                DB::table("officers")
+                    ->where("officer_ID", "=", "$officer->officer_ID")
+                    ->update(["officer_position" => $officer->officer_position]);
+
+                $waiter = new WaitingList();
+
+                $waiter->officer_ID = $officer->officer_ID;
+                $waiter->officer_name = $officer->officer_name;
+                $waiter->password = $officer->password;
+                $waiter->officer_position = $officer->officer_position;
+                $waiter->head_ID = $officer->head_ID;
+                $waiter->administrator_ID = $officer->administrator_ID;
+                $waiter->save();
+            }
+
+            $then = Carbon::parse($officer->updated_at)->format("Y");
+            $now = Carbon::now()->format("Y");
+            $nationals =  DB::table('hospitals')->select("head_ID")
+                ->where("class","=","National Referral")
+                ->get();
+            foreach ($nationals as $national)
+                if (($now - $then >= 5) && ($officer->head_ID == $national->head_ID)) {
+                    DB::Table('officers')
+                        ->where("officer_ID", "=", "$officer->officer_ID")
+                        ->update(["Retired" => true]);
+
+                    $promoted = new PromotedOfficer();
+                    $promoted->officer_ID = $officer->officer_ID;
+                    $promoted->officer_name = $officer->officer_name;
+                    $promoted->officer_position = "Retired";
+
+                    $hospital = DB::Table('hospitals')
+                        ->select('hospital_name')
+                        ->where("head_ID", "=", "$officer->head_ID")
+                        ->first();
+
+                    $promoted->previous_hospital = $hospital->hospital_name;
+                    $promoted->new_hospital = "None";
+                    try {
+                        $promoted->save();
+                    }catch (QueryException $ex)
+                    {
+                        DB::table("promoted_officers")
+                            ->where("officer_ID","=","$officer->officer_ID")
+                            ->update(["officer_position"=>"$promoted->officer_position",
+                            "previous_hospital"=>$promoted->previous_hospital,
+                            "new_hospital"=>$promoted->new_hospital
+                            ]);
+                    }
+                }
+        }
+    }
+
+    public function waiting()
+    {
+        $waiters = DB::Table('waiting_lists')
+            ->select('*')
+            ->get();
+
+        if ($waiters)
+            foreach ($waiters as $waiter)
+            {
+                $officer = DB::table("officers")
+                    ->select("*")
+                    ->where("officer_ID", "=", "$waiter->officer_ID")
+                    ->first();
+
+                $promoted = new PromotedOfficer();
+                $promoted->officer_ID = $officer->officer_ID;
+                $promoted->officer_name = $officer->officer_name;
+                $promoted->officer_position = "Consultant";
+
+                $hospital = DB::Table('hospitals')
+                    ->select('hospital_name')
+                    ->where("head_ID", "=", "$officer->head_ID")
+                    ->first();
+
+                $promoted->previous_hospital = $hospital->hospital_name;
+
+                $head = DB::Table('hospitals')
+                    ->select('head_ID','hospital_name')
+                    ->where("class", "=", "National Referral")
+                    ->get();
+
+                $least = 4;
+                $hospital = 0;
+                $full = true;
+                foreach ($head as $h) {
+                    $headed = DB::Table('officers')
+                        ->select('officer_ID')
+                        ->where("head_ID", "=", $h->head_ID)
+                        ->where("Retired", "=", "0")
+                        ->get();
+                    $num = count($headed);
+                    if ($num < $least) {
+                        $least = $num;
+                        $hospital = $h;
+                        $full = false;
+                    }
+                }
+
+                if($full)
+                    break;
+                else
+                {
+                    $promoted->new_hospital = $hospital->hospital_name;
+                    try {
+                        $promoted->save();
+                    }catch (QueryException $ex)
+                    {
+                        DB::table("promoted_officers")
+                            ->where("officer_ID","=","$officer->officer_ID")
+                            ->update(["officer_position"=>"$promoted->officer_position",
+                                "previous_hospital"=>$promoted->previous_hospital,
+                                "new_hospital"=>$promoted->new_hospital
+                            ]);
+                    }
+
+                    $officer->head_ID = $hospital->head_ID;
+                    DB::table('officers')
+                        ->where("officer_ID", "=", "$officer->officer_ID")
+                        ->update(["head_ID" => "$hospital->head_ID","updated_at"=>Carbon::now()]);
+
+                    DB::table("waiting_lists")
+                        ->where("officer_ID", "=", "$waiter->officer_ID")
+                        ->delete();
+                }
+            }
+    }
+
 }

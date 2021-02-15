@@ -39,8 +39,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
+                    <div class="row" style="width: 100%;">
+                        <div class="col" style="width: 45%;">
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h6 class="text-primary font-weight-bold m-0">Donations Made By Well Wishers</h6>
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col" style="width: 45%;">
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h6 class="text-primary font-weight-bold m-0">Donations Made in a Given Month</h6>
@@ -71,16 +71,98 @@
                         </div>
                     </div>
 
-                    <div class="row" style="width: 50%;" >
-                        <div class="col " style="width: 100%;">
+                    <div class="row" style="width: 100%;" >
+                        <div class="col" style="width: 45%;">
                             <div class="card shadow mb-4"  >
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h6 class="text-primary font-weight-bold m-0">Variation in Percentage Change in Enrollment Figures</h6>
                                 </div>
                                 <div class="card-body" >
                                     <div class="chart-area" style="margin-top: 10px;">
-                                        <canvas id="chbar3" >
+                                        <canvas id="chbar3">
                                         </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col" style="width: 45%;">
+                            <div class="card shadow mb-4"  >
+                                <div class="card-header d-flex justify-content-between align-items-center" id="wait">
+                                    <h6 class="text-primary font-weight-bold m-0">Waiting list</h6>
+                                </div>
+                                <div class="card-body" >
+                                    <div class="chart-area" style="margin-top: 10px;">
+                                        <table class="table my-0" id="dataTable">
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Officer</th>
+                                                <th>Position</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if($waiting)
+                                                    @foreach($waiting as $of)
+                                                    <tr>
+                                                        <td>{{$of->officer_ID}}</td>
+                                                        <td>{{$of->officer_name}}</td>
+                                                        <td>{{$of->officer_position}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        @if($waiting)
+                                            <div class="d-flex justify-content-center pagination mx-auto">
+                                                {!! $waiting->onEachSide(1)->links() !!}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="width: 100%;" >
+                        <div class="col" style="width: 100%;">
+                            <div class="card shadow mb-4"  >
+                                <div class="card-header d-flex justify-content-between align-items-center" id="promote">
+                                    <h6 class="text-primary font-weight-bold m-0">Promoted and Retired Officers</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area" style="margin-top: 10px;">
+                                        <table class="table my-0" id="dataTable">
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Officer</th>
+                                                <th>New Position</th>
+                                                <th>Former Hospital</th>
+                                                <th>New Hospital</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @if($promoted)
+                                                @foreach($promoted as $of)
+                                                    <tr>
+                                                        <td>{{$of->officer_ID}}</td>
+                                                        <td>{{$of->officer_name}}</td>
+                                                        <td>{{$of->officer_position}}</td>
+                                                        <td>{{$of->previous_hospital}}</td>
+                                                        <td>{{$of->new_hospital}}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        @if($promoted)
+                                            <div class="d-flex justify-content-center pagination mx-auto">
+                                                {{ $promoted->onEachSide(1)->links() }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

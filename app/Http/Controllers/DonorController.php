@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Donation;
 use App\Models\Donor;
 use App\Models\Officer;
+use App\Models\Paid;
 use App\Models\RetiredOfficer;
 use App\Models\Salary;
 use App\Models\Consultant;
@@ -20,7 +21,7 @@ use phpDocumentor\Reflection\Types\Array_;
 
 class DonorController extends Controller
 {
-    function payments()
+    function display()
     {
         try
         {
@@ -44,7 +45,12 @@ class DonorController extends Controller
 
             //first subtract that of paid promoted consultants
             //will be implemented after promotion is done
-            $consultants = $this->promotion();
+
+            $consultants = DB::table("consultants")
+                ->select("*")
+                ->where("officer_position","=","Consultant")
+                ->get();
+
             $total = $total - (10 * count($consultants));
 
             $pos_num = array();
@@ -156,20 +162,13 @@ class DonorController extends Controller
 
 
             if ($salary->save()) {
-                DB::table("consultants")->delete();
 
-                foreach ($consultants as $officer)
-                {
-                    $consultant = new Consultant();
+                DB::table("consultants")
+                    ->where("officer_position","=","New Consultant")
+                    ->delete();
 
-                    $consultant->officer_ID = $officer->officer_ID;
-                    $consultant->officer_name = $officer->officer_name;
-                    $consultant->password = $officer->password;
-                    $consultant->officer_position = $officer->officer_position;
-                    $consultant->head_ID = $officer->head_ID;
-                    $consultant->administrator_ID = $officer->administrator_ID;
-                    $consultant->save();
-                }
+                DB::table("consultants")
+                    ->update(["officer_position" => "New Consultant"]);
 
                 $donations = DB::table("donations")
                     ->select("*")
@@ -189,18 +188,49 @@ class DonorController extends Controller
 
                 DB::table("donations")->delete();
 
-                $officers = DB::table("officers")
-                    ->select("officer_name", "officer_position", "officer_ID")
-                    ->where("Retired", "=", "0");
+                DB::table("paids")->delete();
+
+                $admins = DB::table("users")
+                    ->select("name", "position", "id")
+                    ->get();
+
+                foreach ($admins as $admin)
+                {
+                    $paid_workers = new Paid();
+
+                    $paid_workers->id = $admin->id;
+                    $paid_workers->name = $admin->name;
+                    $paid_workers->position = $admin->position;
+                    $paid_workers->save();
+                }
 
                 $heads = DB::table("hospitals")
-                    ->select("head_name", "officer_position", "head_ID");
+                    ->select("head_name", "officer_position", "head_ID")
+                    ->get();
 
-                $workers = DB::table("users")
-                    ->select("name", "position", "id")
-                    ->union($heads)
-                    ->union($officers)
-                    ->paginate(10);
+                foreach ($heads as $head)
+                {
+                    $paid_workers = new Paid();
+
+                    $paid_workers->id = $head->head_ID;
+                    $paid_workers->name = $head->head_name;
+                    $paid_workers->position = $head->officer_position;
+                    $paid_workers->save();
+                }
+
+                $officers = DB::table("officers")
+                    ->select("officer_name", "officer_position", "officer_ID")
+                    ->where("Retired", "=", "0")
+                    ->get();
+                foreach ($officers as $officer)
+                {
+                    $paid_workers = new Paid();
+
+                    $paid_workers->id = $officer->officer_ID;
+                    $paid_workers->name = $officer->officer_name;
+                    $paid_workers->position = $officer->officer_position;
+                    $paid_workers->save();
+                }
 
                 $salary = DB::table("salaries")
                     ->select("*")
@@ -288,11 +318,14 @@ class DonorController extends Controller
                     ->select('id', 'month_name')
                     ->get();
 
+                $workers = DB::table("paids")
+                    ->select("name", "position", "id")
+                    ->paginate(10,["*"],"paid")->fragment("salary");
+
                 $consultant = DB::table("consultants")
                     ->select("*")
-                    ->get();
-
-                $this->waiting();
+                    ->where("officer_position","=","New Consultant")
+                    ->paginate(5,["*"],"system")->fragment("system");
 
                 $n_donor = false;
                 $n_donation = false;
@@ -315,18 +348,15 @@ class DonorController extends Controller
             }
         } catch (QueryException $ex) {
             $time = Carbon::now()->format('Y-m');
-            $officers = DB::table("officers")
-                ->select("officer_name", "officer_position", "officer_ID")
-                ->where("Retired", "=", "0");
 
-            $heads = DB::table("hospitals")
-                ->select("head_name", "officer_position", "head_ID");
-
-            $workers = DB::table("users")
+            $workers = DB::table("paids")
                 ->select("name", "position", "id")
-                ->union($heads)
-                ->union($officers)
-                ->paginate(10);
+                ->paginate(10,["*"],"paid")->fragment("salary");
+
+            $consultant = DB::table("consultants")
+                ->select("*")
+                ->where("officer_position","=","New Consultant")
+                ->paginate(5,["*"],"system")->fragment("system");
 
             $salary = DB::table("salaries")
                 ->select("*")
@@ -414,10 +444,6 @@ class DonorController extends Controller
                 ->select('id', 'month_name')
                 ->get();
 
-            $consultant = DB::table("consultants")
-                ->select("*")
-                ->get();
-
             $n_donor = false;
             $n_donation = false;
 
@@ -437,265 +463,6 @@ class DonorController extends Controller
                 'month_donations' => $values,
             ]);
         }
-    }
-
-    public function promotion()
-    {
-        $officers = DB::table("officers")
-            ->select("*")
-            ->get();
-
-        $counter = 0;
-        $consultants = array();
-        foreach ($officers as $officer) {
-            $patients = DB::table("officer_patients")
-                ->select("patient_ID")
-                ->where("officer_ID", "=", "$officer->officer_ID")
-                ->get();
-            $num = count($patients);
-            $position = $officer->officer_position;
-
-            if ($num >= 4 && $position == "Health Officer") {
-                DB::table("officers")
-                    ->where("officer_ID", "=", "$officer->officer_ID")
-                    ->update(["officer_position" => "Senior health Officer"]);
-
-                $head = DB::Table('hospitals')
-                    ->select('head_ID')
-                    ->where("class", "=", "Regional Referral")
-                    ->get();
-
-                $least = 100;
-                $hospital = 0;
-                foreach ($head as $h) {
-                    $headed = DB::Table('officers')
-                        ->select('officer_ID')
-                        ->where("head_ID", "=", $h->head_ID)
-                        ->get();
-                    $num = count($headed);
-                    if ($num < $least) {
-                        $least = $num;
-                        $hospital = $h->head_ID;
-                    }
-                }
-
-                $officer->head_ID = $hospital;
-                DB::Table('officers')
-                    ->where("officer_ID", "=", "$officer->officer_ID")
-                    ->update(["head_ID" => "$hospital"]);
-
-            }
-            if ($num >= 8 && $position == "Senior health Officer") {
-                $officer->officer_position="Consultant";
-                $consultants[$counter] = $officer;
-                $counter++;
-                DB::table("officers")
-                    ->where("officer_ID", "=", "$officer->officer_ID")
-                    ->update(["officer_position" => $officer->officer_position]);
-
-                    $waiter = new WaitingList();
-
-                    $waiter->officer_ID = $officer->officer_ID;
-                    $waiter->officer_name = $officer->officer_name;
-                    $waiter->password = $officer->password;
-                    $waiter->officer_position = $officer->officer_position;
-                    $waiter->head_ID = $officer->head_ID;
-                    $waiter->administrator_ID = $officer->administrator_ID;
-                    $waiter->save();
-            }
-
-            $then = Carbon::parse($officer->updated_at)->format("i");
-            $now = Carbon::now()->format("i");
-            $nationals =  DB::table('hospitals')->select("head_ID")
-                ->where("class","=","National Referral")
-                ->get();
-            foreach ($nationals as $national)
-                if (($now - $then >= 1) && ($officer->head_ID == $national->head_ID)) {
-                    DB::Table('officers')
-                        ->where("officer_ID", "=", "$officer->officer_ID")
-                        ->update(["Retired" => true]);
-                }
-        }
-        return $consultants;
-    }
-
-    public function waiting()
-    {
-        $waiters = DB::Table('waiting_lists')
-            ->select('*')
-            ->get();
-
-        if ($waiters)
-            foreach ($waiters as $waiter)
-            {
-                $officer = DB::table("officers")
-                    ->select("*")
-                    ->where("officer_ID", "=", "$waiter->officer_ID")
-                    ->first();
-
-                $head = DB::Table('hospitals')
-                ->select('head_ID')
-                ->where("class", "=", "National Referral")
-                ->get();
-
-                $least = 200;
-                $hospital = 0;
-                $full = true;
-                foreach ($head as $h) {
-                    $headed = DB::Table('officers')
-                        ->select('officer_ID')
-                        ->where("head_ID", "=", $h->head_ID)
-                        ->where("Retired", "=", "0")
-                        ->get();
-                    $num = count($headed);
-                    if ($num < $least) {
-                        $least = $num;
-                        $hospital = $h->head_ID;
-                        $full = false;
-                    }
-                }
-
-                if($full)
-                    break;
-                else
-                {
-                    $officer->head_ID = $hospital;
-                    DB::table('officers')
-                        ->where("officer_ID", "=", "$officer->officer_ID")
-                        ->update(["head_ID" => "$hospital","updated_at"=>Carbon::now()]);
-
-                    DB::table("waiting_lists")
-                        ->where("officer_ID", "=", "$waiter->officer_ID")
-                        ->delete();
-                }
-            }
-    }
-
-    public function display()
-    {
-        $donations1 = DB::Table('donations')
-            ->select('donor_ID');
-
-        $donations = DB::table("used_donations")
-            ->select('donor_ID')
-            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
-            ->union($donations1)
-            ->get();
-
-        $donor_ids = array();
-
-        foreach ($donations as $donation){
-            $donor_ids[] = $donation->donor_ID;
-        }
-
-        $all_donors = DB::Table('donors')
-            ->select('donor_ID', 'donor_name')
-            ->whereIn('donor_ID', $donor_ids)
-            ->get();
-
-        //////displaying the graph donation amde by well wishers graph////////////////
-        $donations_for_donors = DB::Table('donations')
-            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
-
-        $donations = DB::table("used_donations")
-            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
-            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
-            ->union($donations_for_donors)
-            ->get();
-
-        $months_donations = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        foreach ($donations as $d) {
-            $date = $d->donation_month;
-            $month = Carbon::parse($date)->format("m") - 1;
-            $ammount = (int)$d->amount_donated;
-            for ($i = 0; $i < sizeof($months_donations); $i++) {
-                if ($i == $month) {
-                    $months_donations[$i] += $ammount;
-                }
-            }
-        }
-
-        /////graph for donations made in a given month////////
-        $donations_for_donors = DB::Table('donations')
-            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID');
-
-        $donations = DB::table("used_donations")
-            ->select('donation_ID', 'donation_month', 'amount_donated', 'donor_ID')
-            ->where("donation_month",'like',"%".Carbon::now()->format('Y'))
-            ->union($donations_for_donors)
-            ->get();
-
-        $month_donors = array();//array to contains donors in a give month
-        foreach ($donations as $d){
-            $month = Carbon::parse($d->donation_month)->monthName;
-            if ($month == Carbon::now()->monthName){
-                $donor = DB::Table('donors')
-                    ->select('donor_ID', 'donor_name')
-                    ->where('donor_ID', '=', $d->donor_ID)
-                    ->first();
-
-                if (!array_key_exists($donor->donor_name, $month_donors)){
-                    $month_donors[$donor->donor_name] = $d->amount_donated;
-                }else{
-                    $month_donors[$donor->donor_name] = $month_donors[$donor->donor_name] + $d->amount_donated;
-                }
-
-            }
-
-        }
-        $keys = array();
-        $values = array();
-        foreach ($month_donors as $key=>$value){
-            $keys[] = $key;
-            $values[] = $value;
-        }
-
-        $month = DB::Table('months')
-            ->select('id', 'month_name')
-            ->get();
-
-        $time = Carbon::now()->format('Y-m');
-
-        $officers = DB::table("officers")
-            ->select("officer_name", "officer_position", "officer_ID")
-            ->where("Retired", "=", "0");
-
-        $heads = DB::table("hospitals")
-            ->select("head_name", "officer_position", "head_ID");
-
-        $workers = DB::table("users")
-            ->select("name", "position", "id")
-            ->union($heads)
-            ->union($officers)
-            ->paginate(10);
-
-        $salary = DB::table("salaries")
-            ->select("*")
-            ->where("Date", "=", "$time")
-            ->first();
-
-        $consultants = DB::table("consultants")
-            ->select("*")
-            ->get();
-
-        $n_donor = false;
-        $n_donation = false;
-
-        return view('distribution', [
-            'new_donor'=> $n_donor,
-            'new_donation'=>$n_donation,
-            'officers' => $workers,
-            'all_officers' => Officer::all(),
-            'months' => $month,
-            'donors' => $all_donors,
-            'data' => $months_donations,
-            'selected_donor' => '',
-            'selected_month' => '',
-            'month_donor' => $keys,
-            'month_donations' => $values,
-            'salary' => $salary,
-            'consultants' => $consultants,
-        ]);
     }
 
     public function show($id)
@@ -864,27 +631,19 @@ class DonorController extends Controller
 
         $time = Carbon::now()->format('Y-m');
 
-        $officers = DB::table("officers")
-            ->select("officer_name", "officer_position", "officer_ID")
-            ->where("Retired", "=", "0");
-
-        $heads = DB::table("hospitals")
-            ->select("head_name", "officer_position", "head_ID");
-
-        $workers = DB::table("users")
-            ->select("name", "position", "id")
-            ->union($heads)
-            ->union($officers)
-            ->paginate(10);
-
         $salary = DB::table("salaries")
             ->select("*")
             ->where("Date", "=", "$time")
             ->first();
 
+        $workers = DB::table("paids")
+            ->select("name", "position", "id")
+            ->paginate(10,["*"],"paid")->fragment("salary");
+
         $consultant = DB::table("consultants")
             ->select("*")
-            ->get();
+            ->where("officer_position","=","New Consultant")
+            ->paginate(5,["*"],"system")->fragment("system");
 
         $n_donor = false;
         $n_donation = false;
@@ -951,18 +710,6 @@ class DonorController extends Controller
         }
 
         $time = Carbon::now()->format('Y-m');
-        $officers = DB::table("officers")
-            ->select("officer_name", "officer_position", "officer_ID")
-            ->where("Retired", "=", "0");
-
-        $heads = DB::table("hospitals")
-            ->select("head_name", "officer_position", "head_ID");
-
-        $workers = DB::table("users")
-            ->select("name", "position", "id")
-            ->union($heads)
-            ->union($officers)
-            ->paginate(10);
 
         $salary = DB::table("salaries")
             ->select("*")
@@ -1029,9 +776,14 @@ class DonorController extends Controller
             ->select('id', 'month_name')
             ->get();
 
+        $workers = DB::table("paids")
+            ->select("name", "position", "id")
+            ->paginate(10,["*"],"paid")->fragment("salary");
+
         $consultant = DB::table("consultants")
             ->select("*")
-            ->get();
+            ->where("officer_position","=","New Consultant")
+            ->paginate(5,["*"],"system")->fragment("system");
 
         return view('distribution', [
             'officers' => $workers,

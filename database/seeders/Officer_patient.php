@@ -22,7 +22,7 @@ class Officer_patient extends Seeder
             ->where("Retired", "=","0")
             ->pluck('officer_ID')->toArray();
         $patients = \App\Models\Patient::all()->pluck('patient_ID')->toArray();
-        foreach (range(1,10) as $index) {
+        foreach (range(1,100) as $index) {
             DB::table('officer_patients')->insert([
                 'officer_ID' => $faker->randomElement($officers),
                 'patient_ID' => $faker->randomElement($patients),

@@ -55,11 +55,11 @@
                 @endif
                 <div class="card shadow">
                     <div class="card-header py-3">
-                        <div class="col">
-                            <div style="margin-bottom: 10px;"><a class="btn btn-primary" aria-expanded="true" aria-controls="collapse-1" href="salary#salary" role="button">Generate Monthly Payments</a></div>
+                        <div class="col" id="salary">
+                            <div style="margin-bottom: 10px;"><p class="text-primary m-0 font-weight-bold">Monthly Payments</p></div>
                         </div>
                     </div>
-                    <div class="card-body" id="salary">
+                    <div class="card-body">
                         <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
                             <table class="table my-0" id="dataTable">
                                 <thead>
@@ -114,15 +114,15 @@
                         </div>
                         <div class="row">
                             @if($officers and $salary)
-                                <div class="d-flex justify-content-center">
-                                    {!! $officers->links() !!}
+                                <div class="d-flex justify-content-center pagination mx-auto">
+                                    {!! $officers->onEachSide(1)->links() !!}
                                 </div>
                             @endif
                         </div>
                     </div>
                 </div>
                 <div class="card shadow" style="margin-top: 14px;">
-                    <div class="card-header py-3">
+                    <div class="card-header py-3" id="system">
                         <p class="text-primary m-0 font-weight-bold">Staff Paid by System</p>
                     </div>
                     <div class="card-body">
@@ -164,6 +164,11 @@
                             </table>
                         </div>
                         <div class="row">
+                                @if($consultants)
+                                    <div class="d-flex justify-content-center pagination mx-auto">
+                                        {!! $consultants->onEachSide(1)->links() !!}
+                                    </div>
+                                @endif
                         </div>
                     </div>
                 </div>
