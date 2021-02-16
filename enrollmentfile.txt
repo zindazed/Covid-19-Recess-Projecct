@@ -1,0 +1,16 @@
+asma 12-12-2020 symptomatic female positive
+sanjay 12-12-2020 symptomatic female positive
+wendy 12-12-2020 symptomatic female positive
+wejuli 13-12-2020 symptomatic male positive
+craig 13-12-2020 symptomatic male positive
+bobby 13-12-2020 symptomatic male false-positive
+jarx 14-12-2020 symptomatic male positive
+leila 14-12-2020 symptomatic female positive
+musa 14-12-2020 symptomatic male positive
+eazi 14-12-2020 symptomatic male false-positive
+gift 14-12-2020 symptomatic female positive
+kwezi 14-12-2020 symptomatic male positive
+boy 15-12-2020 symptomatic male positive
+william 15-12-2020 symptomatic male positive
+okello 16-12-2020 symptomatic male positive
+yeta 16-12-2020 symptomatic male positive

@@ -1,0 +1,7 @@
+shaquil    12-14-2020  symptomatic  male    positive
+sarah    12-14-2020  symptomatic    female    positive
+jane    12-15-2020  symptomatic female    positive
+joy    12-15-2020  symptomatic  female    positive
+janet    12-15-2020  symptomatic male    positive
+ishaq    12-15-2020  symptomatic    male    false-positive
+bob    12-16-2020  symptomatic  male    positive

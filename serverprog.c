@@ -57,7 +57,7 @@ void addPatient(int sockfd, char **arr2){
     puts("Cannot open file");
     }
     //append the structure data into the file
-    fprintf(fp,"%s\t%s\t%s\t%s", arr2[1], arr2[2], arr2[3], arr2[4]);
+    fprintf(fp,"%s %s %s %s %s", arr2[1], arr2[2], arr2[3], arr2[4], arr2[5]);
     fclose(fp);
     char feedback[MAX] = "patient has been added";
 	// sending feedback to the client
@@ -80,8 +80,9 @@ int Check_status(int sockfd){
 
     while (fgets(str, 1000, fw) != NULL){
         count=count+1; //counting the number of records in the patient file        }
-    	printf("%d", count);
+    	//printf("%d", count);
     }
+    printf("%d\n",count );
     fclose(fw); //close the patient file
     //sedn the number of records in the patient file to the client
     return count;
@@ -94,7 +95,7 @@ void search(int sockfd, char **ar){
     fr = fopen("patient.txt","r"); //opening the patient file in read mode
     if (fr == NULL){
         printf("Failed to open the patient file");
-        exit(0); //close the program incase the file cannot be opened
+        exit(1); //close the program incase the file cannot be opened
     }
     int w = strlen(ar[1]); //stripping off the last character and assignin it to zero
 
@@ -138,31 +139,60 @@ int authenticate(int sockfd){
     }
     printf("%s %s %s\n",credarr[0],credarr[1], credarr[2]);
 
-    MYSQL *conn; //mysql connect variable
-   char *server = "localhost";
-   char *user = "root";
-   char *password1 = "";
-   char *database = "patients";
+   MYSQL *conn; //mysql connect variable
+   MYSQL_RES *res;
+   MYSQL_ROW row;
+
+   char *server = "sql5.freemysqlhosting.net"; //remote mysql server address
+   char *user = "sql5392531";  //remote mysql username
+   char *password1 = "NcjJcFdr3c"; //remote mysql server password
+   char *database = "sql5392531"; //remote mysql database name
+   FILE *fp;
    conn = mysql_init(NULL); //initializing the connection variable
 
-   /* Connect to database */
-   if(!mysql_real_connect(conn, server, user, password1, database, 3308, NULL, 0)){
-   	  char error[30]="connection to database error";
-   	  write(sockfd, error, sizeof(error));
+     //Connect to database 
+   puts("connecting");
+   if(!mysql_real_connect(conn, server, user, password1, database, 3306, NULL, 0)){
+      char error[30]="connection to database error";
+      //write(sockfd, error, sizeof(error));
       fprintf(stderr, "%s\n", mysql_error(conn)); //message to client here
       exit(1);
    }
-
+   puts("connected to remote mysql");
    char query[1024]; //buffer to store the query
    //cater for the variables to sit in the query
    //NOTE; credarr[0] is the username, and credarr[1] is the password all from client
-   snprintf(query, sizeof(query),"SELECT name, password, retired FROM pats WHERE name = ('%s') AND password = ('%s')", credarr[0], credarr[1] );
-
+   //building the query
+   snprintf(query, sizeof(query),"SELECT officer_name, password, Retired FROM officers WHERE officer_name = ('%s') AND password = ('%s') and Retired = 0", credarr[0], credarr[1] );
+   puts("validating...");
   if(mysql_query(conn, query)){
     fprintf(stderr, "%s\n", mysql_error(conn)); //message to client here
     char valid[20] = "validation failed";
-    write(sockfd, valid, sizeof(valid));
+    //write(sockfd, valid, sizeof(valid));
     exit(1);
+    }
+    //
+    res = mysql_store_result(conn);
+    if (res==NULL)
+    {
+      return 0;
+    }
+    int cols = mysql_num_fields(res); //counting the number of columns in result, but there is only 1 thou
+    int g;
+    printf("the results");
+    while(row = mysql_fetch_row(res)){
+        printf("\n%s\n", row[0]); 
+        printf("\n%s\n", row[1]);
+        //row[0] contains the officer username and row[1] = contains the officer password
+        //actual verification
+        if((strcmp(credarr[0], row[0])==0)&&(strcmp(credarr[1], row[1])==0)){ 
+        puts("validated");
+        write(sockfd, feed, sizeof(feed));
+        }else{
+        	char notsucesful[max] = "validation wrong";
+        	write(sockfd, notsucesful, sizeof(notsucesful));
+        	exit(1);
+        }
     }
 
     printf("success\n");
@@ -182,7 +212,10 @@ void func(int sockfd)
 	// infinite loop
 	for (;;) { //forever loop
 		bzero(command, MAX);
-			if ((strncmp(command, "exit", 4)) == 0) {
+		// read the message from client and copy it in command
+		read(sockfd, command, sizeof(command));
+		printf("%s\n", command);
+		if ((strncmp(command, "exit", 4)) == 0) {//STOP THE PROGRAM IF COMMAND IS EXIT
 			printf("serve stopped...\n");
 		  	//send feedback message to client
 		    char feedback0[MAX] = "server stopped";
@@ -191,9 +224,6 @@ void func(int sockfd)
 			write(sockfd, feedback0, sizeof(feedback0));
 			break;
 			}
-		// read the message from client and copy it in command
-		read(sockfd, command, sizeof(command));
-		printf("%s\n", command);
 		//checking if command is correct
 		if(strncmp("Addpatientlist", command,14)==0){ //FOR ADDPATIENTLIST
 	        	printf("addpatientlist");
@@ -210,7 +240,7 @@ void func(int sockfd)
 			}else if(strncmp(command,"Addpatient",10)==0){ //FOR ADDPATIENT
 	        //send arguments to server
 				puts("addpatient");
-				char *arr[4];//array to store strings from input
+				char *arr[5];//array to store strings from input
 				char *p;//pointer to the delimeter
 			    int i = 0;
 			    p = strtok(command, " ");//getting the first token before the first delimeter using the strtok func
@@ -304,9 +334,9 @@ int main()
 	else
 		printf("server acccept the client...\n");
 
-	// verification
-	// authenticate(connfd);
-	// // Function for chatting between client and server
+	// verification of an officer
+    authenticate(connfd);
+
 	func(connfd);
 
 	// After chatting close the socket

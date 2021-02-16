@@ -34,13 +34,13 @@ int authentication(int sockfd){
     strcat(username, " ");
     strcat(username, district);
   //  printf("%s and %s and %s\n", username, password, district );
-    printf("%s\n", username);
+//    printf("%s\n", username);
     write(sockfd, username, sizeof(username)); //send the username and password
 
     bzero(feed, sizeof(feed)); //receive the authentication feedback
    	read(sockfd, feed, sizeof(feed));//receive feed
    	printf("Authentication message from server :  %s\n",feed);
-
+   	bzero(feed, sizeof(feed));
    	//then continue to the next function
 
 }
@@ -93,8 +93,8 @@ int main()
 	else
 		printf("connected to the server..\n");
 
-	authentication(sockfd);
-	// function for chat
+	authentication(sockfd); //verify an officer first
+	// function for client server communication
 	funcCom(sockfd);
 
 	// close the socket
