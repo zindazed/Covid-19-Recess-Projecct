@@ -16,7 +16,8 @@ int authentication(int sockfd){
     char username[max];
     char district[10];
     char feed[max];
-   
+
+while(1){
     //bzero(username, sizeof(username)); //prepare memory for username
     puts("enter username");
     scanf("%s", username);
@@ -39,9 +40,15 @@ int authentication(int sockfd){
 
     bzero(feed, sizeof(feed)); //receive the authentication feedback
    	read(sockfd, feed, sizeof(feed));//receive feed
-   	printf("Authentication message from server :  %s\n",feed);
-   	bzero(feed, sizeof(feed));
-   	//then continue to the next function
+   	printf("%s\n", feed);
+   	if(strcmp(feed, "Success, continue")==0){
+   		break;
+   	}
+   	printf("Validation wrong, please try again\n" );
+   //then continue to the next function	
+}  
+   	printf("Validation successful\n"); 
+
 
 }
 

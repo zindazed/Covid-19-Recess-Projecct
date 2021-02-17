@@ -12,6 +12,7 @@
 #define PORT 8080
 #define SA struct sockaddr
 //addpatientlist filename function
+char *district;
 void addPatientlist(int sockfd, char **patarr)
 {
 	FILE *fs, *ft;
@@ -27,7 +28,7 @@ void addPatientlist(int sockfd, char **patarr)
 		exit(1);
 	}
 
-	ft = fopen("patient.txt", "a");//open the target file(ie; patient file)
+	ft = fopen("enrollmentfile.txt", "a");//open the target file(ie; patient file)
 	if (ft == NULL){
 		puts ("Cannot open target file");
 		exit(1);
@@ -52,12 +53,17 @@ void addPatientlist(int sockfd, char **patarr)
 void addPatient(int sockfd, char **arr2){
 
     FILE *fp;
-    fp = fopen("patient.txt", "a");
+    fp = fopen("enrollmentfile.txt", "a");
     if (fp == NULL){
     puts("Cannot open file");
     }
+    printf("%s",arr2[5]);
+    printf("%s",arr2[5]);
+    int ps = strlen(arr2[5]); //stripping off the last character and assignin it to zero
+
+    arr2[5][ps-1] = 0;
     //append the structure data into the file
-    fprintf(fp,"%s %s %s %s %s", arr2[1], arr2[2], arr2[3], arr2[4], arr2[5]);
+    fprintf(fp,"%s %s %s %s %s %s\n", arr2[1], arr2[2], arr2[3], arr2[4], arr2[5], district);
     fclose(fp);
     char feedback[MAX] = "patient has been added";
 	// sending feedback to the client
@@ -72,7 +78,7 @@ int Check_status(int sockfd){
     FILE *fw; // declaring the file pointer
     char str[1000]; //definig string to hold patient records
 
-    fw = fopen("patient.txt", "r"); //opening the patient file in read mode
+    fw = fopen("enrollmentfile.txt", "r"); //opening the patient file in read mode
     if (fw == NULL){
         printf("Failed to open patient file");
         exit(0); //close the program incase the file cannot be opened
@@ -82,6 +88,7 @@ int Check_status(int sockfd){
         count=count+1; //counting the number of records in the patient file        }
     	//printf("%d", count);
     }
+   // char hold[2] = char(count);
     printf("%d\n",count );
     fclose(fw); //close the patient file
     //sedn the number of records in the patient file to the client
@@ -92,7 +99,7 @@ void search(int sockfd, char **ar){
 	puts("heey");
     FILE *fr; // declaring the file pointer
     char str[1000]; //definig string to hold patient records
-    fr = fopen("patient.txt","r"); //opening the patient file in read mode
+    fr = fopen("enrollmentfile.txt","r"); //opening the patient file in read mode
     if (fr == NULL){
         printf("Failed to open the patient file");
         exit(1); //close the program incase the file cannot be opened
@@ -137,6 +144,7 @@ int authenticate(int sockfd){
      credarr[d++]=s;
      s = strtok(0, " "); //pointing to the next delimeter in the comand
     }
+    district = credarr[2];
     printf("%s %s %s\n",credarr[0],credarr[1], credarr[2]);
 
    MYSQL *conn; //mysql connect variable
@@ -150,7 +158,7 @@ int authenticate(int sockfd){
    FILE *fp;
    conn = mysql_init(NULL); //initializing the connection variable
 
-     //Connect to database 
+     //Connect to database
    puts("connecting");
    if(!mysql_real_connect(conn, server, user, password1, database, 3306, NULL, 0)){
       char error[30]="connection to database error";
@@ -181,11 +189,11 @@ int authenticate(int sockfd){
     int g;
     printf("the results");
     while(row = mysql_fetch_row(res)){
-        printf("\n%s\n", row[0]); 
+        printf("\n%s\n", row[0]);
         printf("\n%s\n", row[1]);
         //row[0] contains the officer username and row[1] = contains the officer password
         //actual verification
-        if((strcmp(credarr[0], row[0])==0)&&(strcmp(credarr[1], row[1])==0)){ 
+        if((strcmp(credarr[0], row[0])==0)&&(strcmp(credarr[1], row[1])==0)){
         puts("validated");
         write(sockfd, feed, sizeof(feed));
         }else{
