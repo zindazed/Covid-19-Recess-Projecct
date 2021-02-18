@@ -22,8 +22,8 @@
             <form action="/addofficer" method="post">
                 @csrf
                 <h2 class="text-center"><strong>officer registration</strong></h2>
-                <div class="form-group"><input class="form-control" type="text" name="officer_name" placeholder="officer name"></div>
-                <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
+                <div class="form-group"><input class="form-control" type="text" name="officer_name" placeholder="officer name" required></div>
+                <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password" required></div>
                 <div class="form-group"><button class="btn btn-primary btn-block" type="submit" style="background: var(--blue);">add officer</button></div>
                 <div class="form-group"><button class="btn btn-primary btn-block" onclick="window.location.href='{{ url('/home') }}'" type="reset" style="background: var(--blue);">Back</button></div>
                 @if($message == 1)

@@ -22,11 +22,11 @@
             <form action="addhospital" method="post">
                 @csrf
                 <h2 class="text-center"><strong>Hospital registration</strong></h2>
-                <div class="form-group"><input class="form-control" type="text" name="head_name" placeholder="head name"></div>
-                <div class="form-group"><input class="form-control" type="text" name="Email" placeholder="Head Email"></div>
-                <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Head password"></div>
-                <div class="form-group"><input class="form-control" type="text" name="hospital_name" placeholder="Hospital name"></div>
-                <div class="form-group"><input class="form-control" type="text" name="district" placeholder="District"></div>
+                <div class="form-group"><input class="form-control" type="text" name="head_name" placeholder="head name" required></div>
+                <div class="form-group"><input class="form-control" type="text" name="Email" placeholder="Head Email" required></div>
+                <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Head password" required></div>
+                <div class="form-group"><input class="form-control" type="text" name="hospital_name" placeholder="Hospital name" required></div>
+                <div class="form-group"><input class="form-control" type="text" name="district" placeholder="District" required></div>
                 <div class="form-group d-flex">
                     <select name="category" style="padding: 2px;margin-right: 20px;width: 48%;background: rgb(247,249,252);color: rgb(80,94,108); border-style: hidden">
                         <option value="Public">Public</option>
