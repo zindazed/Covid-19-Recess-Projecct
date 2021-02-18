@@ -192,6 +192,7 @@ class DonorController extends Controller
 
                 $admins = DB::table("users")
                     ->select("name", "position", "id")
+                    ->where("position","=","Administrator")
                     ->get();
 
                 foreach ($admins as $admin)
