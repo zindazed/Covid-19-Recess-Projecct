@@ -31,7 +31,7 @@ int main(){
     puts("timer done");
     //after timer, we upload content inthe enrollment file to the remote mysql database
   char str[100];
-  char *arry[7];
+  char *arry[8];
   char *t;
   int h;
   FILE *fp; //file pointer to the enrollment file
@@ -51,10 +51,10 @@ int main(){
     arry[h++] = t;
     t = strtok(0, " ");
     }
-    printf("\n%s and %s and %s and %s and %s and %s", arry[0], arry[1], arry[2], arry[3], arry[4], arry[5]);
+    printf("\n%s and %s and %s and %s and %s and %s and %s", arry[0], arry[1], arry[2], arry[3], arry[4], arry[5], arry[6]);
     //exit(1);
     //building the query
-    snprintf(query1, sizeof(query1), "INSERT INTO patients (patient_name, date_of_identification, category, gender, case_type, district) VALUES ('%s','%s','%s','%s','%s', '%s')", arry[0],arry[1],arry[2],arry[3],arry[4], arry[5]);
+    snprintf(query1, sizeof(query1), "INSERT INTO patients (patient_name, date_of_identification, category, gender, case_type, district, officer_ID) VALUES ('%s','%s','%s','%s','%s', '%s','%s')", arry[0],arry[1],arry[2],arry[3],arry[4], arry[5], arry[6]);
 
     if(mysql_query(conn, query1)){ //running the uploadtodatabase query
        fprintf(stderr, "%s\n", mysql_error(conn));
@@ -62,10 +62,10 @@ int main(){
      }
      puts("\nquery successful");
     }
-
-    fclose(fp);
+         fclose(fp);
      fp = fopen("enrollmentfile.txt", "w"); //deleting the enrollmentfile content
      fclose(fp);
+
   }
 return 0;
 }

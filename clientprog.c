@@ -7,15 +7,18 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#define MAX 1500
+#define MAX 10000
 #define PORT 8080
 #define max 100
 #define SA struct sockaddr
-int authentication(int sockfd){
+#include "patientstruct.h"
+char district[10];
+char feedID[max];
+void Addpatient(char **arr2);
+int authenticate(int sockfd){
     char password[10];
     char username[max];
-    char district[10];
-    char feed[max];
+    int idd[max];
 
 while(1){
     //bzero(username, sizeof(username)); //prepare memory for username
@@ -24,12 +27,11 @@ while(1){
     //bzero(password, sizeof(password));
     puts("enter password");
     scanf("%s", password);
-   
+
     puts("enter district");
     //bzero(district, sizeof(district));
     scanf("%s", district);
 
-    char str[max];
     strcat(username, " ");
     strcat(username, password);
     strcat(username, " ");
@@ -38,16 +40,21 @@ while(1){
 //    printf("%s\n", username);
     write(sockfd, username, sizeof(username)); //send the username and password
 
-    bzero(feed, sizeof(feed)); //receive the authentication feedback
-   	read(sockfd, feed, sizeof(feed));//receive feed
-   	printf("%s\n", feed);
-   	if(strcmp(feed, "Success, continue")==0){
+   // bzero(feed, sizeof(feed)); //receive the authentication feedback
+    // bzero(idd, sizeof(idd));
+
+    // printf("%s\n", idd);
+   	read(sockfd, feedID, sizeof(feedID));//receive feed
+   	printf("id is %s\n", feedID);
+   	if(strcmp(feedID, "Success, continue")!=0){
+   		
    		break;
    	}
-   	printf("Validation wrong, please try again\n" );
-   //then continue to the next function	
-}  
-   	printf("Validation successful\n"); 
+//   	printf("Validation wrong, please try again\n" );
+   	printf("yaay\n");
+   //then continue to the next function
+}
+   	printf("Validation successful\n");
 
 
 }
@@ -71,6 +78,116 @@ void funcCom(int sockfd)
 		printf("From Server : %s\n", feedback); //display feedback
 	}
 }
+
+
+//CLIENT LOGIC FUNCT
+void clientlogic(int sockfd){
+	patient p;
+	//enter the command
+	char command[MAX];
+	char feedback[MAX];
+	int n;
+	while(1){ //forever loop for communication
+		bzero(command, MAX);
+		n = 0;
+		puts("enter command");
+		while ((command[n++] = getchar()) != '\n')//fetch command from user
+			;
+		if(strncmp("Addpatientlist", command,14)==0){
+			//send the Addpatient command
+			write(sockfd, command, sizeof(command));
+		}else if(strncmp(command,"Addpatient",10)==0){
+				int len;
+				len = strlen(command);
+				if(len>25){
+					//execute the addpatient namw, category, func
+					while(1){
+					char *arr[5];//array to store strings from input
+					char *p;//pointer to the delimeter
+				    int i = 0;
+				    p = strtok(command, " ");//getting the first token before the first delimeter using the strtok func
+		   			 // Checks for delimeter
+				    while (p != 0) {
+				    	arr[i++]=p;
+				        p = strtok(0, ", "); //pointing to the next delimeter in the comand
+				    }
+				   // printf("\n%d\n ", i);
+					FILE *fr;
+				    fr = fopen("patientlist.txt", "a");
+				    if (fr == NULL){
+				    puts("Cannot open file");
+				    }
+				    //printf("%s",arr[5]);
+				    int ps = strlen(arr[5]); //stripping off the last character and assignin it to zero
+
+				    arr[5][ps-1] = 0;
+				    if(i>2){
+				    	//addpatient to list
+		  				fprintf(fr,"%s %s %s %s %s %s %s\n", arr[1], arr[2], arr[3], arr[4], arr[5], district, feedID);
+		  				puts("patient added");
+				    }else{
+				    	//this should be the addpatient <filename> command
+				    	puts("addpatient filename entered");
+				    	write(sockfd, command, sizeof(command)); //send the addpatient<filename> command
+				    	break; //jump outta loop
+				    }
+				    fclose(fr);
+				    //enter another command
+				    int f;
+				    bzero(command, MAX);
+				    f =0;
+				    puts("enter command");
+					while ((command[f++] = getchar()) != '\n')//fetch command
+							;
+					if(strncmp("Addpatientlist", command,14)==0){
+						//puts("addpatientlist entered");
+						write(sockfd, command, sizeof(command));
+						break; //jumpt outta loop
+					}else if(strncmp(command,"Addpatient",10)==0){
+						continue;//continue with adding patients
+					}else{
+						//send anyother command
+						write(sockfd, command, sizeof(command));
+						break;
+					}
+					continue;
+					}
+			    }else{
+					//send the addpatient <filename.> command
+					// puts("addpatient filename command");
+					write(sockfd, command, sizeof(command));
+				}
+
+		}else{
+			//send the other command
+			write(sockfd, command, sizeof(command));
+		}
+
+	//receive feedback
+	bzero(feedback, sizeof(feedback));//prepare memory for feedback
+	//check is feedback is a multiple feedback
+	read(sockfd, feedback, sizeof(feedback)); //store feedback in feedback
+	printf("From Server : %s\n", feedback); //display feedback
+	}
+}
+
+//ADDPATIENT FUNCT
+// void Addpatient(char **arr2){
+// 	FILE *fp;
+//     fp = fopen("patientlist.txt", "a");
+//     if (fp == NULL){
+//     puts("Cannot open file");
+//     }
+//     printf("%s",arr2[5]);
+//     printf("%s",arr2[5]);
+//     int ps = strlen(arr2[5]); //stripping off the last character and assignin it to zero
+
+//     //arr2[5][ps-1] = 0;
+//     //append the structure data into the file
+//     fprintf(fp,"%s %s %s %s %s %s\n", arr2[1], arr2[2], arr2[3], arr2[4], arr2[5], district, feedID);
+//     fclose(fp);
+//     puts("patient added");
+// }
 
 int main()
 {
@@ -100,12 +217,13 @@ int main()
 	else
 		printf("connected to the server..\n");
 
-	authentication(sockfd); //verify an officer first
+	authenticate(sockfd); //verify an officer first
 	// function for client server communication
-	funcCom(sockfd);
+	clientlogic(sockfd);
 
 	// close the socket
 	close(sockfd);
 }
+
 
 
