@@ -62,10 +62,10 @@ int main(){
      }
      puts("\nquery successful");
     }
-         fclose(fp);
+
+    fclose(fp);
      fp = fopen("enrollmentfile.txt", "w"); //deleting the enrollmentfile content
      fclose(fp);
-
   }
 return 0;
 }
