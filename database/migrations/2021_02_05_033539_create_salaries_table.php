@@ -14,7 +14,7 @@ class CreateSalariesTable extends Migration
     public function up()
     {
         Schema::create('salaries', function (Blueprint $table) {
-            $table->string("Date")->primary();
+            $table->string("Date",50)->primary();
             $table->string("Director");
             $table->string("Superintendent");
             $table->string("Administrator");

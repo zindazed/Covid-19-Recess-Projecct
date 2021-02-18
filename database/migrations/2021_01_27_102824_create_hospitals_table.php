@@ -21,7 +21,7 @@ class CreateHospitalsTable extends Migration
 
             $table->bigIncrements("head_ID");
             $table->string("head_name");
-            $table->string("Email")->unique();
+            $table->string("Email",100)->unique();
             $table->string("password");
             $table->string("officer_position");
             $table->unsignedBigInteger("administrator_ID")->index();

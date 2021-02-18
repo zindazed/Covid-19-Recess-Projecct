@@ -182,10 +182,11 @@ class HomeController extends Controller
             ->get();
 
         foreach ($officers as $officer) {
-            $patients = DB::table("officer_patients")
+            $patients = DB::table("patients")
                 ->select("patient_ID")
                 ->where("officer_ID", "=", "$officer->officer_ID")
                 ->get();
+
             $num = count($patients);
             $position = $officer->officer_position;
 

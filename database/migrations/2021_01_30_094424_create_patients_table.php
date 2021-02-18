@@ -20,8 +20,13 @@ class CreatePatientsTable extends Migration
             $table->string("category");
             $table->string("gender");
             $table->string("case_type");
+            $table->string("district");
+            $table->unsignedBigInteger("officer_ID")->index();
 
             $table->timestamps();
+
+            $table->foreign("officer_ID")->references("officer_ID")->on("officers")->onDelete("cascade");
+
         });
     }
 

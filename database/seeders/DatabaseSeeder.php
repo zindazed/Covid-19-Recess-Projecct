@@ -122,16 +122,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        $officers = \App\Models\Officer::all()->pluck('officer_ID')->toArray();
-        foreach (range(1,20) as $index){
-            DB::table('officer_patients')->insert([
-                'officer_ID' => $faker ->randomElement($officers),
-                'patient_ID' => $faker -> randomElement($patients),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
-        }
-
         $hospitals = DB::table("hospitals")->select("*")->get();
         foreach ($hospitals as $hospital) {
             switch ($hospital->class) {
