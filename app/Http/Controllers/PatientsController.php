@@ -43,7 +43,7 @@ class PatientsController extends Controller
 
         $positive_cases = DB::Table('patients')
             ->select('patient_name', 'case_type')
-            ->where('case_type', '=', 'postive')
+            ->where('case_type', '=', 'positive')
             ->get();
 
         $False_positive_cases = DB::Table('patients')
