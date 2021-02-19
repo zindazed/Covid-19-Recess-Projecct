@@ -5,9 +5,6 @@ jums 12-12-2020 symptomatic male positve wakiso
 dan 12-12-2020 symptomatic male positve wakiso
 dany 12-12-2020 symptomatic male positive wakiso
 han 12-12-2020 symptomatic male postive wakiso
-
-
-
 fraser 12-12-2020 symptomatic male positive (null)
 tort 12-12-2020 symptomatic male positive (null)
 jan 12-12-2020 symptomatic female positive (null)

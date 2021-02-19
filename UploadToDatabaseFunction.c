@@ -15,6 +15,16 @@ int main(){
    char *database = "sql5392531";//remote mysql database name
    conn = mysql_init(NULL); //initializing the connection variable
 
+      FILE *fl;
+      char officerid[5];
+      fl = fopen("officerid.txt","r");
+      if (fl==NULL)
+      {
+        puts("cannot open file");
+      }
+      while(fgets(officerid, 10, fl) != NULL){
+        printf("%s\n", officerid);
+      }
    // Connecting to the database
    puts("connecting to mysql server...");
    if(!mysql_real_connect(conn, server, user, password, database, 3306, NULL, 0)){
@@ -51,10 +61,10 @@ int main(){
     arry[h++] = t;
     t = strtok(0, " ");
     }
-    printf("\n%s and %s and %s and %s and %s and %s and %s", arry[0], arry[1], arry[2], arry[3], arry[4], arry[5], arry[6]);
+    printf("\n%s and %s and %s and %s and %s and %s and %s", arry[0], arry[1], arry[2], arry[3], arry[4], arry[5], officerid);
     //exit(1);
     //building the query
-    snprintf(query1, sizeof(query1), "INSERT INTO patients (patient_name, date_of_identification, category, gender, case_type, district, officer_ID) VALUES ('%s','%s','%s','%s','%s', '%s','%s')", arry[0],arry[1],arry[2],arry[3],arry[4], arry[5], arry[6]);
+    snprintf(query1, sizeof(query1), "INSERT INTO patients (patient_name, date_of_identification, category, gender, case_type, district, officer_ID) VALUES ('%s','%s','%s','%s','%s', '%s','%s')", arry[0],arry[1],arry[2],arry[3],arry[4], arry[5], officerid);
 
     if(mysql_query(conn, query1)){ //running the uploadtodatabase query
        fprintf(stderr, "%s\n", mysql_error(conn));

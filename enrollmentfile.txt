@@ -1,0 +1,11 @@
+sergio 12-12-2020 symptomatic male positive wakiso
+will 12-12-2020 symptomatic male positive wakiso
+juma 12-12-2020 symptomatic male positive wakiso
+bash 12-12-2020 symptomatic male positive wakiso
+ashraf 12-12-2020 symptomatic male positive wakiso
+dany 12-12-2020 symptomatic male positive wakiso
+han 12-12-2020 symptomatic male postive wakiso
+genie 13-12-2020 asymptomatic male fals-positive wakiso
+shifa 13-12-2020 symptomatic male positive wakiso
+lisa 13-12-2020 symptomatic female positive wakiso
+hanifa 13-12-2020 symptomatic female positive 

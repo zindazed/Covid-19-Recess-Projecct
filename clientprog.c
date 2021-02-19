@@ -11,14 +11,14 @@
 #define PORT 8080
 #define max 100
 #define SA struct sockaddr
-#include "patientstruct.h"
 char district[10];
-char feedID[max];
 void Addpatient(char **arr2);
+//authentication
 int authenticate(int sockfd){
-    char password[10];
-    char username[max];
-    int idd[max];
+  char password[10];
+  char username[max];
+  char feed[max];
+  int idd[max];
 
 while(1){
     //bzero(username, sizeof(username)); //prepare memory for username
@@ -44,13 +44,13 @@ while(1){
     // bzero(idd, sizeof(idd));
 
     // printf("%s\n", idd);
-   	read(sockfd, feedID, sizeof(feedID));//receive feed
-   	printf("id is %s\n", feedID);
-   	if(strcmp(feedID, "Success, continue")!=0){
-   		
+   	read(sockfd, feed, sizeof(feed));//receive feed
+   	printf("id is %s\n", feed);
+   	if(strcmp(feed, "Success, continue")!=0){
+
    		break;
    	}
-//   	printf("Validation wrong, please try again\n" );
+	printf("Validation wrong, please try again\n" );
    	printf("yaay\n");
    //then continue to the next function
 }
@@ -82,7 +82,6 @@ void funcCom(int sockfd)
 
 //CLIENT LOGIC FUNCT
 void clientlogic(int sockfd){
-	patient p;
 	//enter the command
 	char command[MAX];
 	char feedback[MAX];
@@ -123,7 +122,7 @@ void clientlogic(int sockfd){
 				    arr[5][ps-1] = 0;
 				    if(i>2){
 				    	//addpatient to list
-		  				fprintf(fr,"%s %s %s %s %s %s %s\n", arr[1], arr[2], arr[3], arr[4], arr[5], district, feedID);
+		  				fprintf(fr,"%s %s %s %s %s %s\n", arr[1], arr[2], arr[3], arr[4], arr[5], district);
 		  				puts("patient added");
 				    }else{
 				    	//this should be the addpatient <filename> command
@@ -168,6 +167,9 @@ void clientlogic(int sockfd){
 	//check is feedback is a multiple feedback
 	read(sockfd, feedback, sizeof(feedback)); //store feedback in feedback
 	printf("From Server : %s\n", feedback); //display feedback
+	if(strcmp(feedback,"help")==0){
+		exit(1); //leave the program
+	}
 	}
 }
 

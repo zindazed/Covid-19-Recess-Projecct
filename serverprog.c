@@ -211,14 +211,21 @@ int authenticate(int sockfd){
         printf("\n%s\n", row[2]);
         // char officerid[10];
 		//officerID = row[0];
+			// stroring the officerID into a file
+			FILE *fl;
+			fl = fopen("officerid.txt","w");
+			if (fl==NULL)
+			{
+				puts("cannot open file");
+			}
+			fprintf(fl,"%s",row[0]);
 		//printf("%d\n", officerID);
-
-		//sending the officerID to the client
-		write(sockfd, row[0], sizeof(row[0]));
         //row[0] contains the officer username and row[1] = contains the officer password
         //actual verification
         if((strcmp(credarr[0], row[1])==0)&&(strcmp(credarr[1], row[2])==0)){
         puts("validated");
+		//send the authentication feedback
+		write(sockfd, feed, sizeof(feed));
         //write(sockfd, feed, sizeof(feed));
         }else{
         	char notsucesful[max] = "validation wrong";
@@ -234,7 +241,7 @@ return 0;
 }
 
 // Function designed for communication between client and server.
-void func(int sockfd)
+void serverlogic(int sockfd)
 {
 	char command[MAX];
 	int n;
@@ -242,7 +249,7 @@ void func(int sockfd)
 	// char strr[20]="Addpatient";
 	// char strr1[20]="Addpatientlist";
 	// infinite loop
-	for (;;) { //forever loop
+	while(1){ //forever loop
 		bzero(command, MAX);
 		// read the message from client and copy it in command
 		read(sockfd, command, sizeof(command));
@@ -357,7 +364,7 @@ int main()
 	// verification of an officer
     authenticate(connfd);
 
-	func(connfd);
+	serverlogic(connfd);
 
 	// After chatting close the socket
 	close(sockfd);
