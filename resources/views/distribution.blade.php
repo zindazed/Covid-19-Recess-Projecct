@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="assets/css/untitled.css">
 </head>
 
-<body id="page-top">
+<body id="page-top" style="min-width: 600px">
 @include('layouts.app')
 <div id="wrapper" style="margin-top: -50px;">
     @include('layouts.nav')

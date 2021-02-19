@@ -14,12 +14,12 @@
     <link rel="stylesheet" href="assets/css/untitled.css">
 </head>
 
-<body id="page-top">
+<body id="page-top" style="min-width: 600px;">
 @include('layouts.app')
 <div id="wrapper" style="margin-top: -50px;">
     @include('layouts.nav')
     <div class="d-flex flex-column" id="content-wrapper">
-        <div id="content">
+        <div id="content" style="height: 900px">
             <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
                 <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                     <h1>Hierachy</h1>
