@@ -13,6 +13,7 @@
 #define SA struct sockaddr
 char *district;
 int *officerID;
+char *Message;
 // addpatient <filename> function
 void addPatient(int sockfd, char **patarr)
 {
@@ -46,8 +47,8 @@ void addPatient(int sockfd, char **patarr)
 	fs = fopen(patarr[1],"w");//reopen the source file in write mode to delete its content
 	fclose(fs);//close the source file
 	 //send feedback message to client
-	char feedback2[MAX] = "patient-file has been added";
-	write(sockfd, feedback2, sizeof(feedback2));
+	Message = "patient-file has been added";
+	//write(sockfd, feedback2, sizeof(feedback2));
 }
 
 //addpatientlist function
@@ -82,12 +83,13 @@ void Addpatientlist(int sockfd){
 	fclose(fx); //close the source(patientlist file) file
 	fx = fopen("patientlist.txt","w");//reopen the source file in write mode to delete its content
 	fclose(fx);//close the source file
-    char feedback[MAX] = "patient-list has been added";
+ //   char feedback[MAX] = "patient-list has been added";
 	// sending feedback to the client
-	write(sockfd, feedback, sizeof(feedback));
+	//write(sockfd, feedback, sizeof(feedback));
 }
 
 //check-status
+
 //basher
 int Check_status(int sockfd){
     int count=0; //initialising record counter
@@ -106,8 +108,32 @@ int Check_status(int sockfd){
     }
     //char *hold = char(count);
    	printf("%d\n",count);
+	   			FILE *fl;
+			fl = fopen("number.txt","w");
+			if (fl==NULL)
+			{
+				puts("cannot open file");
+			}
+			fprintf(fl,"%d",count);
+			fclose(fl);
+			fl = fopen("number.txt","r");
+			if (fl==NULL)
+			{
+				puts("cannot open file");
+			}
+			char STR[30];
+			//char c = fgetc(fl);
+		  while (fgets(STR, 10, fl) != NULL){
+		  		printf("%s\n",STR);
+   				 }
+   			strcat(STR, " patient(s) in the file");
+   			fclose(fl);
+   			fl = fopen("number.txt","w");
+   			fclose(fl);
+
    // strcat(hld, char(count));
-	// write(sockfd, count, sizeof(count));
+   write(sockfd, STR, sizeof(STR));
+ //  Message = STR;
     fclose(fw); //close the patient file
     //sedn the number of records in the patient file to the client
     return count;
@@ -117,10 +143,16 @@ void search(int sockfd, char **ar){
 	puts("heey");
     FILE *fr; // declaring the file pointer
     char str[1000]; //definig string to hold patient records
+    FILE *fc;
+    char ser[1000];
     fr = fopen("enrollmentfile.txt","r"); //opening the patient file in read mode
     if (fr == NULL){
         printf("Failed to open the patient file");
         exit(1); //close the program incase the file cannot be opened
+    }
+    fc = fopen("seachres.txt", "w");
+    if(fc==NULL){
+    	puts("failed to open searchres.txt");
     }
     int w = strlen(ar[1]); //stripping off the last character and assignin it to zero
 
@@ -134,12 +166,15 @@ void search(int sockfd, char **ar){
 
         if((strstr(str, ar[1])) != NULL){
         	printf("%s\n",str);
-       		write(sockfd, str, sizeof(str)); //send the search query back to the client
+        	write(sockfd, str, sizeof(str)); //send the search query back to the client
+        	fprintf(fc, "%s\n", str); //putting search result into the searchres.txt
        		bzero(str, sizeof(str));
         }
     }
-
+    	fclose(fc); //close the searchres.txt file
         fclose(fr); //close the patient file
+        //sedn the file content
+       // write(sockfd, serch, sizeof(serch));
 }
 
 //authentication
@@ -153,9 +188,9 @@ int authenticate(int sockfd){
     char *credarr[3];//array to store strings from input
     char *s;//pointer to the delimeter
     int d = 0;
-    char feed[max] = "Success, continue";
 //    write(sockfd, feed, sizeof(feed));//send feed to the client
     s = strtok(credentials, " ");//getting the first token before the first delimeter using the strtok func
+
      // Checks for delimeter
     while (s != 0) {
      credarr[d++]=s;
@@ -169,34 +204,37 @@ int authenticate(int sockfd){
    MYSQL_ROW row;
 
    char *server = "sql5.freemysqlhosting.net"; //remote mysql server address
-   char *user = "sql5392531";  //remote mysql username
-   char *password1 = "NcjJcFdr3c"; //remote mysql server password
-   char *database = "sql5392531"; //remote mysql database name
+   char *user = "sql5393974";  //remote mysql username
+   char *password1 = "kuKRU1TNFZ"; //remote mysql server password
+   char *database = "sql5393974"; //remote mysql database name
    FILE *fp;
    conn = mysql_init(NULL); //initializing the connection variable
 
      //Connect to database
    puts("connecting");
    if(!mysql_real_connect(conn, server, user, password1, database, 3306, NULL, 0)){
+   	puts("connection to database error");
       char error[30]="connection to database error";
-      //write(sockfd, error, sizeof(error));
+      write(sockfd, error, sizeof(error));
       fprintf(stderr, "%s\n", mysql_error(conn)); //message to client here
-      exit(1);
+//      exit(1);
    }
    puts("connected to remote mysql");
    char query[1024]; //buffer to store the query
    //cater for the variables to sit in the query
    //NOTE; credarr[0] is the username, and credarr[1] is the password all from client
-   //building the query
+
+  //building the query
    snprintf(query, sizeof(query),"SELECT officer_Id, officer_name, password, Retired FROM officers WHERE officer_name = ('%s') AND password = ('%s') and Retired = 0", credarr[0], credarr[1] );
    puts("validating...");
-  if(mysql_query(conn, query)){
+  if(mysql_query(conn, query)!=0){
+	puts("failed");
+  	 char valid[20] = "validation failed";
+    write(sockfd, valid, sizeof(valid));
     fprintf(stderr, "%s\n", mysql_error(conn)); //message to client here
-    char valid[20] = "validation failed";
-    //write(sockfd, valid, sizeof(valid));
-    exit(1);
+    //exit(1);
     }
-    //
+
     res = mysql_store_result(conn);
     if (res==NULL)
     {
@@ -204,7 +242,7 @@ int authenticate(int sockfd){
     }
     int cols = mysql_num_fields(res); //counting the number of columns in result, but there is only 1 thou
     int g;
-    printf("the results");
+   	printf("comparing");
     while(row = mysql_fetch_row(res)){
         printf("\n%s\n", row[0]);
         printf("\n%s\n", row[1]);
@@ -219,22 +257,24 @@ int authenticate(int sockfd){
 				puts("cannot open file");
 			}
 			fprintf(fl,"%s",row[0]);
+			fclose(fl);
 		//printf("%d\n", officerID);
         //row[0] contains the officer username and row[1] = contains the officer password
         //actual verification
         if((strcmp(credarr[0], row[1])==0)&&(strcmp(credarr[1], row[2])==0)){
         puts("validated");
 		//send the authentication feedback
+		char feed[max] = "Success, continue";
 		write(sockfd, feed, sizeof(feed));
         //write(sockfd, feed, sizeof(feed));
         }else{
         	char notsucesful[max] = "validation wrong";
         	write(sockfd, notsucesful, sizeof(notsucesful));
-        	exit(1);
+        	//exit(1);
         }
     }
 
-    printf("success\n");
+    //printf("success\n");
     //proceed to the rest of the program ie call funcCom()
 
 return 0;
@@ -299,19 +339,10 @@ void serverlogic(int sockfd)
 			    printf("%s and %s", ARR3[0], ARR3[1]);
 			    search(sockfd, ARR3);
 		        //break;
-	        }else if(strncmp(command, "help", 4)==0){//FOR HELP
-	        	char feedback5[MAX] = "Check_status, help, Search <criteria>, Addpatientlist <patientlistfilename.txt>, Addpatient";
-				//bzero(feedback5, MAX);
-				write(sockfd, feedback5, sizeof(feedback5));
-	        }else { //IF COMMAND IS WRONG
-		       	char feedback6[MAX] = "the command you have entered is wrong, check your command again. type 'help' to list the commands available";
-				// // sending feedback to the client
-				bzero(feedback6, MAX);
-				write(sockfd, feedback6, sizeof(feedback6));
-	        //puts("you have entered a wrong command\n to show commands available");
-	        //puts("commands available\n1. Addpatient patientname, dtae, gender, category\n2. Addpatientlist\n3. Check_status\n4. Search <criteria>\n5. Addpatient filename.txt");
-        	}
-  	}
+	        }
+        	//sending back the feedback from any of the functions
+        	//write(sockfd, Message, sizeof(Message));
+}
 }
 
 //the server main
@@ -319,7 +350,6 @@ int main()
 {
 	int sockfd, connfd, len;
 	struct sockaddr_in servaddr, cli;
-
 	// socket create and verification
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd == -1) {
@@ -354,7 +384,7 @@ int main()
 
 	// Accept the data packet from client and verification
 	connfd = accept(sockfd, (SA*)&cli, &len);
-	if (connfd < 0) {
+	if (connfd < 0){
 		printf("server acccept failed...\n");
 		exit(0);
 	}
@@ -362,7 +392,7 @@ int main()
 		printf("server acccept the client...\n");
 
 	// verification of an officer
-    authenticate(connfd);
+//   authenticate(connfd);
 
 	serverlogic(connfd);
 

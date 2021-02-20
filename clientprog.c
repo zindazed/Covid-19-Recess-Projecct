@@ -13,6 +13,7 @@
 #define SA struct sockaddr
 char district[10];
 void Addpatient(char **arr2);
+
 //authentication
 int authenticate(int sockfd){
   char password[10];
@@ -45,13 +46,13 @@ while(1){
 
     // printf("%s\n", idd);
    	read(sockfd, feed, sizeof(feed));//receive feed
-   	printf("id is %s\n", feed);
-   	if(strcmp(feed, "Success, continue")!=0){
+   	printf("feed is %s\n", feed);
+   	if(strncmp(feed, "Success, continue", 7)==0){
 
    		break;
    	}
 	printf("Validation wrong, please try again\n" );
-   	printf("yaay\n");
+//   	printf("yaay\n");
    //then continue to the next function
 }
    	printf("Validation successful\n");
@@ -86,7 +87,8 @@ void clientlogic(int sockfd){
 	char command[MAX];
 	char feedback[MAX];
 	int n;
-	while(1){ //forever loop for communication
+	while(1)
+	{
 		bzero(command, MAX);
 		n = 0;
 		puts("enter command");
@@ -94,6 +96,7 @@ void clientlogic(int sockfd){
 			;
 		if(strncmp("Addpatientlist", command,14)==0){
 			//send the Addpatient command
+			puts("From Server: list added");
 			write(sockfd, command, sizeof(command));
 		}else if(strncmp(command,"Addpatient",10)==0){
 				int len;
@@ -123,10 +126,10 @@ void clientlogic(int sockfd){
 				    if(i>2){
 				    	//addpatient to list
 		  				fprintf(fr,"%s %s %s %s %s %s\n", arr[1], arr[2], arr[3], arr[4], arr[5], district);
-		  				puts("patient added");
+		  				puts("From Server: patient added");
 				    }else{
 				    	//this should be the addpatient <filename> command
-				    	puts("addpatient filename entered");
+				    	//puts("addpatient filename entered");
 				    	write(sockfd, command, sizeof(command)); //send the addpatient<filename> command
 				    	break; //jump outta loop
 				    }
@@ -140,6 +143,7 @@ void clientlogic(int sockfd){
 							;
 					if(strncmp("Addpatientlist", command,14)==0){
 						//puts("addpatientlist entered");
+						puts("From Server: List added");
 						write(sockfd, command, sizeof(command));
 						break; //jumpt outta loop
 					}else if(strncmp(command,"Addpatient",10)==0){
@@ -158,21 +162,54 @@ void clientlogic(int sockfd){
 				}
 
 		}else{
-			//send the other command
-			write(sockfd, command, sizeof(command));
-		}
+		//send any other command
+		write(sockfd, command, sizeof(command));
+	    }
 
-	//receive feedback
-	bzero(feedback, sizeof(feedback));//prepare memory for feedback
-	//check is feedback is a multiple feedback
-	read(sockfd, feedback, sizeof(feedback)); //store feedback in feedback
-	printf("From Server : %s\n", feedback); //display feedback
-	if(strcmp(feedback,"help")==0){
-		exit(1); //leave the program
-	}
-	}
+		//prepare feedback space
+		bzero(feedback, sizeof(feedback));//prepare memory for feedback
+
+			if(strncmp("Addpatientlist", command,14)==0){
+				//printf("From server: list added");
+
+			}else if(strncmp(command,"Addpatient",10)==0){ //FOR ADDPATIENT <<FILENAME>>
+				printf("From Server: patient-file Added\n");
+			}else if(strncmp(command, "Check_status",12)==0){ //FOR CHECK_STATUS
+				sleep(1);
+				read(sockfd, feedback, sizeof(feedback)); //store feedback in feedback
+				printf("From Server: %s\n",feedback);
+	        }else if(strncmp(command, "Search",6)==0){ //FOR SEARCH
+	        	//display search results
+	        	puts("From Server:\n")
+	        	read(sockfd, feedback, sizeof(feedback)); //store feedback in feedback
+	        	printf("%s", feedback);
+	        	// sleep(5);
+	        	// FILE *ft; char rec[100];
+	        	// if (ft==NULL)
+	        	// {
+	        	// 	puts("couldnt open file");
+	        	// }
+	        	// ft = fopen("searchres.txt","r");
+	        	// while (fgets(rec, 100, ft) != NULL){
+	        	// 	puts(rec);
+	        	// }
+
+	        	// puts("yaaay");
+	        	// fclose(ft);
+	   //       	break;
+	        }else if(strncmp(command, "help", 4)==0){//FOR HELP
+	        	puts("THE LIST OF AVAILABLE COMMANDS:");
+	        	printf("\n1. Search <patientname>\n2. Check_status\n3. Addpatient <patientname, date, category, gender, case_type >\n4. Addpatientlist\n5. Addpatient <filename>\n");
+			 }else if((strncmp(command, "exit", 4)) == 0){
+			 	read(sockfd, feedback, sizeof(feedback));
+			 	printf("%s\n", feedback );
+			 	puts("byee");
+			 	exit(1);
+			 }
+
+
+    }
 }
-
 //ADDPATIENT FUNCT
 // void Addpatient(char **arr2){
 // 	FILE *fp;
@@ -219,7 +256,7 @@ int main()
 	else
 		printf("connected to the server..\n");
 
-	authenticate(sockfd); //verify an officer first
+//	authenticate(sockfd); //verify an officer first
 	// function for client server communication
 	clientlogic(sockfd);
 

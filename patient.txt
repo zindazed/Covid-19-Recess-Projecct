@@ -48,3 +48,16 @@ jelly 12-12-2020 symptomatic male positive wakiso
 faga 12-12-2020 symptomatic male positive wakiso
 gerry 12-12-2020 symptomatic male positive wakiso
 frevin 12-12-2020 symptomatic male positive wakiso
+
+
+
+
+
+
+
+
+willy 13-12-2020 symptomatic male positive
+gwen 15-12-2020 symptomatic female false-positive 
+seth 15-12-2020 symptomatic male positive 
+yel 15-12-2020 asymptomatic male negative 
+rennie 15-12-2020 asymptomatic male false-positive 
