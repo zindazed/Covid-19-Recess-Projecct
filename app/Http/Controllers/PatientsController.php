@@ -48,7 +48,7 @@ class PatientsController extends Controller
 
         $False_positive_cases = DB::Table('patients')
             ->select('patient_name', 'case_type')
-            ->where('case_type', '=', 'false positive')
+            ->where('case_type', '=', 'false-positive')
             ->get();
 
         $Asymptomatic = DB::Table('patients')

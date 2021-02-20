@@ -34,7 +34,7 @@
                                 <form style="padding-left: 7px;padding-bottom: 5px;background: var(--white);" action="/donations" method="post">
                                     @csrf
                                     <label style="color: var(--blue);">Amount in Million UGX:</label>
-                                    <input class="form-control" type="text" style="width: 200px;" name="ammount" required="true">
+                                    <input class="form-control" type="number" style="width: 200px;" name="ammount" required="true">
                                     <label style="color: var(--blue);">Donor Name:</label>
                                     <input class="form-control" type="text" style="width: 200px;" name="donor" required="true">
                                     <button class="btn btn-primary" type="submit" style="margin-top: 8px;font-size: 14px;background: var(--blue);padding-top: 0px;padding-bottom: 1px;">add</button>

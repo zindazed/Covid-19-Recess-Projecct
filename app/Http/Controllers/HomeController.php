@@ -37,6 +37,12 @@ class HomeController extends Controller
             $total_donations = $total_donations + (int)$d->amount_donated;
         }
 
+        $saved = DB::table("salaries")
+            ->select("saved")
+            ->orderBy("Date","desc")
+            ->first();
+        $total_donations = $total_donations + $saved->saved;
+
         $donations1 = DB::Table('donations')
             ->select('donor_ID');
 

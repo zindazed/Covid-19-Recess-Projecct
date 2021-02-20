@@ -43,7 +43,7 @@
                         <div class="col" style="width: 45%; min-width: 400px;">
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary font-weight-bold m-0">Donations Made By Well Wishers</h6>
+                                    <h6 class="text-primary font-weight-bold m-0">Donations Made By All Well Wishers</h6>
                                 </div>
                                 <div class="card-body" style="padding: 0px!important;">
                                     <div class="chart-area" style="margin-top: 10px; height: fit-content"">
@@ -57,7 +57,7 @@
                         <div class="col" style="width: 45%;">
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary font-weight-bold m-0">Donations Made in a Given Month</h6>
+                                    <h6 class="text-primary font-weight-bold m-0">Donations Made in the Current Month</h6>
 
                                 </div>
                                 <div class="card-body " style="padding: 0px!important;">
