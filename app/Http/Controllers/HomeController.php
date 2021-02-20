@@ -129,7 +129,7 @@ class HomeController extends Controller
         $percentages = array();
         $patients_graph = DB::table("patients")
             ->select("*")
-            ->where("date_of_identification","like",Carbon::now()->format("Y")."%")
+            ->where("date_of_identification","like","%".Carbon::now()->format("Y"))
             ->get();
 
         //Patient::all();
