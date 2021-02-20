@@ -217,7 +217,7 @@
                             },
                             scaleLabel: {
                                 display: true,
-                                labelString: "months",
+                                labelString: "Months of the Year",
                             },
                         }],
                     },
@@ -249,9 +249,23 @@
                     scales: {
                         yAxes: [{
                             ticks: {
+                                fontColor: "rgb(78,115,223)",
                                 beginAtZero: true
-                            }
-                        }]
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Million UGX",
+                            },
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontColor: "rgb(78,115,223)",
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Donors",
+                            },
+                        }],
                     },
                     legend: {
                         display: false
@@ -280,9 +294,23 @@
                     scales: {
                         yAxes: [{
                             ticks: {
+                                fontColor: "rgb(78,115,223)",
                                 beginAtZero: true
-                            }
-                        }]
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Percentage change",
+                            },
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontColor: "rgb(78,115,223)",
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Months of the Year",
+                            },
+                        }],
                     },
                     legend: {
                         display: false

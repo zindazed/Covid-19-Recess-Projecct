@@ -126,11 +126,6 @@
                         <p class="text-primary m-0 font-weight-bold">Staff Paid by System</p>
                     </div>
                     <div class="card-body">
-                        <div class="row justify-content-end">
-                            <div class="col-md-6">
-                                <div class="text-md-right dataTables_filter" id="dataTable_filter-1"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search officer's name"></label></div>
-                            </div>
-                        </div>
                         <div class="table-responsive table mt-2" id="dataTable-2" role="grid" aria-describedby="dataTable_info">
                             <table class="table my-0" id="dataTable" style="min-width: 500px;">
                                 <thead>
@@ -269,9 +264,23 @@
                     scales: {
                         yAxes: [{
                             ticks: {
-                                beginAtZero: true
-                            }
-                        }]
+                                fontColor: "rgb(78,115,223)",
+                                beginAtZero: true,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Million UGX",
+                            },
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontColor: "rgb(78,115,223)",
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Months of the Year",
+                            },
+                        }],
                     },
                     legend: {
                         display: false
@@ -301,9 +310,23 @@
                     scales: {
                         yAxes: [{
                             ticks: {
+                                fontColor: "rgb(78,115,223)",
                                 beginAtZero: true
-                            }
-                        }]
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Million UGX",
+                            },
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontColor: "rgb(78,115,223)",
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Donors",
+                            },
+                        }],
                     },
                     legend: {
                         display: false

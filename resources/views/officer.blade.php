@@ -34,6 +34,10 @@
                     <script>
                         window.alert("All available General hospitals are filled");
                     </script>
+                @elseif($message == 3)
+                    <script>
+                        window.alert("There is no General Hospital in the system");
+                    </script>
                 @endif
             </form>
         </div>

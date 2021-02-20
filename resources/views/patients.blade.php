@@ -138,10 +138,24 @@
                 options: {
                     scales: {
                         yAxes: [{
-                          ticks: {
-                              beginAtZero: true
-                          }
-                        }]
+                            ticks: {
+                                fontColor: "rgb(78,115,223)",
+                                beginAtZero: true
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Percentage change",
+                            },
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontColor: "rgb(78,115,223)",
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Months of the Year",
+                            },
+                        }],
                     },
                 legend: {
                         display: false
