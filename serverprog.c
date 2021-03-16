@@ -14,11 +14,13 @@
 char *district;
 int *officerID;
 char *Message;
+
 // addpatient <filename> function
 void addPatient(int sockfd, char **patarr)
 {
 	FILE *fs, *ft;
 	char ch;
+	char s;
 	printf("\n%s", patarr[1]);
 	int wx = strlen(patarr[1]); //stripping off the last character and assignin it to zero
     patarr[1][wx-1] = 0;
@@ -27,13 +29,13 @@ void addPatient(int sockfd, char **patarr)
 	fs = fopen(patarr[1], "r");
 	if (fs == NULL){
 		puts ("Cannot open source file");
-		exit(1);
+		//exit(1);
 	}
 
 	ft = fopen("enrollmentfile.txt", "a");//open the target file(ie; patient file)
 	if (ft == NULL){
 		puts ("Cannot open target file");
-		exit(1);
+		//exit(1);
     }
 	while(1){
 		ch = fgetc(fs);
@@ -99,7 +101,7 @@ int Check_status(int sockfd){
     fw = fopen("enrollmentfile.txt", "r"); //opening the patient file in read mode
     if (fw == NULL){
         printf("Failed to open patient file");
-        exit(0); //close the program incase the file cannot be opened
+        //exit(0); //close the program incase the file cannot be opened
     }
     char *hld;
     while (fgets(str, 1000, fw) != NULL){
@@ -122,6 +124,7 @@ int Check_status(int sockfd){
 				puts("cannot open file");
 			}
 			char STR[30];
+
 			//char c = fgetc(fl);
 		  while (fgets(STR, 10, fl) != NULL){
 		  		printf("%s\n",STR);
@@ -148,7 +151,7 @@ void search(int sockfd, char **ar){
     fr = fopen("enrollmentfile.txt","r"); //opening the patient file in read mode
     if (fr == NULL){
         printf("Failed to open the patient file");
-        exit(1); //close the program incase the file cannot be opened
+        //exit(1); //close the program incase the file cannot be opened
     }
     fc = fopen("seachres.txt", "w");
     if(fc==NULL){
@@ -175,6 +178,7 @@ void search(int sockfd, char **ar){
         fclose(fr); //close the patient file
         //sedn the file content
        // write(sockfd, serch, sizeof(serch));
+
 }
 
 //authentication
@@ -392,7 +396,7 @@ int main()
 		printf("server acccept the client...\n");
 
 	// verification of an officer
-//   authenticate(connfd);
+    authenticate(connfd);
 
 	serverlogic(connfd);
 

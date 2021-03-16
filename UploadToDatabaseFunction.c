@@ -44,7 +44,7 @@ int main(){
       char *arry[8];
       char *t;
       int h;
-      FILE *fp; //file pointer 
+      FILE *fp; //file pointer
       char query1[1024]; //variable to store the query for upload
       fp = fopen("enrollmentfile.txt", "r");//open the enrollment file
       if (fp==NULL)

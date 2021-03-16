@@ -12,8 +12,6 @@
 #define max 100
 #define SA struct sockaddr
 char district[10];
-void Addpatient(char **arr2);
-
 //authentication
 int authenticate(int sockfd){
   char password[10];
@@ -180,7 +178,7 @@ void clientlogic(int sockfd){
 				printf("From Server: %s\n",feedback);
 	        }else if(strncmp(command, "Search",6)==0){ //FOR SEARCH
 	        	//display search results
-	        	puts("From Server:\n")
+	        	puts("From Server:\n");
 	        	read(sockfd, feedback, sizeof(feedback)); //store feedback in feedback
 	        	printf("%s", feedback);
 	        	// sleep(5);
@@ -210,23 +208,9 @@ void clientlogic(int sockfd){
 
     }
 }
-//ADDPATIENT FUNCT
-// void Addpatient(char **arr2){
-// 	FILE *fp;
-//     fp = fopen("patientlist.txt", "a");
-//     if (fp == NULL){
-//     puts("Cannot open file");
-//     }
-//     printf("%s",arr2[5]);
-//     printf("%s",arr2[5]);
-//     int ps = strlen(arr2[5]); //stripping off the last character and assignin it to zero
+void fetch(){
 
-//     //arr2[5][ps-1] = 0;
-//     //append the structure data into the file
-//     fprintf(fp,"%s %s %s %s %s %s\n", arr2[1], arr2[2], arr2[3], arr2[4], arr2[5], district, feedID);
-//     fclose(fp);
-//     puts("patient added");
-// }
+}
 
 int main()
 {
@@ -256,7 +240,7 @@ int main()
 	else
 		printf("connected to the server..\n");
 
-//	authenticate(sockfd); //verify an officer first
+    authenticate(sockfd); //verify an officer first
 	// function for client server communication
 	clientlogic(sockfd);
 
